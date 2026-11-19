@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "deny": [
+      "Bash(git push * main)",
+      "Bash(git push * development)",
+      "Bash(git push *:main)",
+      "Bash(git push *:development)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "PowerShell(git push * main)",
+      "PowerShell(git push * development)",
+      "PowerShell(git push *:main)",
+      "PowerShell(git push *:development)",
+      "PowerShell(git push --force *)",
+      "PowerShell(git push -f *)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  }
+}
