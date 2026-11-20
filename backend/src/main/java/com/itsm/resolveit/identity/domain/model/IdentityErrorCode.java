@@ -13,7 +13,11 @@ public enum IdentityErrorCode implements ErrorCode {
     /** No valid session (missing, expired, logged out, or the user was deactivated). */
     AUTH_UNAUTHENTICATED(Set.of()),
     /** A state-changing request without a matching X-XSRF-TOKEN header and XSRF-TOKEN cookie (RIT-US-05). */
-    AUTH_CSRF_INVALID(Set.of());
+    AUTH_CSRF_INVALID(Set.of()),
+    /** A user with this email already exists (case-insensitive) (RIT-US-06). */
+    USER_EMAIL_TAKEN(Set.of("email")),
+    /** Admins can only create Support Agents and Employees (RIT-US-06). */
+    USER_ROLE_NOT_ALLOWED(Set.of("role"));
 
     private final Set<String> requiredParams;
 

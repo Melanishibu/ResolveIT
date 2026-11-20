@@ -93,6 +93,12 @@ GoRouter buildAppRouter({
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: NotAllowedView()),
         ),
+        // Admin only: the role guard maps it to User Management (AB#48).
+        GoRoute(
+          path: CreateUserView.path,
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: CreateUserView()),
+        ),
         for (final destination in MenuDestination.values)
           GoRoute(
             path: destination.path,

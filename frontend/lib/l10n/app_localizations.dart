@@ -580,6 +580,114 @@ abstract class AppLocalizations {
   /// **'Back to the dashboard'**
   String get notAllowedBackToDashboard;
 
+  /// No description provided for @errorUserEmailTakenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This email address is already in use'**
+  String get errorUserEmailTakenTitle;
+
+  /// No description provided for @errorUserEmailTakenWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'A ResolveIT user with the email address {email} already exists. Email addresses are unique, regardless of upper or lower case.'**
+  String errorUserEmailTakenWhy(String email);
+
+  /// No description provided for @errorUserEmailTakenNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a different email address, or find the existing user in User Management.'**
+  String get errorUserEmailTakenNextStep;
+
+  /// No description provided for @errorUserRoleNotAllowedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This role can\'t be given to a new user'**
+  String get errorUserRoleNotAllowedTitle;
+
+  /// No description provided for @errorUserRoleNotAllowedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'New users can only be Technicians or Employees; the role {role} can\'t be created here.'**
+  String errorUserRoleNotAllowedWhy(String role);
+
+  /// No description provided for @errorUserRoleNotAllowedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Technician or Employee and create the user again.'**
+  String get errorUserRoleNotAllowedNextStep;
+
+  /// No description provided for @createUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add user'**
+  String get createUserTitle;
+
+  /// No description provided for @createUserSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The new user gets an email with a link to set their own password.'**
+  String get createUserSubtitle;
+
+  /// No description provided for @createUserNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get createUserNameLabel;
+
+  /// No description provided for @createUserEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get createUserEmailLabel;
+
+  /// No description provided for @createUserRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get createUserRoleLabel;
+
+  /// No description provided for @createUserDepartmentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Department'**
+  String get createUserDepartmentLabel;
+
+  /// No description provided for @createUserButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create user'**
+  String get createUserButton;
+
+  /// No description provided for @createUserNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the user\'s name.'**
+  String get createUserNameRequired;
+
+  /// No description provided for @createUserEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the user\'s email address.'**
+  String get createUserEmailRequired;
+
+  /// No description provided for @createUserRoleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a role.'**
+  String get createUserRoleRequired;
+
+  /// No description provided for @createUserDepartmentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the user\'s department.'**
+  String get createUserDepartmentRequired;
+
+  /// No description provided for @createUserSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'User created. The invitation email goes to {email}.'**
+  String createUserSuccess(String email);
+
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:

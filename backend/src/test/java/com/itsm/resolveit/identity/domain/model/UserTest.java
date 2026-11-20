@@ -118,7 +118,7 @@ class UserTest {
 
     private static User user(boolean active, int failures, Instant lockedUntil) {
         return User.reconstitute(new UserId(UUID.randomUUID()), new EmailAddress("employee1@resolveit.local"),
-                new DisplayName("Employee One"), Role.EMPLOYEE, new PasswordHash("$2a$10$hash"), active, failures,
-                lockedUntil);
+                new DisplayName("Employee One"), Role.EMPLOYEE, new Department("Finance"), new PasswordHash("$2a$10$hash"),
+                active, failures, lockedUntil);
     }
 }

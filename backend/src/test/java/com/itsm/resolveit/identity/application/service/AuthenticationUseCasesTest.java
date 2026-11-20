@@ -10,6 +10,7 @@ import com.itsm.resolveit.identity.application.service.IdentityFakes.InMemoryUse
 import com.itsm.resolveit.identity.application.service.IdentityFakes.MutableClock;
 import com.itsm.resolveit.identity.application.service.IdentityFakes.PlainPasswords;
 import com.itsm.resolveit.identity.application.service.IdentityFakes.TransparentTokens;
+import com.itsm.resolveit.identity.domain.model.Department;
 import com.itsm.resolveit.identity.domain.model.DisplayName;
 import com.itsm.resolveit.identity.domain.model.EmailAddress;
 import com.itsm.resolveit.identity.domain.model.IdentityErrorCode;
@@ -137,7 +138,7 @@ class AuthenticationUseCasesTest {
     void aDeactivatedUsersSessionIsRejectedOnTheNextRequest() {
         SessionToken token = logIn.logIn(new LogInCommand("employee1@resolveit.local", PASSWORD)).token();
         users.with(User.reconstitute(employee.id(), employee.email(), employee.displayName(), employee.role(),
-                employee.passwordHash(), false, 0, null));
+                employee.department(), employee.passwordHash().orElseThrow(), false, 0, null));
 
         assertThatThrownBy(() -> currentUser.currentUser(Optional.of(token)))
                 .isInstanceOf(NotAuthenticatedException.class);
@@ -147,6 +148,6 @@ class AuthenticationUseCasesTest {
         return User.reconstitute(new UserId(UUID.randomUUID()), new EmailAddress(email),
                 new DisplayName(email.startsWith("employee") ? "Employee One" : "Agent Two"),
                 email.startsWith("employee") ? Role.EMPLOYEE : Role.SUPPORT_AGENT,
-                PlainPasswords.hashOf(PASSWORD), active, 0, null);
+                new Department("Finance"), PlainPasswords.hashOf(PASSWORD), active, 0, null);
     }
 }

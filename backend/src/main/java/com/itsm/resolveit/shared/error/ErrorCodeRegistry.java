@@ -78,6 +78,18 @@ public final class ErrorCodeRegistry {
                 "The security token that protects your session was missing or didn't match, so ResolveIT refused"
                         + " the change.",
                 "Reload the page and try again. If it keeps happening, log out and log in again."));
+        // User management (AB#48).
+        register(new RegisteredErrorCode(
+                "USER_EMAIL_TAKEN", 409, Set.of("email"),
+                "This email address is already in use",
+                "A ResolveIT user with the email address {email} already exists. Email addresses are unique,"
+                        + " regardless of upper or lower case.",
+                "Use a different email address, or find the existing user in User Management."));
+        register(new RegisteredErrorCode(
+                "USER_ROLE_NOT_ALLOWED", 400, Set.of("role"),
+                "This role can't be given to a new user",
+                "New users can only be Technicians or Employees; the role {role} can't be created here.",
+                "Choose Technician or Employee and create the user again."));
     }
 
     private ErrorCodeRegistry() {

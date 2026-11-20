@@ -51,6 +51,16 @@ final class IdentityFakes {
             saves++;
             byId.put(user.id(), user);
         }
+
+        @Override
+        public boolean existsByEmail(EmailAddress email) {
+            return lockByEmail(email).isPresent();
+        }
+
+        @Override
+        public UserId nextId() {
+            return new UserId(UUID.randomUUID());
+        }
     }
 
     static final class InMemorySessions implements UserSessionRepository {

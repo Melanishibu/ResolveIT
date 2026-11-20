@@ -3,6 +3,7 @@ package com.itsm.resolveit.identity.domain.model;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Aggregate root: a person who can log in to ResolveIT.
@@ -17,31 +18,46 @@ public final class User {
     private final EmailAddress email;
     private final DisplayName displayName;
     private final Role role;
+    private final Department department;
     private final PasswordHash passwordHash;
     private final boolean active;
     private int failedLoginAttempts;
     private Instant lockedUntil;
 
-    private User(UserId id, EmailAddress email, DisplayName displayName, Role role, PasswordHash passwordHash,
-                 boolean active, int failedLoginAttempts, Instant lockedUntil) {
+    private User(UserId id, EmailAddress email, DisplayName displayName, Role role, Department department,
+                 PasswordHash passwordHash, boolean active, int failedLoginAttempts, Instant lockedUntil) {
         this.id = Objects.requireNonNull(id, "id");
         this.email = Objects.requireNonNull(email, "email");
         this.displayName = Objects.requireNonNull(displayName, "displayName");
         this.role = Objects.requireNonNull(role, "role");
-        this.passwordHash = Objects.requireNonNull(passwordHash, "passwordHash");
+        this.department = Objects.requireNonNull(department, "department");
         if (failedLoginAttempts < 0) {
             throw new IllegalArgumentException("failedLoginAttempts must not be negative");
         }
+        this.passwordHash = passwordHash;
         this.active = active;
         this.failedLoginAttempts = failedLoginAttempts;
         this.lockedUntil = lockedUntil;
     }
 
-    /** Rebuilds a user from storage. Creating new users (invitations) is a later story. */
+    /**
+     * An Admin invites a new user (RIT-US-06): active, with no password until they set one from the
+     * invitation link. Admins cannot create Admins.
+     */
+    public static User invite(UserId id, EmailAddress email, DisplayName displayName, Role role, Department department) {
+        Objects.requireNonNull(role, "role");
+        if (role == Role.ADMIN) {
+            throw new UserRoleNotAllowedException(role);
+        }
+        return new User(id, email, displayName, role, department, null, true, 0, null);
+    }
+
+    /** Rebuilds a user from storage. {@code passwordHash} is null while an invited user has not set one. */
     public static User reconstitute(UserId id, EmailAddress email, DisplayName displayName, Role role,
-                                    PasswordHash passwordHash, boolean active, int failedLoginAttempts,
-                                    Instant lockedUntil) {
-        return new User(id, email, displayName, role, passwordHash, active, failedLoginAttempts, lockedUntil);
+                                    Department department, PasswordHash passwordHash, boolean active,
+                                    int failedLoginAttempts, Instant lockedUntil) {
+        return new User(id, email, displayName, role, department, passwordHash, active, failedLoginAttempts,
+                lockedUntil);
     }
 
     /**
@@ -106,8 +122,13 @@ public final class User {
         return role;
     }
 
-    public PasswordHash passwordHash() {
-        return passwordHash;
+    public Department department() {
+        return department;
+    }
+
+    /** Empty while an invited user has not set a password yet; such a user cannot log in. */
+    public Optional<PasswordHash> passwordHash() {
+        return Optional.ofNullable(passwordHash);
     }
 
     public boolean isActive() {

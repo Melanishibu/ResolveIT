@@ -90,8 +90,9 @@ class RequestProtectionIT {
     void deactivatedUserLosesAccess() throws Exception {
         UUID agentId = UUID.randomUUID();
         jdbc.sql("""
-                INSERT INTO identity.app_user (id, email, display_name, role, password_hash, active)
-                SELECT :id, 'agent-to-deactivate@resolveit.local', 'Agent Three', 'SUPPORT_AGENT', password_hash, TRUE
+                INSERT INTO identity.app_user (id, email, display_name, role, password_hash, active, department)
+                SELECT :id, 'agent-to-deactivate@resolveit.local', 'Agent Three', 'SUPPORT_AGENT', password_hash, TRUE,
+                       'IT Support'
                 FROM identity.app_user WHERE email = 'agent1@resolveit.local'
                 """).param("id", agentId).update();
         HttpResponse<String> login = api().logIn("agent-to-deactivate@resolveit.local", AuthApiClient.PASSWORD);

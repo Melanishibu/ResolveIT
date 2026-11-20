@@ -16,6 +16,11 @@ public interface UserRepository {
 
     Optional<User> findById(UserId id);
 
+    /** Whether a user with this email exists (emails are stored in lower case, so this is case-insensitive). */
+    boolean existsByEmail(EmailAddress email);
+
+    UserId nextId();
+
     /** Stores the user's current state (inserts or updates). */
     void save(User user);
 }

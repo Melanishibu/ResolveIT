@@ -10,6 +10,9 @@ public record DisplayName(String value) {
             throw new IllegalArgumentException("Display name is required");
         }
         value = value.strip();
+        if (value.chars().anyMatch(Character::isISOControl)) {
+            throw new IllegalArgumentException("DisplayName must not contain control characters");
+        }
         if (value.length() > MAX_LENGTH) {
             throw new IllegalArgumentException("Display name must be at most " + MAX_LENGTH + " characters");
         }

@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/features/identity/adapters/data/api_identity_gateway.dart';
+import 'package:resolveit/features/identity/adapters/data/api_user_admin_gateway.dart';
+import 'package:resolveit/features/identity/application/interactors/create_user.dart';
+import 'package:resolveit/features/identity/application/ports/user_admin_gateway.dart';
 import 'package:resolveit/features/identity/application/interactors/load_current_user.dart';
 import 'package:resolveit/features/identity/application/interactors/log_in.dart';
 import 'package:resolveit/features/identity/application/interactors/log_out.dart';
@@ -40,4 +43,13 @@ final logInProvider = Provider<LogIn>(
 
 final logOutProvider = Provider<LogOut>(
   (ref) => LogOut(ref.watch(sessionGatewayProvider)),
+);
+
+/// User management for Admins (RIT-US-06). Tests override it with a fake.
+final userAdminGatewayProvider = Provider<UserAdminGateway>(
+  (ref) => ApiUserAdminGateway(ref.watch(identityHttpClientProvider)),
+);
+
+final createUserProvider = Provider<CreateUser>(
+  (ref) => CreateUser(ref.watch(userAdminGatewayProvider)),
 );

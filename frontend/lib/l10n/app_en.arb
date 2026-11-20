@@ -135,6 +135,36 @@
 
   "notAllowedBackToDashboard": "Back to the dashboard",
 
+  "errorUserEmailTakenTitle": "This email address is already in use",
+  "errorUserEmailTakenWhy": "A ResolveIT user with the email address {email} already exists. Email addresses are unique, regardless of upper or lower case.",
+  "@errorUserEmailTakenWhy": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "errorUserEmailTakenNextStep": "Use a different email address, or find the existing user in User Management.",
+
+  "errorUserRoleNotAllowedTitle": "This role can't be given to a new user",
+  "errorUserRoleNotAllowedWhy": "New users can only be Technicians or Employees; the role {role} can't be created here.",
+  "@errorUserRoleNotAllowedWhy": {
+    "placeholders": { "role": { "type": "String" } }
+  },
+  "errorUserRoleNotAllowedNextStep": "Choose Technician or Employee and create the user again.",
+
+  "createUserTitle": "Add user",
+  "createUserSubtitle": "The new user gets an email with a link to set their own password.",
+  "createUserNameLabel": "Name",
+  "createUserEmailLabel": "Email",
+  "createUserRoleLabel": "Role",
+  "createUserDepartmentLabel": "Department",
+  "createUserButton": "Create user",
+  "createUserNameRequired": "Enter the user's name.",
+  "createUserEmailRequired": "Enter the user's email address.",
+  "createUserRoleRequired": "Choose a role.",
+  "createUserDepartmentRequired": "Enter the user's department.",
+  "createUserSuccess": "User created. The invitation email goes to {email}.",
+  "@createUserSuccess": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+
   "loginTitle": "Log in to ResolveIT",
   "loginSubtitle": "IT Service Desk – use your work email and password.",
   "loginEmailLabel": "Email",

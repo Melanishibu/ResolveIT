@@ -1,6 +1,11 @@
 package com.itsm.resolveit.identity.adapters.out.integration;
 
+import com.itsm.resolveit.identity.application.port.out.DomainEventPublisher;
+import com.itsm.resolveit.identity.application.port.out.EmailSender;
 import com.itsm.resolveit.identity.application.port.out.PasswordVerifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.javamail.JavaMailSender;
 import com.itsm.resolveit.identity.config.SessionProperties;
 import com.itsm.resolveit.identity.config.SessionSigningKeys;
 import java.time.Clock;
@@ -21,6 +26,16 @@ class IdentitySecurityConfig {
     @Bean
     PasswordVerifier passwordVerifier() {
         return new BCryptPasswordVerifier(new BCryptPasswordEncoder());
+    }
+
+    @Bean
+    EmailSender emailSender(JavaMailSender mailSender, @Value("${resolveit.mail.from}") String from) {
+        return new SmtpEmailSender(mailSender, from);
+    }
+
+    @Bean
+    DomainEventPublisher identityEventPublisher(ApplicationEventPublisher publisher) {
+        return new SpringDomainEventPublisher(publisher);
     }
 
     @Bean

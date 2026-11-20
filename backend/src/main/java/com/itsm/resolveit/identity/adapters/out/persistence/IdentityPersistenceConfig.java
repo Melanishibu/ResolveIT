@@ -1,5 +1,7 @@
 package com.itsm.resolveit.identity.adapters.out.persistence;
 
+import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
+import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.port.out.UserRepository;
 import com.itsm.resolveit.identity.application.port.out.UserSessionRepository;
 import org.springframework.context.annotation.Bean;
@@ -20,5 +22,15 @@ class IdentityPersistenceConfig {
     @Bean
     UserSessionRepository userSessionRepository(JdbcClient jdbc) {
         return new JdbcUserSessionRepository(jdbc);
+    }
+
+    @Bean
+    InvitationRepository invitationRepository(JdbcClient jdbc) {
+        return new JdbcInvitationRepository(jdbc);
+    }
+
+    @Bean
+    UserAuditLog userAuditLog(JdbcClient jdbc) {
+        return new JdbcUserAuditLog(jdbc);
     }
 }

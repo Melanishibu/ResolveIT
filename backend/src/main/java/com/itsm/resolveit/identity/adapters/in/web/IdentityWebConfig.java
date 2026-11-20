@@ -1,6 +1,11 @@
 package com.itsm.resolveit.identity.adapters.in.web;
 
+import com.itsm.resolveit.identity.application.port.in.CreateUserUseCase;
 import com.itsm.resolveit.identity.application.port.in.GetCurrentUserUseCase;
+import com.itsm.resolveit.identity.application.port.out.DomainEventPublisher;
+import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
+import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
+import com.itsm.resolveit.identity.application.service.CreateUserService;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
 import com.itsm.resolveit.identity.application.port.in.LogOutUseCase;
 import com.itsm.resolveit.identity.application.port.out.PasswordVerifier;
@@ -50,6 +55,12 @@ class IdentityWebConfig {
     GetCurrentUserUseCase getCurrentUserUseCase(SessionTokenVerifier tokens, UserSessionRepository sessions,
                                                 UserRepository users, ObjectProvider<Clock> clock) {
         return new GetCurrentUserService(tokens, sessions, users, clock(clock));
+    }
+
+    @Bean
+    CreateUserUseCase createUserUseCase(UserRepository users, InvitationRepository invitations, UserAuditLog auditLog,
+                                        DomainEventPublisher events, ObjectProvider<Clock> clock) {
+        return new CreateUserService(users, invitations, auditLog, events, clock(clock));
     }
 
     /** Request protection (RIT-US-05): CSRF and session check on every ResolveIT endpoint, plus the Actor parameter. */

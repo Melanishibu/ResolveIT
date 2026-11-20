@@ -56,7 +56,7 @@ public class LogInService implements LogInUseCase {
             throw new InvalidCredentialsException();
         }
         User user = found.get();
-        boolean passwordMatches = passwords.matches(command.password(), user.passwordHash());
+        boolean passwordMatches = passwordMatches(command.password(), user);
         LoginAttemptOutcome outcome = user.recordLoginAttempt(passwordMatches, now, lockoutPolicy);
         users.save(user);
         return switch (outcome) {
@@ -64,6 +64,16 @@ public class LogInService implements LogInUseCase {
             case INVALID_CREDENTIALS -> throw new InvalidCredentialsException();
             case TEMPORARILY_BLOCKED -> throw new LoginTemporarilyBlockedException(user.minutesUntilUnlocked(now));
         };
+    }
+
+    /** An invited user without a password never matches; the dummy check keeps the response time the same. */
+    private boolean passwordMatches(String rawPassword, User user) {
+        return user.passwordHash()
+                .map(hash -> passwords.matches(rawPassword, hash))
+                .orElseGet(() -> {
+                    passwords.verifyAgainstDummy(rawPassword);
+                    return false;
+                });
     }
 
     private LoginResult startSession(User user, Instant now) {

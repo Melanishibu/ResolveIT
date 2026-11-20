@@ -64,6 +64,20 @@
     "why" : "Nothing is available at {path}. The link may be outdated or mistyped.",
     "nextStep" : "Check the address, or go back to the dashboard and open the item from there."
   }, {
+    "code" : "USER_EMAIL_TAKEN",
+    "httpStatus" : 409,
+    "requiredParams" : [ "email" ],
+    "title" : "This email address is already in use",
+    "why" : "A ResolveIT user with the email address {email} already exists. Email addresses are unique, regardless of upper or lower case.",
+    "nextStep" : "Use a different email address, or find the existing user in User Management."
+  }, {
+    "code" : "USER_ROLE_NOT_ALLOWED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "role" ],
+    "title" : "This role can't be given to a new user",
+    "why" : "New users can only be Technicians or Employees; the role {role} can't be created here.",
+    "nextStep" : "Choose Technician or Employee and create the user again."
+  }, {
     "code" : "VALIDATION_FAILED",
     "httpStatus" : 400,
     "requiredParams" : [ "fields" ],

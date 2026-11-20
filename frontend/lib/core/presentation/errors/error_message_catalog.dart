@@ -102,6 +102,16 @@ final class ErrorMessageCatalog {
       why: (l, p) => l.errorResourceNotFoundWhy(p('path')),
       nextStep: (l, _) => l.errorResourceNotFoundNextStep,
     ),
+    'USER_EMAIL_TAKEN': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserEmailTakenTitle,
+      why: (l, p) => l.errorUserEmailTakenWhy(p('email')),
+      nextStep: (l, _) => l.errorUserEmailTakenNextStep,
+    ),
+    'USER_ROLE_NOT_ALLOWED': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserRoleNotAllowedTitle,
+      why: (l, p) => l.errorUserRoleNotAllowedWhy(p('role')),
+      nextStep: (l, _) => l.errorUserRoleNotAllowedNextStep,
+    ),
     'VALIDATION_FAILED': ErrorCatalogEntry(
       title: (l, _) => l.errorValidationFailedTitle,
       why: (l, p) => l.errorValidationFailedWhy(p('fields')),

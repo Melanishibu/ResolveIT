@@ -297,6 +297,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notAllowedBackToDashboard => 'Back to the dashboard';
 
   @override
+  String get errorUserEmailTakenTitle => 'This email address is already in use';
+
+  @override
+  String errorUserEmailTakenWhy(String email) {
+    return 'A ResolveIT user with the email address $email already exists. Email addresses are unique, regardless of upper or lower case.';
+  }
+
+  @override
+  String get errorUserEmailTakenNextStep =>
+      'Use a different email address, or find the existing user in User Management.';
+
+  @override
+  String get errorUserRoleNotAllowedTitle =>
+      'This role can\'t be given to a new user';
+
+  @override
+  String errorUserRoleNotAllowedWhy(String role) {
+    return 'New users can only be Technicians or Employees; the role $role can\'t be created here.';
+  }
+
+  @override
+  String get errorUserRoleNotAllowedNextStep =>
+      'Choose Technician or Employee and create the user again.';
+
+  @override
+  String get createUserTitle => 'Add user';
+
+  @override
+  String get createUserSubtitle =>
+      'The new user gets an email with a link to set their own password.';
+
+  @override
+  String get createUserNameLabel => 'Name';
+
+  @override
+  String get createUserEmailLabel => 'Email';
+
+  @override
+  String get createUserRoleLabel => 'Role';
+
+  @override
+  String get createUserDepartmentLabel => 'Department';
+
+  @override
+  String get createUserButton => 'Create user';
+
+  @override
+  String get createUserNameRequired => 'Enter the user\'s name.';
+
+  @override
+  String get createUserEmailRequired => 'Enter the user\'s email address.';
+
+  @override
+  String get createUserRoleRequired => 'Choose a role.';
+
+  @override
+  String get createUserDepartmentRequired => 'Enter the user\'s department.';
+
+  @override
+  String createUserSuccess(String email) {
+    return 'User created. The invitation email goes to $email.';
+  }
+
+  @override
   String get loginTitle => 'Log in to ResolveIT';
 
   @override

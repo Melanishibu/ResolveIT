@@ -45,6 +45,15 @@ test profile never load them; only the login integration test (`AuthLoginIT`) ad
 
 Five failed logins in a row lock an account for 15 minutes. Sessions last 8 hours.
 
+**Invitation emails and Mailpit (RIT-US-06):** when an Admin creates a user (User Management → Add user), the user
+gets an email with a one-time link to set their password (valid 24 hours). Locally these emails go to **Mailpit**
+from `docker-compose.yml`: open http://localhost:8025 (or your `RESOLVEIT_MAILPIT_UI_PORT`) to read them. Emails
+never contain a password. Settings (environment variables; the `dev` profile has the local defaults):
+`RESOLVEIT_SMTP_HOST` / `RESOLVEIT_SMTP_PORT` (dev: `localhost` / `RESOLVEIT_MAILPIT_SMTP_PORT` or 1025),
+`RESOLVEIT_MAIL_FROM` (dev: `ResolveIT <no-reply@resolveit.local>`), and `FRONTEND_BASE_URL` for the link
+(dev: `http://localhost:5000`). If the mail server is down, the user is still created and the invitation shows
+`SEND_FAILED`.
+
 **Port already in use?** If 5432, 1025 or 8025 is taken on your machine (for example by a Windows
 PostgreSQL service or another project's container), `docker compose` cannot publish the port and the backend
 may connect to the wrong PostgreSQL. Pick free host ports and set them as user environment variables
