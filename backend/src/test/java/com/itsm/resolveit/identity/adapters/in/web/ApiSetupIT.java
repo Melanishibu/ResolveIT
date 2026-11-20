@@ -3,6 +3,7 @@ package com.itsm.resolveit.identity.adapters.in.web;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.itsm.resolveit.TestcontainersConfiguration;
+import com.itsm.resolveit.testsupport.AuthApiClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import org.junit.jupiter.api.Test;

@@ -272,6 +272,31 @@ class AppLocalizationsEn extends AppLocalizations {
       'Log in again with your email address and password.';
 
   @override
+  String get errorAuthForbiddenTitle => 'You don\'t have access to this';
+
+  @override
+  String get errorAuthForbiddenWhy =>
+      'Your role doesn\'t allow this action or page in ResolveIT.';
+
+  @override
+  String get errorAuthForbiddenNextStep =>
+      'If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard.';
+
+  @override
+  String get errorAuthCsrfInvalidTitle => 'This request couldn\'t be verified';
+
+  @override
+  String get errorAuthCsrfInvalidWhy =>
+      'The security token that protects your session was missing or didn\'t match, so ResolveIT refused the change.';
+
+  @override
+  String get errorAuthCsrfInvalidNextStep =>
+      'Reload the page and try again. If it keeps happening, log out and log in again.';
+
+  @override
+  String get notAllowedBackToDashboard => 'Back to the dashboard';
+
+  @override
   String get loginTitle => 'Log in to ResolveIT';
 
   @override

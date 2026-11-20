@@ -64,6 +64,19 @@ with `[Environment]::SetEnvironmentVariable("RESOLVEIT_DB_PORT", $null, "User")`
 Build and test (unit, integration, ArchUnit, Spring Modulith and error-gate tests; needs Docker for
 Testcontainers): `cd backend; .\mvnw.cmd clean verify`. Tests always run with the `test` profile, never `dev`.
 
+**Request protection and authorisation (RIT-US-05):** every ResolveIT endpoint needs a valid session (401
+`AUTH_UNAUTHENTICATED`) unless it is marked `@PublicEndpoint`, and every POST/PUT/PATCH/DELETE needs the
+`X-XSRF-TOKEN` header equal to the `XSRF-TOKEN` cookie (403 `AUTH_CSRF_INVALID`; only login is `@CsrfExempt`).
+Controllers take an `Actor` parameter and pass it to the use case, which checks it first:
+`actor.require(Permission.MANAGE_USERS)` (403 `AUTH_FORBIDDEN`). `Permission` holds the unconditional rows of the
+permission table; rules like "if assigned" belong to the incident domain.
+
+**Authorisation test harness:** for each new endpoint, add one test to an integration test that loads the dev seed
+(see `AuthorizationHarnessIT`), using `com.itsm.resolveit.testsupport.AuthorizationMatrix` (public, usable from any
+module's tests): one expected status per role plus anonymous (always 401: the session is checked before CSRF), for example
+`new AuthorizationMatrix(port).endpoint("GET", "/api/v1/...").expect(Role.ADMIN, 200).expect(Role.SUPPORT_AGENT, 403)
+.expect(Role.EMPLOYEE, 403).expectAnonymous(401).verify()`. State-changing requests are sent with the CSRF token.
+
 Error codes: the registry `ErrorCodeRegistry` is published as `contracts/error-codes.json`. After changing
 the registry, regenerate the file with `cd backend; .\mvnw.cmd test "-Dtest=ErrorCodeContractTest" "-DupdateContracts=true"`
 and commit it.

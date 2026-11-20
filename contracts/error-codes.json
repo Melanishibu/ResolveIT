@@ -1,6 +1,20 @@
 {
   "description" : "ResolveIT error-code registry. Generated from ErrorCodeRegistry; do not edit by hand. Regenerate: cd backend; .\\mvnw.cmd test \"-Dtest=ErrorCodeContractTest\" \"-DupdateContracts=true\"",
   "errorCodes" : [ {
+    "code" : "AUTH_CSRF_INVALID",
+    "httpStatus" : 403,
+    "requiredParams" : [ ],
+    "title" : "This request couldn't be verified",
+    "why" : "The security token that protects your session was missing or didn't match, so ResolveIT refused the change.",
+    "nextStep" : "Reload the page and try again. If it keeps happening, log out and log in again."
+  }, {
+    "code" : "AUTH_FORBIDDEN",
+    "httpStatus" : 403,
+    "requiredParams" : [ ],
+    "title" : "You don't have access to this",
+    "why" : "Your role doesn't allow this action or page in ResolveIT.",
+    "nextStep" : "If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard."
+  }, {
     "code" : "AUTH_INVALID_CREDENTIALS",
     "httpStatus" : 401,
     "requiredParams" : [ ],

@@ -66,6 +66,18 @@ public final class ErrorCodeRegistry {
                 "Your session has ended or is no longer valid, for example after you logged out, after 8 hours,"
                         + " or because your account was deactivated.",
                 "Log in again with your email address and password."));
+        // Request protection (AB#14).
+        register(new RegisteredErrorCode(
+                "AUTH_FORBIDDEN", 403, Set.of(),
+                "You don't have access to this",
+                "Your role doesn't allow this action or page in ResolveIT.",
+                "If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard."));
+        register(new RegisteredErrorCode(
+                "AUTH_CSRF_INVALID", 403, Set.of(),
+                "This request couldn't be verified",
+                "The security token that protects your session was missing or didn't match, so ResolveIT refused"
+                        + " the change.",
+                "Reload the page and try again. If it keeps happening, log out and log in again."));
     }
 
     private ErrorCodeRegistry() {

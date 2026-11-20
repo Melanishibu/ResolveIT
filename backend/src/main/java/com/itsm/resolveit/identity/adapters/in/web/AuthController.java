@@ -1,6 +1,8 @@
 package com.itsm.resolveit.identity.adapters.in.web;
 
-import com.itsm.resolveit.identity.application.port.in.GetCurrentUserUseCase;
+import com.itsm.resolveit.identity.CsrfExempt;
+import com.itsm.resolveit.identity.PublicEndpoint;
+import com.itsm.resolveit.identity.application.port.in.CurrentUserView;
 import com.itsm.resolveit.identity.application.port.in.LogInCommand;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
 import com.itsm.resolveit.identity.application.port.in.LogOutUseCase;
@@ -32,18 +34,17 @@ class AuthController {
 
     private final LogInUseCase logIn;
     private final LogOutUseCase logOut;
-    private final GetCurrentUserUseCase currentUser;
     private final SessionCookies cookies;
 
-    AuthController(LogInUseCase logIn, LogOutUseCase logOut, GetCurrentUserUseCase currentUser,
-                   SessionCookies cookies) {
+    AuthController(LogInUseCase logIn, LogOutUseCase logOut, SessionCookies cookies) {
         this.logIn = logIn;
         this.logOut = logOut;
-        this.currentUser = currentUser;
         this.cookies = cookies;
     }
 
     @PostMapping("/login")
+    @PublicEndpoint
+    @CsrfExempt
     @Operation(summary = "Log in with email and password",
             description = "Sets the RIT_SESSION cookie (session, 8 h, HttpOnly, Secure, SameSite=Strict) and the"
                     + " XSRF-TOKEN cookie. 5 failed attempts in a row lock the account for 15 minutes.")
@@ -63,8 +64,11 @@ class AuthController {
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "Log out", description = "Ends the session and clears both cookies. Always 204.")
+    @PublicEndpoint
+    @Operation(summary = "Log out", description = "Ends the session and clears both cookies. 204 whenever the CSRF token is valid (also without a session).")
     @ApiResponse(responseCode = "204", description = "Logged out")
+    @ApiResponse(responseCode = "403", description = "AUTH_CSRF_INVALID (X-XSRF-TOKEN header missing or not matching)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<Void> logOut(
             @CookieValue(name = SessionCookies.SESSION_COOKIE, required = false) String sessionToken) {
         logOut.logOut(token(sessionToken));
@@ -79,9 +83,9 @@ class AuthController {
     @ApiResponse(responseCode = "200", description = "The current user")
     @ApiResponse(responseCode = "401", description = "AUTH_UNAUTHENTICATED",
             content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    CurrentUserResponse me(
-            @CookieValue(name = SessionCookies.SESSION_COOKIE, required = false) String sessionToken) {
-        return CurrentUserResponse.of(currentUser.currentUser(token(sessionToken)));
+    CurrentUserResponse me(CurrentUserView user) {
+        // The session was checked by RequestProtectionInterceptor (401 AUTH_UNAUTHENTICATED without one).
+        return CurrentUserResponse.of(user);
     }
 
     private static Optional<SessionToken> token(String cookieValue) {

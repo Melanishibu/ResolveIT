@@ -1,12 +1,13 @@
 package com.itsm.resolveit.identity.adapters.in.web;
 
-import static com.itsm.resolveit.identity.adapters.in.web.AuthApiClient.PASSWORD;
-import static com.itsm.resolveit.identity.adapters.in.web.AuthApiClient.cookiePair;
-import static com.itsm.resolveit.identity.adapters.in.web.AuthApiClient.json;
-import static com.itsm.resolveit.identity.adapters.in.web.AuthApiClient.setCookie;
+import static com.itsm.resolveit.testsupport.AuthApiClient.PASSWORD;
+import static com.itsm.resolveit.testsupport.AuthApiClient.cookiePair;
+import static com.itsm.resolveit.testsupport.AuthApiClient.json;
+import static com.itsm.resolveit.testsupport.AuthApiClient.setCookie;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.itsm.resolveit.TestcontainersConfiguration;
+import com.itsm.resolveit.testsupport.AuthApiClient;
 import java.net.http.HttpResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +111,16 @@ class AuthLoginIT {
     // Scenario: Logout ends the session
     @Test
     void logoutEndsTheSession() throws Exception {
-        String session = cookiePair(api().logIn("agent1@resolveit.local", PASSWORD), "RIT_SESSION");
+        HttpResponse<String> login = api().logIn("agent1@resolveit.local", PASSWORD);
+        String session = cookiePair(login, "RIT_SESSION");
+        String xsrf = cookiePair(login, "XSRF-TOKEN");
         assertThat(api().me(session).statusCode()).isEqualTo(200);
 
-        HttpResponse<String> logout = api().logOut(session);
+        // AB#14: logout is state-changing, so it carries the CSRF token like the frontend does.
+        HttpResponse<String> logout = api().send(api().request("/api/v1/auth/logout")
+                .header("Cookie", session + "; " + xsrf)
+                .header("X-XSRF-TOKEN", xsrf.substring(xsrf.indexOf('=') + 1))
+                .POST(java.net.http.HttpRequest.BodyPublishers.noBody()));
 
         assertThat(logout.statusCode()).isEqualTo(204);
         assertThat(setCookie(logout, "RIT_SESSION")).hasValueSatisfying(cookie -> assertThat(cookie).contains("Max-Age=0"));

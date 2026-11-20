@@ -8,7 +8,7 @@ enum MenuDestination {
   incidents('/incidents', Icons.assignment_outlined),
   myIncidents('/my-incidents', Icons.assignment_ind_outlined),
   createIncident('/incidents/new', Icons.add_circle_outline),
-  userManagement('/users', Icons.manage_accounts_outlined),
+  userManagement('/admin/users', Icons.manage_accounts_outlined),
   profile('/profile', Icons.person_outline);
 
   const MenuDestination(this.path, this.icon);

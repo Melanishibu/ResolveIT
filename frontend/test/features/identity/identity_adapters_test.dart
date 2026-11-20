@@ -138,7 +138,7 @@ void main() {
 
     test('signed-in users leave /login for the dashboard', () {
       expect(sessionRedirect(AsyncData(user), '/login'), '/dashboard');
-      expect(sessionRedirect(AsyncData(user), '/incidents'), isNull);
+      expect(sessionRedirect(AsyncData(user), '/my-incidents'), isNull);
     });
 
     test(

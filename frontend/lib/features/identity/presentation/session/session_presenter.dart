@@ -24,6 +24,12 @@ class SessionPresenter extends AsyncNotifier<CurrentUser?> {
   /// Called by the login screen after a successful login.
   void signedIn(CurrentUser user) => state = AsyncData(user);
 
+  /// Any API call answered 401: the session has ended (expired, logged out elsewhere, deactivated).
+  /// Does nothing while nobody is signed in (for example a refused login).
+  void signedOut() {
+    if (state.value != null) state = const AsyncData(null);
+  }
+
   /// Ends the session. The user is signed out locally even if the call fails.
   Future<void> logOut() async {
     await ref.read(logOutProvider)();

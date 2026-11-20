@@ -15,10 +15,14 @@ import com.itsm.resolveit.identity.config.SessionProperties;
 import com.itsm.resolveit.identity.domain.model.LoginLockoutPolicy;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import java.time.Clock;
+import java.util.List;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Builds the use cases this web adapter drives, from port interfaces only (the implementations are
@@ -46,6 +50,22 @@ class IdentityWebConfig {
     GetCurrentUserUseCase getCurrentUserUseCase(SessionTokenVerifier tokens, UserSessionRepository sessions,
                                                 UserRepository users, ObjectProvider<Clock> clock) {
         return new GetCurrentUserService(tokens, sessions, users, clock(clock));
+    }
+
+    /** Request protection (RIT-US-05): CSRF and session check on every ResolveIT endpoint, plus the Actor parameter. */
+    @Bean
+    WebMvcConfigurer requestProtection(GetCurrentUserUseCase currentUser) {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(new RequestProtectionInterceptor(currentUser));
+            }
+
+            @Override
+            public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+                resolvers.add(new CurrentUserArgumentResolver());
+            }
+        };
     }
 
     @Bean

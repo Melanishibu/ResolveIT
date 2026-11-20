@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:resolveit/app/dev/component_gallery_view.dart';
 import 'package:resolveit/app/shell/app_shell_view.dart';
 import 'package:resolveit/app/shell/navigation_menu.dart';
+import 'package:resolveit/app/shell/not_allowed_view.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/identity/identity.dart';
@@ -39,18 +40,26 @@ List<RouteBase> devComponentRoutes() => [
   ),
 ];
 
-/// Where the session state sends the user (AB#13):
+/// Where the session state sends the user (AB#13, AB#14):
 /// - signed out → `/login` (dev routes stay reachable in debug builds);
 /// - signed in on `/login` → the dashboard;
+/// - signed in on a page that isn't in the role's menu → the "not allowed" page;
 /// - still loading or backend unreachable → stay (the shell shows loading or the error panel).
-/// Role guards and the "not allowed" page arrive with RIT-US-05.
+/// The backend enforces every rule; the router only keeps users on pages their role may use.
 String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   if (session.isLoading || !session.hasValue) return null;
-  final signedIn = session.value != null;
-  if (!signedIn && path != LoginView.path && !path.startsWith('/dev/')) {
-    return LoginView.path;
+  final user = session.value;
+  if (user == null) {
+    if (path != LoginView.path && !path.startsWith('/dev/')) {
+      return LoginView.path;
+    }
+    return null;
   }
-  if (signedIn && path == LoginView.path) return MenuDestination.dashboard.path;
+  if (path == LoginView.path) return MenuDestination.dashboard.path;
+  final destination = MenuDestination.forLocation(path);
+  if (destination != null && !menuFor(user.role).contains(destination)) {
+    return NotAllowedView.path;
+  }
   return null;
 }
 
@@ -79,6 +88,11 @@ GoRouter buildAppRouter({
       builder: (context, state, child) =>
           AppShellView(location: state.uri.path, child: child),
       routes: [
+        GoRoute(
+          path: NotAllowedView.path,
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: NotAllowedView()),
+        ),
         for (final destination in MenuDestination.values)
           GoRoute(
             path: destination.path,

@@ -11,7 +11,9 @@ public enum IdentityErrorCode implements ErrorCode {
     /** 5 consecutive failures lock the account for 15 minutes. */
     AUTH_LOGIN_TEMPORARILY_BLOCKED(Set.of("retryAfterMinutes")),
     /** No valid session (missing, expired, logged out, or the user was deactivated). */
-    AUTH_UNAUTHENTICATED(Set.of());
+    AUTH_UNAUTHENTICATED(Set.of()),
+    /** A state-changing request without a matching X-XSRF-TOKEN header and XSRF-TOKEN cookie (RIT-US-05). */
+    AUTH_CSRF_INVALID(Set.of());
 
     private final Set<String> requiredParams;
 

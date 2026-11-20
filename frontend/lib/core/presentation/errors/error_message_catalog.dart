@@ -56,6 +56,16 @@ final class ErrorMessageCatalog {
   final Map<String, ErrorCatalogEntry> entries;
 
   static final ErrorMessageCatalog standard = ErrorMessageCatalog({
+    'AUTH_CSRF_INVALID': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthCsrfInvalidTitle,
+      why: (l, _) => l.errorAuthCsrfInvalidWhy,
+      nextStep: (l, _) => l.errorAuthCsrfInvalidNextStep,
+    ),
+    'AUTH_FORBIDDEN': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthForbiddenTitle,
+      why: (l, _) => l.errorAuthForbiddenWhy,
+      nextStep: (l, _) => l.errorAuthForbiddenNextStep,
+    ),
     'AUTH_INVALID_CREDENTIALS': ErrorCatalogEntry(
       title: (l, _) => l.errorAuthInvalidCredentialsTitle,
       why: (l, _) => l.errorAuthInvalidCredentialsWhy,

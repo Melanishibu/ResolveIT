@@ -125,6 +125,16 @@
   "errorAuthUnauthenticatedWhy": "Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.",
   "errorAuthUnauthenticatedNextStep": "Log in again with your email address and password.",
 
+  "errorAuthForbiddenTitle": "You don't have access to this",
+  "errorAuthForbiddenWhy": "Your role doesn't allow this action or page in ResolveIT.",
+  "errorAuthForbiddenNextStep": "If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard.",
+
+  "errorAuthCsrfInvalidTitle": "This request couldn't be verified",
+  "errorAuthCsrfInvalidWhy": "The security token that protects your session was missing or didn't match, so ResolveIT refused the change.",
+  "errorAuthCsrfInvalidNextStep": "Reload the page and try again. If it keeps happening, log out and log in again.",
+
+  "notAllowedBackToDashboard": "Back to the dashboard",
+
   "loginTitle": "Log in to ResolveIT",
   "loginSubtitle": "IT Service Desk – use your work email and password.",
   "loginEmailLabel": "Email",

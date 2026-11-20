@@ -538,6 +538,48 @@ abstract class AppLocalizations {
   /// **'Log in again with your email address and password.'**
   String get errorAuthUnauthenticatedNextStep;
 
+  /// No description provided for @errorAuthForbiddenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have access to this'**
+  String get errorAuthForbiddenTitle;
+
+  /// No description provided for @errorAuthForbiddenWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your role doesn\'t allow this action or page in ResolveIT.'**
+  String get errorAuthForbiddenWhy;
+
+  /// No description provided for @errorAuthForbiddenNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard.'**
+  String get errorAuthForbiddenNextStep;
+
+  /// No description provided for @errorAuthCsrfInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This request couldn\'t be verified'**
+  String get errorAuthCsrfInvalidTitle;
+
+  /// No description provided for @errorAuthCsrfInvalidWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The security token that protects your session was missing or didn\'t match, so ResolveIT refused the change.'**
+  String get errorAuthCsrfInvalidWhy;
+
+  /// No description provided for @errorAuthCsrfInvalidNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload the page and try again. If it keeps happening, log out and log in again.'**
+  String get errorAuthCsrfInvalidNextStep;
+
+  /// No description provided for @notAllowedBackToDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the dashboard'**
+  String get notAllowedBackToDashboard;
+
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:
