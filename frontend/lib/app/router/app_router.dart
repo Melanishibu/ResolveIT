@@ -9,6 +9,7 @@ import 'package:resolveit/app/shell/not_allowed_view.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/incident/incident.dart';
 import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
@@ -64,6 +65,18 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   return null;
 }
 
+/// The feature screens inside the shell (each feature's `presentation/router`).
+List<RouteBase> get _shellFeatureRoutes => [
+  ...usersRoutes(),
+  ...incidentRoutes(),
+];
+
+/// Paths served by a feature screen; their menu destinations get no placeholder page.
+Set<String> get _shellFeaturePaths => {
+  for (final route in _shellFeatureRoutes)
+    if (route is GoRoute) route.path,
+};
+
 /// Every menu destination is a placeholder page inside the shell until its story arrives.
 /// [devRoutes] are added only by the debug composition root (see [appRouterProvider]).
 /// Without [session] (tests of routing alone) no session redirect applies.
@@ -90,16 +103,18 @@ GoRouter buildAppRouter({
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: NotAllowedView()),
         ),
-        ...usersRoutes(),
+        ..._shellFeatureRoutes,
+        // Destinations without a feature screen yet show a placeholder page.
         for (final destination in MenuDestination.values)
-          GoRoute(
-            path: destination.path,
-            pageBuilder: (context, state) => NoTransitionPage(
-              child: PlaceholderPage(
-                title: destination.label(AppLocalizations.of(context)),
+          if (!_shellFeaturePaths.contains(destination.path))
+            GoRoute(
+              path: destination.path,
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: PlaceholderPage(
+                  title: destination.label(AppLocalizations.of(context)),
+                ),
               ),
             ),
-          ),
       ],
     ),
     ...devRoutes,

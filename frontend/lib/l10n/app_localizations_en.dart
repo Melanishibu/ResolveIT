@@ -381,4 +381,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginPasswordRequired => 'Enter your password.';
+
+  @override
+  String get categoryHardware => 'Hardware';
+
+  @override
+  String get categorySoftware => 'Software';
+
+  @override
+  String get categoryNetwork => 'Network';
+
+  @override
+  String get categoryAccess => 'Access';
+
+  @override
+  String get categoryOther => 'Other';
+
+  @override
+  String get createIncidentSubtitle =>
+      'Describe the problem and the support team will pick it up.';
+
+  @override
+  String get createIncidentHelpTitle => 'We\'re here to help!';
+
+  @override
+  String get createIncidentHelpBody =>
+      'Tell us what happened, when it started and what you already tried. A clear title and description help the support team solve it faster.';
+
+  @override
+  String get createIncidentTitleLabel => 'Title';
+
+  @override
+  String get createIncidentTitleHint => 'For example: Laptop won\'t start';
+
+  @override
+  String get createIncidentCategoryLabel => 'Category';
+
+  @override
+  String get createIncidentPriorityLabel => 'Priority';
+
+  @override
+  String get createIncidentDescriptionLabel => 'Description';
+
+  @override
+  String get createIncidentDescriptionHint =>
+      'What happened, since when, and what you already tried.';
+
+  @override
+  String get createIncidentCancel => 'Cancel';
+
+  @override
+  String get createIncidentSubmit => 'Submit Incident';
+
+  @override
+  String get createIncidentTitleRequired =>
+      'Enter a title (up to 120 characters).';
+
+  @override
+  String get createIncidentCategoryRequired => 'Choose a category.';
+
+  @override
+  String get createIncidentPriorityRequired => 'Choose a priority.';
+
+  @override
+  String get createIncidentDescriptionRequired =>
+      'Enter a description (up to 2000 characters).';
+
+  @override
+  String createIncidentSuccess(String ticketNumber) {
+    return 'Incident $ticketNumber created. The support team will pick it up.';
+  }
 }

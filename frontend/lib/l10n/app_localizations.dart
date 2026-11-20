@@ -729,6 +729,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your password.'**
   String get loginPasswordRequired;
+
+  /// No description provided for @categoryHardware.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware'**
+  String get categoryHardware;
+
+  /// No description provided for @categorySoftware.
+  ///
+  /// In en, this message translates to:
+  /// **'Software'**
+  String get categorySoftware;
+
+  /// No description provided for @categoryNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get categoryNetwork;
+
+  /// No description provided for @categoryAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Access'**
+  String get categoryAccess;
+
+  /// No description provided for @categoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get categoryOther;
+
+  /// No description provided for @createIncidentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the problem and the support team will pick it up.'**
+  String get createIncidentSubtitle;
+
+  /// No description provided for @createIncidentHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re here to help!'**
+  String get createIncidentHelpTitle;
+
+  /// No description provided for @createIncidentHelpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened, when it started and what you already tried. A clear title and description help the support team solve it faster.'**
+  String get createIncidentHelpBody;
+
+  /// No description provided for @createIncidentTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get createIncidentTitleLabel;
+
+  /// No description provided for @createIncidentTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: Laptop won\'t start'**
+  String get createIncidentTitleHint;
+
+  /// No description provided for @createIncidentCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get createIncidentCategoryLabel;
+
+  /// No description provided for @createIncidentPriorityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get createIncidentPriorityLabel;
+
+  /// No description provided for @createIncidentDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get createIncidentDescriptionLabel;
+
+  /// No description provided for @createIncidentDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened, since when, and what you already tried.'**
+  String get createIncidentDescriptionHint;
+
+  /// No description provided for @createIncidentCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get createIncidentCancel;
+
+  /// No description provided for @createIncidentSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Incident'**
+  String get createIncidentSubmit;
+
+  /// No description provided for @createIncidentTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a title (up to 120 characters).'**
+  String get createIncidentTitleRequired;
+
+  /// No description provided for @createIncidentCategoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category.'**
+  String get createIncidentCategoryRequired;
+
+  /// No description provided for @createIncidentPriorityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a priority.'**
+  String get createIncidentPriorityRequired;
+
+  /// No description provided for @createIncidentDescriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a description (up to 2000 characters).'**
+  String get createIncidentDescriptionRequired;
+
+  /// No description provided for @createIncidentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident {ticketNumber} created. The support team will pick it up.'**
+  String createIncidentSuccess(String ticketNumber);
 }
 
 class _AppLocalizationsDelegate

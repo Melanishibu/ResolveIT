@@ -171,5 +171,31 @@
   "loginPasswordLabel": "Password",
   "loginButton": "Log in",
   "loginEmailRequired": "Enter your email address.",
-  "loginPasswordRequired": "Enter your password."
+  "loginPasswordRequired": "Enter your password.",
+
+  "categoryHardware": "Hardware",
+  "categorySoftware": "Software",
+  "categoryNetwork": "Network",
+  "categoryAccess": "Access",
+  "categoryOther": "Other",
+
+  "createIncidentSubtitle": "Describe the problem and the support team will pick it up.",
+  "createIncidentHelpTitle": "We're here to help!",
+  "createIncidentHelpBody": "Tell us what happened, when it started and what you already tried. A clear title and description help the support team solve it faster.",
+  "createIncidentTitleLabel": "Title",
+  "createIncidentTitleHint": "For example: Laptop won't start",
+  "createIncidentCategoryLabel": "Category",
+  "createIncidentPriorityLabel": "Priority",
+  "createIncidentDescriptionLabel": "Description",
+  "createIncidentDescriptionHint": "What happened, since when, and what you already tried.",
+  "createIncidentCancel": "Cancel",
+  "createIncidentSubmit": "Submit Incident",
+  "createIncidentTitleRequired": "Enter a title (up to 120 characters).",
+  "createIncidentCategoryRequired": "Choose a category.",
+  "createIncidentPriorityRequired": "Choose a priority.",
+  "createIncidentDescriptionRequired": "Enter a description (up to 2000 characters).",
+  "createIncidentSuccess": "Incident {ticketNumber} created. The support team will pick it up.",
+  "@createIncidentSuccess": {
+    "placeholders": { "ticketNumber": { "type": "String" } }
+  }
 }

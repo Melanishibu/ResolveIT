@@ -30,6 +30,10 @@ final class AppSpacing extends ThemeExtension<AppSpacing> {
   double get emptyStateIcon => 40;
   double get fieldMaxWidth => 420;
 
+  // RIT-US-09 (AB#37) create-incident layout.
+  double get illustrationIcon => 64;
+  double get twoColumnMinWidth => 840;
+
   @override
   AppSpacing copyWith() => this;
 
