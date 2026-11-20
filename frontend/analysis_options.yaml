@@ -1,0 +1,15 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    # package: imports everywhere, so the import-boundary test sees every dependency.
+    always_use_package_imports: true
+    avoid_relative_lib_imports: true
+    prefer_final_fields: true
+    prefer_const_constructors: true
+    unawaited_futures: true

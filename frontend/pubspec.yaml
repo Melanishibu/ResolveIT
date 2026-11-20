@@ -1,0 +1,28 @@
+name: resolveit
+description: "ResolveIT – IT Service Desk and Incident Management web app."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  dio: ^5.11.1
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^3.5.0
+  go_router: ^18.1.4
+  intl: ^0.20.2
+  web: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  http_mock_adapter: ^0.6.1
+
+flutter:
+  uses-material-design: true
+  generate: true

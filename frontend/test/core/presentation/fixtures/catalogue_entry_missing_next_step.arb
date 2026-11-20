@@ -1,0 +1,6 @@
+{
+  "@@locale": "en",
+  "_comment": "Deliberately broken sample (AB#11): the SAMPLE_REFUSED entry has no 'what to do' (NextStep) text. Lives under test/ only.",
+  "errorSampleRefusedTitle": "This sample can't be processed",
+  "errorSampleRefusedWhy": "The sample entry is incomplete on purpose."
+}

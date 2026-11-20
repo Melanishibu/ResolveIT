@@ -51,6 +51,30 @@ Error codes: the registry `ErrorCodeRegistry` is published as `contracts/error-c
 the registry, regenerate the file with `cd backend; .\mvnw.cmd test "-Dtest=ErrorCodeContractTest" "-DupdateContracts=true"`
 and commit it.
 
+# Run the frontend locally
+Prerequisites: Flutter stable (3.44 or later) and Chrome. Commands are for Windows PowerShell, from the repo root.
+
+1. Fetch dependencies: `cd frontend; flutter pub get`
+2. Start the app on the port the backend's CORS setting expects:
+   `flutter run -d chrome --web-port 5000`
+   - The shell opens on the Dashboard with the navy side menu. The menu screens are placeholders until their stories arrive.
+3. Optional build-time settings (`--dart-define`, no secrets):
+   - `API_BASE_URL`: the backend API (default `http://localhost:8080/api/v1`).
+   - `DEV_ROLE`: which menu the placeholder user sees: `ADMIN` (default), `SUPPORT_AGENT` (shown as Technician) or
+     `EMPLOYEE`. This exists only until login (US-04) is built, and it grants no access.
+   - Example: `flutter run -d chrome --web-port 5000 --dart-define=DEV_ROLE=EMPLOYEE`
+
+Checks (from `frontend`):
+- `flutter analyze`
+- `flutter test`: this includes the import-boundary test, the error-catalogue gate (which reads
+  `../contracts/error-codes.json`) and the theme-token test.
+- `flutter build web` (output in `frontend/build/web`).
+
+User-facing texts, including the error catalogue, live in `frontend/lib/l10n/app_en.arb`. After changing that file,
+run `flutter gen-l10n` and commit the generated files. When the backend adds an error code, add its
+`error<Code>Title`, `…Why` and `…NextStep` entries and a line in `ErrorMessageCatalog`; otherwise the catalogue gate
+fails.
+
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
 
