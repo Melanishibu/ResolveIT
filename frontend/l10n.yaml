@@ -1,0 +1,6 @@
+# D3 – English only in PI_01: every user-facing string lives in lib/l10n/app_en.arb.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-dir: lib/l10n
+output-localization-file: app_localizations.dart
+nullable-getter: false

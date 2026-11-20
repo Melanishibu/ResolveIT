@@ -1,0 +1,92 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "ResolveIT",
+  "appBrand": "IT Service Desk",
+
+  "menuDashboard": "Dashboard",
+  "menuIncidents": "Incidents",
+  "menuMyIncidents": "My Incidents",
+  "menuCreateIncident": "Create Incident",
+  "menuUserManagement": "User Management",
+  "menuProfile": "Profile",
+  "menuLogout": "Logout",
+
+  "roleAdmin": "Admin",
+  "roleSupportAgent": "Technician",
+  "roleEmployee": "Employee",
+
+  "avatarTooltip": "Signed in as {name} ({role})",
+  "@avatarTooltip": {
+    "placeholders": { "name": { "type": "String" }, "role": { "type": "String" } }
+  },
+  "loadingLabel": "Loading…",
+  "placeholderComingSoon": "This screen is coming in a later story.",
+
+  "priorityLow": "Low",
+  "priorityMedium": "Medium",
+  "priorityHigh": "High",
+  "priorityCritical": "Critical",
+  "statusOpen": "Open",
+  "statusAssigned": "Assigned",
+  "statusInProgress": "In Progress",
+  "statusResolved": "Resolved",
+  "statusClosed": "Closed",
+
+  "errorWhatToDo": "What to do",
+  "errorDetails": "Details",
+  "errorClose": "Close",
+  "errorDetailsCode": "Code: {code}",
+  "@errorDetailsCode": {
+    "placeholders": { "code": { "type": "String" } }
+  },
+  "errorDetailsStatus": "HTTP status: {status}",
+  "@errorDetailsStatus": {
+    "placeholders": { "status": { "type": "String" } }
+  },
+  "errorDetailsReference": "Reference: {traceId}",
+  "@errorDetailsReference": {
+    "placeholders": { "traceId": { "type": "String" } }
+  },
+  "errorValueUnavailable": "not available",
+
+  "errorInternalErrorTitle": "Something went wrong on our side",
+  "errorInternalErrorWhy": "ResolveIT couldn't complete the request because of an unexpected error.",
+  "errorInternalErrorNextStep": "Try again in a moment. If it keeps happening, contact the ResolveIT administrator and quote the reference shown under Details.",
+
+  "errorMethodNotAllowedTitle": "This action isn't available here",
+  "errorMethodNotAllowedWhy": "{path} does not accept {method} requests.",
+  "@errorMethodNotAllowedWhy": {
+    "placeholders": { "path": { "type": "String" }, "method": { "type": "String" } }
+  },
+  "errorMethodNotAllowedNextStep": "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator.",
+
+  "errorRequestNotSupportedTitle": "This request can't be processed",
+  "errorRequestNotSupportedWhy": "The request to {path} uses a format or option that ResolveIT doesn't support.",
+  "@errorRequestNotSupportedWhy": {
+    "placeholders": { "path": { "type": "String" } }
+  },
+  "errorRequestNotSupportedNextStep": "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator.",
+
+  "errorResourceNotFoundTitle": "This page or item doesn't exist",
+  "errorResourceNotFoundWhy": "Nothing is available at {path}. The link may be outdated or mistyped.",
+  "@errorResourceNotFoundWhy": {
+    "placeholders": { "path": { "type": "String" } }
+  },
+  "errorResourceNotFoundNextStep": "Check the address, or go back to the dashboard and open the item from there.",
+
+  "errorValidationFailedTitle": "Some information is missing or invalid",
+  "errorValidationFailedWhy": "The request could not be accepted because these fields are missing or invalid: {fields}.",
+  "@errorValidationFailedWhy": {
+    "placeholders": { "fields": { "type": "String" } }
+  },
+  "errorValidationFailedNextStep": "Correct the highlighted fields and submit again.",
+
+  "errorUnknownErrorTitle": "Something went wrong",
+  "errorUnknownErrorWhy": "ResolveIT received a response it doesn't recognise.",
+  "errorUnknownErrorNextStep": "Try again. If it keeps happening, contact the ResolveIT administrator and quote the code shown under Details.",
+
+  "errorNetworkUnavailableTitle": "Can't reach ResolveIT",
+  "errorNetworkUnavailableWhy": "The app couldn't connect to the ResolveIT server.",
+  "errorNetworkUnavailableNextStep": "Check your network connection and try again in a moment."
+}
