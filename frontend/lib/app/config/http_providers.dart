@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/app/config/app_config.dart';
 import 'package:resolveit/core/adapters/http/api_client.dart';
 import 'package:resolveit/core/adapters/http/csrf_token_source.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 
 /// The shared API client. Feature data adapters get it through providers the composition root binds.
 ///

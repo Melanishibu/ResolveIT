@@ -1,0 +1,28 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/users/data/datasource/users_remote_datasource.dart';
+import 'package:resolveit/features/users/data/repository/api_user_admin_repository.dart';
+import 'package:resolveit/features/users/domain/repository/user_admin_repository.dart';
+import 'package:resolveit/features/users/domain/usecase/create_user.dart';
+import 'package:resolveit/features/users/interactor/create_user_interactor.dart';
+
+/// The HTTP client of the user-management API. The composition root (`lib/app/app.dart`) binds it
+/// to the shared API client; features never import the composition root.
+final usersHttpClientProvider = Provider<Dio>(
+  (ref) => throw StateError(
+    'usersHttpClientProvider is bound by the composition root (ResolveItApp)',
+  ),
+);
+
+/// User management for Admins (RIT-US-06). Tests override it with a fake.
+final userAdminRepositoryProvider = Provider<UserAdminRepository>(
+  (ref) => ApiUserAdminRepository(
+    UsersRemoteDataSource(ref.watch(usersHttpClientProvider)),
+  ),
+);
+
+/// What the create-user presenter calls.
+final createUserInteractorProvider = Provider<CreateUserInteractor>(
+  (ref) =>
+      CreateUserInteractor(CreateUser(ref.watch(userAdminRepositoryProvider))),
+);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 /// A screen reachable from the side menu. Logout is a separate action, shown for every role.

@@ -56,6 +56,43 @@ wins only where it lists an approved deviation below; otherwise the skill wins.
   (`lib/app/app.dart`) with `// ARCH-DEVIATION: D2 – no Apex UI access; Material widgets; approved by
   Melani Shibu 11/19/2026`, and mention D2 in PR descriptions that add screens.
 
+## Frontend feature layout
+Approved by Melani Shibu on 11/21/2026 (RIT-US-29, AB#175). It replaces the earlier folder layout, within the
+`references/flutter.md` rule that a project may use its own VIPER names if the dependency rule holds. Enforced by
+`frontend/test/architecture/import_boundary_checker.dart` (deliberately broken samples live under `test/` only).
+
+```
+lib/features/<feature>/
+  data/datasource/        REST calls via Dio, data models
+  data/repository/        implementations of domain/repository
+  domain/entity/          entities and value objects, pure Dart
+  domain/repository/      abstract repository contracts
+  domain/usecase/         one business operation per class
+  interactor/             coordinates use cases for a presentation flow, pure Dart
+  presentation/presenter/ Riverpod notifiers holding screen state, calling the interactor
+  presentation/router/    the feature's routes
+  presentation/view/      widgets only, render presenter state
+  widgets/                feature-specific widgets built on core/presentation/widgets
+  providers.dart          the feature's dependency wiring
+  <feature>.dart          public barrel; other features import only this
+```
+
+| Folder | Must never import |
+|---|---|
+| `data/datasource`, `data/repository` | `presentation`, `interactor` |
+| `domain/entity`, `domain/repository`, `domain/usecase` | Flutter, Riverpod, Dio/HTTP, browser APIs, l10n, `core/adapters`, JSON, `data`, `interactor`, `presentation` |
+| `interactor` | Flutter, Riverpod, Dio/HTTP, browser APIs, l10n, `core/adapters`, `data`, `presentation` |
+| `presentation/presenter` | `data`, Dio/HTTP, `core/adapters`, `domain/usecase`, `domain/repository` |
+| `presentation/router` | `data`, Dio/HTTP, `core/adapters` |
+| `presentation/view` | `data`, Dio/HTTP, `core/adapters`, `interactor`, `domain/usecase` |
+| `widgets` | `data`, Dio/HTTP, `core/adapters`, `interactor` |
+| `providers.dart` | – (anything in its own feature) |
+| another feature's files | everything except that feature's `<feature>.dart` |
+
+Features: `auth` (login, logout, current user, set/forgot/change password), `users` (user management, My Profile),
+`dashboard`, `incident` (create, list, details, search, history, status), `assignment`, `comments`. Create only the
+folders a feature needs. Types shared by several features without UI (for example `Role`) live in `lib/core/domain/`.
+
 ## Workflow for every story
 1. **Read** the story, its Acceptance Criteria, child Tasks, parent Feature and Epic, and linked
    predecessors. If the spec has gaps or contradictions, post a question as a work item comment and stop.

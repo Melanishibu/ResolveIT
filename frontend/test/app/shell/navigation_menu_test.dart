@@ -5,20 +5,20 @@ import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/app/theme/app_colors.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/domain/result.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 
 import '../../support/test_app.dart';
 
 Future<void> _pumpShellAs(
   WidgetTester tester,
-  CurrentUserGateway gateway,
+  CurrentUserRepository repository,
 ) async {
   tester.view.physicalSize = const Size(1440, 900);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
     ResolveItApp(
-      overrides: [currentUserGatewayProvider.overrideWithValue(gateway)],
+      overrides: [currentUserRepositoryProvider.overrideWithValue(repository)],
     ),
   );
   await tester.pumpAndSettle();
@@ -71,7 +71,7 @@ void main() {
     ) async {
       await _pumpShellAs(
         tester,
-        FakeCurrentUserGateway.signedInAs(Role.supportAgent),
+        FakeCurrentUserRepository.signedInAs(Role.supportAgent),
       );
 
       expect(find.byKey(const Key('current-role')), findsOneWidget);
@@ -90,7 +90,7 @@ void main() {
     ) async {
       await _pumpShellAs(
         tester,
-        FakeCurrentUserGateway.signedInAs(Role.employee),
+        FakeCurrentUserRepository.signedInAs(Role.employee),
       );
 
       await tester.tap(find.byKey(const Key('menu-item-createIncident')));
@@ -114,7 +114,7 @@ void main() {
       (tester) async {
         await _pumpShellAs(
           tester,
-          FakeCurrentUserGateway.failing(
+          FakeCurrentUserRepository.failing(
             Failure(ApiFailure.networkUnavailable()),
           ),
         );

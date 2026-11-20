@@ -6,7 +6,8 @@ import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 /// The app shell: navy sidebar with the role's menu, top bar with the avatar, page content.

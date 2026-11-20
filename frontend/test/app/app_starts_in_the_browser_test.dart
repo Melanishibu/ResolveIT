@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resolveit/app/app.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 
 import '../support/test_app.dart';
 
@@ -17,12 +17,12 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    // AB#13 removed the placeholder user: the signed-in "Dev User" now comes from a fake gateway.
+    // AB#13 removed the placeholder user: the signed-in "Dev User" now comes from a fake repository.
     await tester.pumpWidget(
       ResolveItApp(
         overrides: [
-          currentUserGatewayProvider.overrideWithValue(
-            FakeCurrentUserGateway.signedInAs(
+          currentUserRepositoryProvider.overrideWithValue(
+            FakeCurrentUserRepository.signedInAs(
               Role.admin,
               displayName: 'Dev User',
             ),

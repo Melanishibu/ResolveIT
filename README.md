@@ -136,6 +136,12 @@ not contain the gallery.
 `AlertDialog` or `SnackBar` directly; the message names the file and the App component to use instead. A second test
 fails on raw colours, `TextStyle`, `fontSize` or numeric paddings inside the library.
 
+**Feature folders (RIT-US-29):** every feature under `frontend/lib/features/<feature>/` uses the same folders:
+`data/datasource`, `data/repository`, `domain/entity`, `domain/repository`, `domain/usecase`, `interactor`,
+`presentation/presenter`, `presentation/router`, `presentation/view`, `widgets`, plus `providers.dart` (wiring) and the
+public barrel `<feature>.dart`. The layer rules are in `CLAUDE.md` ("Frontend feature layout") and are enforced by
+`flutter test` (import-boundary test).
+
 # Continuous integration
 `azure-pipelines.yml` defines the pipeline **ResolveIT CI** (Azure Pipelines, Microsoft-hosted `ubuntu-latest`,
 free tier: 1 parallel job, 1,800 minutes/month).

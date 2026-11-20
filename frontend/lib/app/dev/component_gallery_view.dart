@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/features/incident/incident.dart';
 
 /// Debug-only component gallery (US-28, AB#170): every component of the shared library in every

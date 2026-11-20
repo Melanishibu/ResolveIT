@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 
 /// Shell state: the signed-in user (drives the menu, the name and the avatar).
 final appShellPresenterProvider =

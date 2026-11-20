@@ -8,20 +8,24 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:resolveit/app/config/http_providers.dart';
 import 'package:resolveit/app/router/app_router.dart';
 import 'package:resolveit/app/theme/app_theme.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 class ResolveItApp extends StatelessWidget {
   const ResolveItApp({super.key, this.overrides = const []});
 
-  /// Test seam: replace ports (for example the current-user gateway) with fakes.
+  /// Test seam: replace ports (for example the current-user repository) with fakes.
   final List<Override> overrides;
 
   @override
   Widget build(BuildContext context) => ProviderScope(
     overrides: [
-      // Composition root: the identity feature talks to the shared API client (AB#13).
-      identityHttpClientProvider.overrideWith(
+      // Composition root: the auth and users features talk to the shared API client (AB#13, AB#48).
+      authHttpClientProvider.overrideWith(
+        (ref) => ref.watch(apiClientProvider),
+      ),
+      usersHttpClientProvider.overrideWith(
         (ref) => ref.watch(apiClientProvider),
       ),
       ...overrides,

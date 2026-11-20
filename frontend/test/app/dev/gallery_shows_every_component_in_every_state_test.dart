@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/features/incident/incident.dart';
 
 import '../../support/component_test_app.dart';

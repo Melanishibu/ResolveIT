@@ -8,7 +8,8 @@ import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/app/shell/not_allowed_view.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -79,11 +80,7 @@ GoRouter buildAppRouter({
     return session == null ? null : sessionRedirect(session.value, path);
   },
   routes: [
-    GoRoute(
-      path: LoginView.path,
-      pageBuilder: (context, state) =>
-          const NoTransitionPage(child: LoginView()),
-    ),
+    ...authRoutes(),
     ShellRoute(
       builder: (context, state, child) =>
           AppShellView(location: state.uri.path, child: child),
@@ -93,12 +90,7 @@ GoRouter buildAppRouter({
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: NotAllowedView()),
         ),
-        // Admin only: the role guard maps it to User Management (AB#48).
-        GoRoute(
-          path: CreateUserView.path,
-          pageBuilder: (context, state) =>
-              const NoTransitionPage(child: CreateUserView()),
-        ),
+        ...usersRoutes(),
         for (final destination in MenuDestination.values)
           GoRoute(
             path: destination.path,

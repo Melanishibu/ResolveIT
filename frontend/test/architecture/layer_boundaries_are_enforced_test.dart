@@ -19,7 +19,7 @@ void main() {
     expect(
       violations,
       contains(
-        'features/sample/domain/sample_entity.dart (domain) imports package:flutter/widgets.dart',
+        'features/sample/domain/entity/sample_entity.dart (domain/entity) imports package:flutter/widgets.dart; rule: domain/entity must never import Flutter',
       ),
       reason:
           'the same check that guards lib/ must report a domain file importing Flutter',

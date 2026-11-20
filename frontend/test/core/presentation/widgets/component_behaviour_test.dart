@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resolveit/app/theme/app_colors.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/users/users.dart';
 
 import '../../../support/component_test_app.dart';
 import '../../../support/test_app.dart';

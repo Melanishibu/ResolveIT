@@ -7,9 +7,9 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:resolveit/app/app.dart';
 import 'package:resolveit/app/router/app_router.dart';
 import 'package:resolveit/core/adapters/http/unauthorized_interceptor.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 
-import '../../support/identity_fakes.dart';
+import '../../support/auth_fakes.dart';
 
 /// RIT-US-05 (AB#14) router scenarios, through the real composition root.
 void main() {
@@ -121,8 +121,8 @@ Future<void> _pumpApp(WidgetTester tester, FakeIdentityBackend backend) async {
   await tester.pumpWidget(
     ResolveItApp(
       overrides: [
-        currentUserGatewayProvider.overrideWithValue(backend),
-        sessionGatewayProvider.overrideWithValue(backend),
+        currentUserRepositoryProvider.overrideWithValue(backend),
+        sessionRepositoryProvider.overrideWithValue(backend),
       ],
     ),
   );
