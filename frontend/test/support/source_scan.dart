@@ -20,13 +20,16 @@ Map<String, String> libSources() {
 }
 
 /// Lines (comments stripped) that match any of [patterns], in files not under [allowedPrefixes].
+/// When [onlyPrefixes] is given, only files under those prefixes are scanned (added for US-28).
 List<String> forbiddenUsages(
   List<RegExp> patterns, {
   List<String> allowedPrefixes = const [],
+  List<String>? onlyPrefixes,
 }) {
   final hits = <String>[];
   libSources().forEach((path, source) {
     if (allowedPrefixes.any(path.startsWith)) return;
+    if (onlyPrefixes != null && !onlyPrefixes.any(path.startsWith)) return;
     final lines = source.split('\n');
     for (var i = 0; i < lines.length; i++) {
       final code = lines[i].replaceFirst(RegExp(r'//.*$'), '');

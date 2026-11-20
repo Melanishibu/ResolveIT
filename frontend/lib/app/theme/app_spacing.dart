@@ -21,6 +21,15 @@ final class AppSpacing extends ThemeExtension<AppSpacing> {
   double get chipHorizontal => 10;
   double get chipVertical => 4;
 
+  // US-28 (AB#170) component sizes.
+  double get spinnerSize => 16;
+  double get spinnerStroke => 2;
+  double get controlMinHeight => 48;
+  double get tabHeight => 48;
+  double get statIconPadding => 12;
+  double get emptyStateIcon => 40;
+  double get fieldMaxWidth => 420;
+
   @override
   AppSpacing copyWith() => this;
 

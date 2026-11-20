@@ -33,6 +33,26 @@
   "statusResolved": "Resolved",
   "statusClosed": "Closed",
 
+  "userActive": "Active",
+  "userInactive": "Inactive",
+  "passwordShow": "Show password",
+  "passwordHide": "Hide password",
+  "searchHint": "Search…",
+  "searchClear": "Clear search",
+  "tableShowing": "Showing {from}–{to} of {total}",
+  "@tableShowing": {
+    "placeholders": { "from": { "type": "int" }, "to": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "tableActions": "Actions",
+  "tablePreviousPage": "Previous page",
+  "tableNextPage": "Next page",
+  "tablePage": "Page {page}",
+  "@tablePage": {
+    "placeholders": { "page": { "type": "int" } }
+  },
+  "confirmCancel": "Cancel",
+  "confirmConfirm": "Confirm",
+
   "errorWhatToDo": "What to do",
   "errorDetails": "Details",
   "errorClose": "Close",

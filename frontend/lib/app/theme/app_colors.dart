@@ -53,6 +53,14 @@ final class AppColors extends ThemeExtension<AppColors> {
     required this.statusInProgress,
     required this.statusResolved,
     required this.statusClosed,
+    required this.border,
+    required this.focusRing,
+    required this.danger,
+    required this.onDanger,
+    required this.success,
+    required this.roleChip,
+    required this.activeChip,
+    required this.inactiveChip,
   });
 
   static const _navy = Color(0xFF132A5E);
@@ -118,6 +126,27 @@ final class AppColors extends ThemeExtension<AppColors> {
       hue: _grey,
       foreground: const Color(0xFF4B5563),
     ),
+    // US-28 (AB#170) component tokens.
+    border: const Color(0xFFCBD5E1),
+    focusRing: const Color(0x332563EB),
+    danger: const Color(0xFFB91C1C),
+    onDanger: _white,
+    success: ChipColors.tinted(
+      hue: _green,
+      foreground: const Color(0xFF166534),
+    ),
+    roleChip: ChipColors.tinted(
+      hue: _primaryBlue,
+      foreground: const Color(0xFF1D4ED8),
+    ),
+    activeChip: ChipColors.tinted(
+      hue: _green,
+      foreground: const Color(0xFF166534),
+    ),
+    inactiveChip: ChipColors.tinted(
+      hue: _red,
+      foreground: const Color(0xFFB91C1C),
+    ),
   );
 
   final Color primary;
@@ -143,6 +172,24 @@ final class AppColors extends ThemeExtension<AppColors> {
   final ChipColors statusResolved;
   final ChipColors statusClosed;
 
+  /// Field outlines and table dividers.
+  final Color border;
+
+  /// Focus highlight for keyboard navigation.
+  final Color focusRing;
+
+  /// Danger button background and its text colour.
+  final Color danger;
+  final Color onDanger;
+
+  /// Success toast.
+  final ChipColors success;
+
+  /// Role chip (all roles) and user active/inactive chips.
+  final ChipColors roleChip;
+  final ChipColors activeChip;
+  final ChipColors inactiveChip;
+
   List<ChipColors> get allChips => [
     priorityLow,
     priorityMedium,
@@ -155,6 +202,10 @@ final class AppColors extends ThemeExtension<AppColors> {
     statusClosed,
     warning,
     error,
+    success,
+    roleChip,
+    activeChip,
+    inactiveChip,
   ];
 
   // One fixed light palette in PI_01: there is nothing to copy or interpolate.

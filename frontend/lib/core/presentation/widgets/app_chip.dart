@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 
-/// A small rounded label: tinted background, darker text of the same hue (all from theme tokens).
-class TintedChip extends StatelessWidget {
-  const TintedChip({super.key, required this.label, required this.colors});
+/// Small rounded label: tinted background, darker text of the same hue (US-28). Base for the
+/// priority, status, role and active chips; replaces US-02's `TintedChip` with the same structure.
+class AppChip extends StatelessWidget {
+  const AppChip({super.key, required this.label, required this.colors});
 
   final String label;
   final ChipColors colors;

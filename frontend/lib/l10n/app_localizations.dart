@@ -238,6 +238,84 @@ abstract class AppLocalizations {
   /// **'Closed'**
   String get statusClosed;
 
+  /// No description provided for @userActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get userActive;
+
+  /// No description provided for @userInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get userInactive;
+
+  /// No description provided for @passwordShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get passwordShow;
+
+  /// No description provided for @passwordHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get passwordHide;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search…'**
+  String get searchHint;
+
+  /// No description provided for @searchClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get searchClear;
+
+  /// No description provided for @tableShowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing {from}–{to} of {total}'**
+  String tableShowing(int from, int to, int total);
+
+  /// No description provided for @tableActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get tableActions;
+
+  /// No description provided for @tablePreviousPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous page'**
+  String get tablePreviousPage;
+
+  /// No description provided for @tableNextPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get tableNextPage;
+
+  /// No description provided for @tablePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String tablePage(int page);
+
+  /// No description provided for @confirmCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get confirmCancel;
+
+  /// No description provided for @confirmConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmConfirm;
+
   /// No description provided for @errorWhatToDo.
   ///
   /// In en, this message translates to:

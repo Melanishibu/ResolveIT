@@ -75,6 +75,29 @@ run `flutter gen-l10n` and commit the generated files. When the backend adds an 
 `error<Code>Title`, `…Why` and `…NextStep` entries and a line in `ErrorMessageCatalog`; otherwise the catalogue gate
 fails.
 
+# UI components
+Every screen is built from the shared component library in `frontend/lib/core/presentation/widgets/`
+(US-28; deviation D2 – it replaces Apex UI). Import it only through `widgets.dart`. The components use the US-02
+theme tokens only and contain no business logic or API calls.
+
+| Group | Components |
+|---|---|
+| Actions | `AppButton` (primary, secondary, text, danger; icon; loading and disabled states), `AppIconButton` |
+| Forms | `AppTextField` (required asterisk, hint, error, counter, password show/hide), `AppDropdown`, `AppSearchField` (300 ms debounce), `AppFormSection` |
+| Display | `AppCard`, `StatCard`, `AppChip` (base of `PriorityChip`, `StatusChip`, `RoleChip`, `ActiveChip`), `AvatarInitials` |
+| Layout | `PageHeader`, `AppTabs` |
+| Data | `AppDataTable` (sortable headers, row action, "Showing x–y of n" pagination; controlled by the presenter) |
+| Feedback | `LoadingState`, `EmptyState`, `ErrorPanel` / `showErrorDialog` (errors), `showConfirmDialog`, `AppToast.success` (success only) |
+
+**Component gallery:** in a debug build, open http://localhost:5000/#/dev/components
+(`cd frontend; flutter run -d chrome --web-port 5000`). It shows every component in every state. Release builds do
+not contain the gallery.
+
+**Guard rule:** `flutter test` fails if a file under `frontend/lib/features/` uses `ElevatedButton`, `TextButton`,
+`OutlinedButton`, `FilledButton`, `TextField`, `TextFormField`, `DropdownButton`, `DropdownMenu`, `DataTable`,
+`AlertDialog` or `SnackBar` directly; the message names the file and the App component to use instead. A second test
+fails on raw colours, `TextStyle`, `fontSize` or numeric paddings inside the library.
+
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
 

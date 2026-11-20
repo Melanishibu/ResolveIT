@@ -88,20 +88,23 @@ void main() {
       }
     });
 
-    test(
-      'no free-text or ad-hoc error dialogs outside the shared error panel',
-      () {
-        final hits = forbiddenUsages(
-          [
-            RegExp(
-              r'\b(AlertDialog|SimpleDialog|CupertinoAlertDialog|SnackBar)\s*\(',
-            ),
-            RegExp(r'\bshowDialog\s*[<(]'),
-          ],
-          allowedPrefixes: ['core/presentation/errors/'],
-        );
-        expect(hits, isEmpty, reason: hits.join('\n'));
-      },
-    );
+    test('no free-text or ad-hoc error dialogs outside the shared error panel', () {
+      final hits = forbiddenUsages(
+        [
+          RegExp(
+            r'\b(AlertDialog|SimpleDialog|CupertinoAlertDialog|SnackBar)\s*\(',
+          ),
+          RegExp(r'\bshowDialog\s*[<(]'),
+        ],
+        allowedPrefixes: [
+          'core/presentation/errors/',
+          // AB#170 (US-28): the sanctioned confirm dialog and success toast; approved by
+          // Melani Shibu 11/20/2026. Only these two files, not the whole widgets folder.
+          'core/presentation/widgets/confirm_dialog.dart',
+          'core/presentation/widgets/app_toast.dart',
+        ],
+      );
+      expect(hits, isEmpty, reason: hits.join('\n'));
+    });
   });
 }

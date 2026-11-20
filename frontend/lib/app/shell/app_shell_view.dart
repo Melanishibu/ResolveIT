@@ -5,7 +5,7 @@ import 'package:resolveit/app/shell/app_shell_presenter.dart';
 import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
-import 'package:resolveit/core/presentation/errors/error_panel.dart';
+import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/identity/identity.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
@@ -207,20 +207,10 @@ class _TopBar extends StatelessWidget {
             ),
           ),
           SizedBox(width: spacing.m),
-          Tooltip(
-            message: l10n.avatarTooltip(user.displayName, role),
-            child: CircleAvatar(
-              key: const Key('user-avatar'),
-              radius: spacing.avatarRadius,
-              backgroundColor: colors.primary,
-              child: Text(
-                user.initials,
-                style: context.textTheme.labelLarge?.copyWith(
-                  color: colors.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+          AvatarInitials(
+            key: const Key('user-avatar'),
+            initials: user.initials,
+            semanticLabel: l10n.avatarTooltip(user.displayName, role),
           ),
         ],
       ),

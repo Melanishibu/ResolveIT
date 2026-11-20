@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
+import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/incident/domain/value_objects/priority.dart';
-import 'package:resolveit/features/incident/presentation/widgets/tinted_chip.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
-/// Priority chip: LOW green, MEDIUM orange, HIGH red, CRITICAL dark red.
+/// Priority chip: LOW green, MEDIUM orange, HIGH red, CRITICAL dark red (built on AppChip, US-28).
 class PriorityChip extends StatelessWidget {
   const PriorityChip(this.priority, {super.key});
 
@@ -27,7 +27,7 @@ class PriorityChip extends StatelessWidget {
       };
 
   @override
-  Widget build(BuildContext context) => TintedChip(
+  Widget build(BuildContext context) => AppChip(
     label: labelFor(AppLocalizations.of(context), priority),
     colors: colorsFor(context.appColors, priority),
   );
