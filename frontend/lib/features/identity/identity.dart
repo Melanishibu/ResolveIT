@@ -7,3 +7,5 @@ export 'package:resolveit/features/identity/application/ports/current_user_gatew
 export 'package:resolveit/features/identity/domain/current_user.dart';
 export 'package:resolveit/features/identity/domain/role.dart';
 export 'package:resolveit/features/identity/presentation/role_label.dart';
+export 'package:resolveit/features/identity/presentation/widgets/active_chip.dart';
+export 'package:resolveit/features/identity/presentation/widgets/role_chip.dart';

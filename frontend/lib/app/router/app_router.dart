@@ -1,21 +1,38 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:resolveit/app/dev/component_gallery_view.dart';
 import 'package:resolveit/app/shell/app_shell_view.dart';
 import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
-import 'package:resolveit/core/presentation/errors/error_panel.dart';
-import 'package:resolveit/core/presentation/widgets/placeholder_page.dart';
+import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final router = buildAppRouter();
+  // `kDebugMode` is a compile-time constant: in release builds the dev routes, and with them
+  // the component gallery, are not compiled into the app at all (US-28, AB#170).
+  final router = buildAppRouter(
+    devRoutes: kDebugMode ? devComponentRoutes() : const [],
+  );
   ref.onDispose(router.dispose);
   return router;
 });
 
+/// Debug-only routes: the component gallery at [ComponentGalleryView.path].
+List<RouteBase> devComponentRoutes() => [
+  GoRoute(
+    path: ComponentGalleryView.path,
+    builder: (context, state) => const ComponentGalleryView(),
+  ),
+];
+
 /// Every menu destination is a placeholder page inside the shell until its story arrives.
-GoRouter buildAppRouter({String initialLocation = '/dashboard'}) => GoRouter(
+/// [devRoutes] are added only by the debug composition root (see [appRouterProvider]).
+GoRouter buildAppRouter({
+  String initialLocation = '/dashboard',
+  List<RouteBase> devRoutes = const [],
+}) => GoRouter(
   initialLocation: initialLocation,
   redirect: (context, state) =>
       state.uri.path == '/' ? MenuDestination.dashboard.path : null,
@@ -35,6 +52,7 @@ GoRouter buildAppRouter({String initialLocation = '/dashboard'}) => GoRouter(
           ),
       ],
     ),
+    ...devRoutes,
   ],
   errorBuilder: (context, state) => Scaffold(
     body: Center(

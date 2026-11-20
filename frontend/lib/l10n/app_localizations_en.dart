@@ -83,6 +83,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusClosed => 'Closed';
 
   @override
+  String get userActive => 'Active';
+
+  @override
+  String get userInactive => 'Inactive';
+
+  @override
+  String get passwordShow => 'Show password';
+
+  @override
+  String get passwordHide => 'Hide password';
+
+  @override
+  String get searchHint => 'Search…';
+
+  @override
+  String get searchClear => 'Clear search';
+
+  @override
+  String tableShowing(int from, int to, int total) {
+    return 'Showing $from–$to of $total';
+  }
+
+  @override
+  String get tableActions => 'Actions';
+
+  @override
+  String get tablePreviousPage => 'Previous page';
+
+  @override
+  String get tableNextPage => 'Next page';
+
+  @override
+  String tablePage(int page) {
+    return 'Page $page';
+  }
+
+  @override
+  String get confirmCancel => 'Cancel';
+
+  @override
+  String get confirmConfirm => 'Confirm';
+
+  @override
   String get errorWhatToDo => 'What to do';
 
   @override

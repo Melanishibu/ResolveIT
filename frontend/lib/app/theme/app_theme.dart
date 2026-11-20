@@ -51,6 +51,44 @@ ThemeData buildAppTheme() {
         shape: controlShape,
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: colors.primary,
+        side: BorderSide(color: colors.primary),
+        shape: controlShape,
+      ),
+    ),
+    // US-28 (AB#170): fields, focus and tables of the shared component library.
+    focusColor: colors.focusRing,
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: colors.cardBackground,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radii.control),
+        borderSide: BorderSide(color: colors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radii.control),
+        borderSide: BorderSide(color: colors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radii.control),
+        borderSide: BorderSide(color: colors.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radii.control),
+        borderSide: BorderSide(color: colors.error.foreground),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(radii.control),
+        borderSide: BorderSide(color: colors.error.foreground, width: 2),
+      ),
+    ),
+    dividerTheme: DividerThemeData(color: colors.border),
+    dataTableTheme: DataTableThemeData(
+      headingRowColor: WidgetStatePropertyAll(colors.pageBackground),
+      dividerThickness: 1,
+    ),
     extensions: [colors, AppSpacing.standard, AppRadii.standard],
   );
 }
