@@ -2,6 +2,6 @@
 # Defaults match the docker-compose.yml PostgreSQL; environment variables still win.
 spring:
   datasource:
-    url: ${RESOLVEIT_DB_URL:jdbc:postgresql://localhost:5432/resolveit}
+    url: ${RESOLVEIT_DB_URL:jdbc:postgresql://localhost:${RESOLVEIT_DB_PORT:5432}/resolveit}
     username: ${RESOLVEIT_DB_USERNAME:resolveit}
     password: ${RESOLVEIT_DB_PASSWORD:resolveit}
