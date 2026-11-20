@@ -1,0 +1,5 @@
+# Automated tests (activated by surefire/failsafe). The datasource is provided by Testcontainers
+# through @ServiceConnection, so no connection settings are needed here.
+spring:
+  main:
+    banner-mode: off

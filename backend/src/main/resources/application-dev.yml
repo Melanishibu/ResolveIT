@@ -1,0 +1,7 @@
+# Local development only (activated by `.\mvnw.cmd spring-boot:run`). Never used by tests or CI.
+# Defaults match the docker-compose.yml PostgreSQL; environment variables still win.
+spring:
+  datasource:
+    url: ${RESOLVEIT_DB_URL:jdbc:postgresql://localhost:5432/resolveit}
+    username: ${RESOLVEIT_DB_USERNAME:resolveit}
+    password: ${RESOLVEIT_DB_PASSWORD:resolveit}
