@@ -1,0 +1,179 @@
+# ResolveIT CI (AB#12, RIT-US-03).
+# Free tier: 1 Microsoft-hosted parallel job, 1,800 minutes/month. Keep runs short:
+# caches for Maven, the Flutter SDK and pub; no runs on feature branches; docs-only changes skipped.
+# No secrets: only public downloads (Maven Central, pub.dev, the Flutter archive, Docker Hub).
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - development
+      - main
+  paths:
+    exclude:
+      - README.md
+      - CLAUDE.md
+      - .claude
+
+# Azure Repos validates pull requests through a build-validation branch policy, not through YAML.
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+  - job: Backend
+    displayName: Backend (Maven, Testcontainers)
+    timeoutInMinutes: 20
+    variables:
+      MAVEN_USER_HOME: $(Pipeline.Workspace)/.m2
+      MAVEN_OPTS: -Dmaven.repo.local=$(Pipeline.Workspace)/.m2/repository
+    steps:
+      - checkout: self
+        fetchDepth: 1
+
+      - task: Cache@2
+        displayName: Restore Maven cache
+        inputs:
+          key: 'maven | "$(Agent.OS)" | backend/pom.xml | backend/.mvn/wrapper/maven-wrapper.properties'
+          restoreKeys: |
+            maven | "$(Agent.OS)"
+          path: $(Pipeline.Workspace)/.m2
+
+      - script: |
+          set -euo pipefail
+          docker info --format 'Docker {{.ServerVersion}} ({{.OperatingSystem}})'
+        displayName: Check Docker for Testcontainers
+
+      - script: |
+          set -euo pipefail
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          java -version
+          ./mvnw -B --no-transfer-progress clean verify
+        displayName: mvnw clean verify (unit, architecture, Modulith, error gate, ITs)
+        workingDirectory: backend
+
+      - task: PublishTestResults@2
+        displayName: Publish backend test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: |
+            backend/target/surefire-reports/TEST-*.xml
+            backend/target/failsafe-reports/TEST-*.xml
+          testRunTitle: Backend
+          mergeTestResults: true
+
+  - job: Frontend
+    displayName: Frontend (Flutter web)
+    timeoutInMinutes: 20
+    variables:
+      # Must match local development (frontend/.metadata). Bump both together.
+      FLUTTER_VERSION: 3.44.4
+      FLUTTER_SHA256: c853cda0312a162854c481fe6a1bc286d84fbb74bfab7037c39750061dc9b466
+      FLUTTER_ROOT_DIR: $(Pipeline.Workspace)/flutter-sdk
+      PUB_CACHE: $(Pipeline.Workspace)/.pub-cache
+      JUNITREPORT_VERSION: 2.0.2
+    steps:
+      - checkout: self
+        fetchDepth: 1
+
+      - task: Cache@2
+        displayName: Restore Flutter SDK cache
+        inputs:
+          key: 'flutter | "$(Agent.OS)" | "$(FLUTTER_VERSION)"'
+          path: $(FLUTTER_ROOT_DIR)
+          cacheHitVar: FLUTTER_CACHE_RESTORED
+
+      - script: |
+          set -euo pipefail
+          archive="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+          curl -fsSL -o "/tmp/$archive" \
+            "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/$archive"
+          echo "${FLUTTER_SHA256}  /tmp/$archive" | sha256sum -c -
+          mkdir -p "$FLUTTER_ROOT_DIR"
+          tar -xJf "/tmp/$archive" -C "$FLUTTER_ROOT_DIR"
+        displayName: Download Flutter $(FLUTTER_VERSION) (cache miss only)
+        condition: ne(variables.FLUTTER_CACHE_RESTORED, 'true')
+
+      - script: |
+          set -euo pipefail
+          echo "##vso[task.prependpath]$FLUTTER_ROOT_DIR/flutter/bin"
+          echo "##vso[task.prependpath]$PUB_CACHE/bin"
+        displayName: Add Flutter to PATH
+
+      - script: |
+          set -euo pipefail
+          flutter config --no-analytics >/dev/null
+          dart --disable-analytics >/dev/null
+          expected=$(sed -nE 's/^  revision: "([0-9a-f]+)"/\1/p' .metadata | head -n1)
+          actual=$(flutter --version --machine | python3 -c 'import json,sys; print(json.load(sys.stdin)["frameworkRevision"])')
+          echo "Flutter revision in CI:     $actual"
+          echo "Flutter revision in .metadata: $expected"
+          if [ "$actual" != "$expected" ]; then
+            echo "##vso[task.logissue type=error]CI Flutter ($actual) differs from local development ($expected, frontend/.metadata). Update FLUTTER_VERSION and FLUTTER_SHA256 together with the local SDK."
+            exit 1
+          fi
+        displayName: Check Flutter version matches local development
+        workingDirectory: frontend
+
+      # First check on purpose: fails fast, before anything is downloaded from pub.dev.
+      - script: dart format --output=none --set-exit-if-changed .
+        displayName: dart format (check)
+        workingDirectory: frontend
+
+      - task: Cache@2
+        displayName: Restore pub cache
+        inputs:
+          key: 'pub | "$(Agent.OS)" | frontend/pubspec.lock'
+          restoreKeys: |
+            pub | "$(Agent.OS)"
+          path: $(PUB_CACHE)
+
+      - script: flutter pub get --enforce-lockfile
+        displayName: flutter pub get
+        workingDirectory: frontend
+
+      - script: flutter analyze
+        displayName: flutter analyze
+        workingDirectory: frontend
+
+      - script: flutter test --file-reporter json:build/test-results.json
+        displayName: flutter test (incl. import-boundary, catalogue gate, guard tests)
+        workingDirectory: frontend
+
+      - script: flutter build web --release
+        displayName: flutter build web --release
+        workingDirectory: frontend
+
+      - script: |
+          set -euo pipefail
+          js=build/web/main.dart.js
+          grep -q "IT Service Desk" "$js" || { echo "##vso[task.logissue type=error]Sanity check failed: app text not found in $js"; exit 1; }
+          if grep -q "ResolveIT component gallery" "$js"; then
+            echo "##vso[task.logissue type=error]The debug-only component gallery (US-28) is in the release build."
+            exit 1
+          fi
+          echo "Release build contains no component gallery."
+        displayName: Check release build has no component gallery
+        workingDirectory: frontend
+
+      - script: |
+          set -euo pipefail
+          if [ -f build/test-results.json ]; then
+            dart pub global activate junitreport "$JUNITREPORT_VERSION" >/dev/null
+            dart pub global run junitreport:tojunit --input build/test-results.json --output build/test-results.xml
+          else
+            echo "No Flutter test results to convert (an earlier step failed)."
+          fi
+        displayName: Convert Flutter test results to JUnit
+        condition: succeededOrFailed()
+        workingDirectory: frontend
+
+      - task: PublishTestResults@2
+        displayName: Publish frontend test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: frontend/build/test-results.xml
+          testRunTitle: Frontend

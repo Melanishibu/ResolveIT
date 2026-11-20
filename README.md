@@ -98,6 +98,26 @@ not contain the gallery.
 `AlertDialog` or `SnackBar` directly; the message names the file and the App component to use instead. A second test
 fails on raw colours, `TextStyle`, `fontSize` or numeric paddings inside the library.
 
+# Continuous integration
+`azure-pipelines.yml` defines the pipeline **ResolveIT CI** (Azure Pipelines, Microsoft-hosted `ubuntu-latest`,
+free tier: 1 parallel job, 1,800 minutes/month).
+
+- **When it runs:** on every push to `development` and `main` (pushes during a run are batched; changes to only
+  `README.md`, `CLAUDE.md` or `.claude/` are skipped). Pull requests are validated by a build-validation branch policy
+  on `development` (set up by the project admin), not by the YAML. Feature branches do not trigger runs on their own.
+- **Backend job:** JDK 21, Maven cache, `./mvnw clean verify` (unit, ArchUnit, Modulith, error-gate and Testcontainers
+  integration tests on the agent's Docker), JUnit results published as "Backend".
+- **Frontend job:** Flutter installed from the official archive (no Marketplace extension) and cached, then
+  `dart format --output=none --set-exit-if-changed .` (first check), `flutter pub get --enforce-lockfile`,
+  `flutter analyze`, `flutter test`, `flutter build web --release`, a check that the debug-only component gallery is
+  not in the release build, and test results published as "Frontend".
+- **Flutter version:** CI uses `FLUTTER_VERSION` / `FLUTTER_SHA256` in `azure-pipelines.yml` and fails if that SDK's
+  revision differs from `frontend/.metadata`. When you upgrade Flutter locally, update both variables in the same
+  pull request (version and sha256 are listed in
+  https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json).
+- **Results:** open the run in Azure Pipelines → **Tests** tab (Backend and Frontend runs); a red step's log names the
+  failing check.
+
 # Contribute
 TODO: Explain how other users and developers can contribute to make your code better. 
 
