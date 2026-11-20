@@ -9,6 +9,8 @@ trigger:
     include:
       - development
       - main
+      # Integration branches collect finished stories before one pull request into development.
+      - integration/*
   paths:
     exclude:
       - README.md

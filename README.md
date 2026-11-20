@@ -102,7 +102,7 @@ fails on raw colours, `TextStyle`, `fontSize` or numeric paddings inside the lib
 `azure-pipelines.yml` defines the pipeline **ResolveIT CI** (Azure Pipelines, Microsoft-hosted `ubuntu-latest`,
 free tier: 1 parallel job, 1,800 minutes/month).
 
-- **When it runs:** on every push to `development` and `main` (pushes during a run are batched; changes to only
+- **When it runs:** on every push to `development`, `main` and `integration/*` (pushes during a run are batched; changes to only
   `README.md`, `CLAUDE.md` or `.claude/` are skipped). Pull requests are validated by a build-validation branch policy
   on `development` (set up by the project admin), not by the YAML. Feature branches do not trigger runs on their own.
 - **Backend job:** JDK 21, Maven cache, `./mvnw clean verify` (unit, ArchUnit, Modulith, error-gate and Testcontainers
