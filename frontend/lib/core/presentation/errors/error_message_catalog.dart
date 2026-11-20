@@ -122,6 +122,16 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorAuthTokenExpiredWhy,
       nextStep: (l, _) => l.errorAuthTokenExpiredNextStep,
     ),
+    'USER_NOT_FOUND': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserNotFoundTitle,
+      why: (l, p) => l.errorUserNotFoundWhy(p('id')),
+      nextStep: (l, _) => l.errorUserNotFoundNextStep,
+    ),
+    'USER_CANNOT_DEACTIVATE_SELF': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserCannotDeactivateSelfTitle,
+      why: (l, _) => l.errorUserCannotDeactivateSelfWhy,
+      nextStep: (l, _) => l.errorUserCannotDeactivateSelfNextStep,
+    ),
     'PASSWORD_POLICY_VIOLATION': ErrorCatalogEntry(
       title: (l, _) => l.errorPasswordPolicyViolationTitle,
       why: (l, _) => l.errorPasswordPolicyViolationWhy,

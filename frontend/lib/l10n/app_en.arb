@@ -185,6 +185,53 @@
   "errorPasswordPolicyViolationWhy": "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
   "errorPasswordPolicyViolationNextStep": "Choose a password that meets these rules and try again.",
 
+  "errorUserNotFoundTitle": "This user doesn't exist",
+  "errorUserNotFoundWhy": "ResolveIT has no user with the id {id}. The list may be out of date.",
+  "@errorUserNotFoundWhy": {
+    "placeholders": { "id": { "type": "String" } }
+  },
+  "errorUserNotFoundNextStep": "Reload User Management and pick the user again.",
+
+  "errorUserCannotDeactivateSelfTitle": "You can't deactivate your own account",
+  "errorUserCannotDeactivateSelfWhy": "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
+  "errorUserCannotDeactivateSelfNextStep": "Ask another Admin to deactivate your account if that is really needed.",
+
+  "userListSubtitle": "Everyone who can use ResolveIT, with their role and status.",
+  "userListAdd": "Add user",
+  "userListSearchHint": "Search by name or email",
+  "userListRoleFilter": "Role",
+  "userListStatusFilter": "Status",
+  "userListAllRoles": "All Roles",
+  "userListAllStatuses": "All Statuses",
+  "userListName": "Name",
+  "userListEmail": "Email",
+  "userListRole": "Role",
+  "userListDepartment": "Department",
+  "userListStatus": "Status",
+  "userListInvitation": "Invitation",
+  "userListActions": "Actions",
+  "userListActivate": "Activate",
+  "userListDeactivate": "Deactivate",
+  "userListDeactivateTitle": "Deactivate {name}?",
+  "@userListDeactivateTitle": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListDeactivateMessage": "They will no longer be able to log in, and any open session ends with their next request. Their incidents stay as they are. You can activate them again at any time.",
+  "userListActivated": "{name} is active again and can log in.",
+  "@userListActivated": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListDeactivated": "{name} is deactivated.",
+  "@userListDeactivated": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListEmpty": "No users match these filters.",
+  "invitationPending": "Pending",
+  "invitationAccepted": "Accepted",
+  "invitationExpired": "Expired",
+  "invitationSendFailed": "Email failed",
+  "invitationNone": "–",
+
   "setPasswordTitle": "Set your password",
   "setPasswordSubtitle": "Choose the password you will use to log in to ResolveIT.",
   "setPasswordPolicy": "Your password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
