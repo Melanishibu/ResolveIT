@@ -7,15 +7,27 @@ import 'package:resolveit/app/shell/app_shell_view.dart';
 import 'package:resolveit/app/shell/navigation_menu.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
+import 'package:resolveit/features/identity/identity.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  // The router re-checks its redirect whenever the session changes (login, logout).
+  final session = ValueNotifier<AsyncValue<CurrentUser?>>(const AsyncLoading());
+  ref.listen(
+    sessionProvider,
+    (_, next) => session.value = next,
+    fireImmediately: true,
+  );
   // `kDebugMode` is a compile-time constant: in release builds the dev routes, and with them
   // the component gallery, are not compiled into the app at all (US-28, AB#170).
   final router = buildAppRouter(
     devRoutes: kDebugMode ? devComponentRoutes() : const [],
+    session: session,
   );
-  ref.onDispose(router.dispose);
+  ref.onDispose(() {
+    router.dispose();
+    session.dispose();
+  });
   return router;
 });
 
@@ -27,16 +39,42 @@ List<RouteBase> devComponentRoutes() => [
   ),
 ];
 
+/// Where the session state sends the user (AB#13):
+/// - signed out → `/login` (dev routes stay reachable in debug builds);
+/// - signed in on `/login` → the dashboard;
+/// - still loading or backend unreachable → stay (the shell shows loading or the error panel).
+/// Role guards and the "not allowed" page arrive with RIT-US-05.
+String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
+  if (session.isLoading || !session.hasValue) return null;
+  final signedIn = session.value != null;
+  if (!signedIn && path != LoginView.path && !path.startsWith('/dev/')) {
+    return LoginView.path;
+  }
+  if (signedIn && path == LoginView.path) return MenuDestination.dashboard.path;
+  return null;
+}
+
 /// Every menu destination is a placeholder page inside the shell until its story arrives.
 /// [devRoutes] are added only by the debug composition root (see [appRouterProvider]).
+/// Without [session] (tests of routing alone) no session redirect applies.
 GoRouter buildAppRouter({
   String initialLocation = '/dashboard',
   List<RouteBase> devRoutes = const [],
+  ValueListenable<AsyncValue<CurrentUser?>>? session,
 }) => GoRouter(
   initialLocation: initialLocation,
-  redirect: (context, state) =>
-      state.uri.path == '/' ? MenuDestination.dashboard.path : null,
+  refreshListenable: session,
+  redirect: (context, state) {
+    final path = state.uri.path;
+    if (path == '/') return MenuDestination.dashboard.path;
+    return session == null ? null : sessionRedirect(session.value, path);
+  },
   routes: [
+    GoRoute(
+      path: LoginView.path,
+      pageBuilder: (context, state) =>
+          const NoTransitionPage(child: LoginView()),
+    ),
     ShellRoute(
       builder: (context, state, child) =>
           AppShellView(location: state.uri.path, child: child),

@@ -16,6 +16,14 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
 
+resolveit:
+  # CORS: the only browser origin allowed to call the API (with cookies). Required outside dev/test.
+  frontend-origin: ${FRONTEND_ORIGIN}
+  session:
+    # HS256 key for the session tokens: a random value of at least 32 characters. Required outside dev/test.
+    signing-key: ${RESOLVEIT_SESSION_SIGNING_KEY:}
+    lifetime: 8h
+
 management:
   endpoints:
     web:

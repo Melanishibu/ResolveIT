@@ -56,6 +56,22 @@ final class ErrorMessageCatalog {
   final Map<String, ErrorCatalogEntry> entries;
 
   static final ErrorMessageCatalog standard = ErrorMessageCatalog({
+    'AUTH_INVALID_CREDENTIALS': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthInvalidCredentialsTitle,
+      why: (l, _) => l.errorAuthInvalidCredentialsWhy,
+      nextStep: (l, _) => l.errorAuthInvalidCredentialsNextStep,
+    ),
+    'AUTH_LOGIN_TEMPORARILY_BLOCKED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthLoginTemporarilyBlockedTitle,
+      why: (l, p) =>
+          l.errorAuthLoginTemporarilyBlockedWhy(p('retryAfterMinutes')),
+      nextStep: (l, _) => l.errorAuthLoginTemporarilyBlockedNextStep,
+    ),
+    'AUTH_UNAUTHENTICATED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthUnauthenticatedTitle,
+      why: (l, _) => l.errorAuthUnauthenticatedWhy,
+      nextStep: (l, _) => l.errorAuthUnauthenticatedNextStep,
+    ),
     'INTERNAL_ERROR': ErrorCatalogEntry(
       title: (l, _) => l.errorInternalErrorTitle,
       why: (l, _) => l.errorInternalErrorWhy,

@@ -483,6 +483,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check your network connection and try again in a moment.'**
   String get errorNetworkUnavailableNextStep;
+
+  /// No description provided for @errorAuthInvalidCredentialsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or password is incorrect'**
+  String get errorAuthInvalidCredentialsTitle;
+
+  /// No description provided for @errorAuthInvalidCredentialsWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The email address and password you entered don\'t match an active ResolveIT account.'**
+  String get errorAuthInvalidCredentialsWhy;
+
+  /// No description provided for @errorAuthInvalidCredentialsNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Check both and try again. After 5 failed attempts in a row, login is blocked for 15 minutes. If you forgot your password, contact your ResolveIT administrator.'**
+  String get errorAuthInvalidCredentialsNextStep;
+
+  /// No description provided for @errorAuthLoginTemporarilyBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Login is temporarily blocked'**
+  String get errorAuthLoginTemporarilyBlockedTitle;
+
+  /// No description provided for @errorAuthLoginTemporarilyBlockedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'There were 5 failed login attempts in a row for this account, so login is blocked for security for about {retryAfterMinutes} more minute(s).'**
+  String errorAuthLoginTemporarilyBlockedWhy(String retryAfterMinutes);
+
+  /// No description provided for @errorAuthLoginTemporarilyBlockedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait until the block ends, then log in with the correct password. If you don\'t remember it, contact your ResolveIT administrator.'**
+  String get errorAuthLoginTemporarilyBlockedNextStep;
+
+  /// No description provided for @errorAuthUnauthenticatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not logged in'**
+  String get errorAuthUnauthenticatedTitle;
+
+  /// No description provided for @errorAuthUnauthenticatedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.'**
+  String get errorAuthUnauthenticatedWhy;
+
+  /// No description provided for @errorAuthUnauthenticatedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in again with your email address and password.'**
+  String get errorAuthUnauthenticatedNextStep;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in to ResolveIT'**
+  String get loginTitle;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'IT Service Desk – use your work email and password.'**
+  String get loginSubtitle;
+
+  /// No description provided for @loginEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get loginEmailLabel;
+
+  /// No description provided for @loginPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get loginPasswordLabel;
+
+  /// No description provided for @loginButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get loginButton;
+
+  /// No description provided for @loginEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address.'**
+  String get loginEmailRequired;
+
+  /// No description provided for @loginPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password.'**
+  String get loginPasswordRequired;
 }
 
 class _AppLocalizationsDelegate

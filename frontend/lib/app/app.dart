@@ -5,8 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
+import 'package:resolveit/app/config/http_providers.dart';
 import 'package:resolveit/app/router/app_router.dart';
 import 'package:resolveit/app/theme/app_theme.dart';
+import 'package:resolveit/features/identity/identity.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 class ResolveItApp extends StatelessWidget {
@@ -17,7 +19,13 @@ class ResolveItApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ProviderScope(
-    overrides: overrides,
+    overrides: [
+      // Composition root: the identity feature talks to the shared API client (AB#13).
+      identityHttpClientProvider.overrideWith(
+        (ref) => ref.watch(apiClientProvider),
+      ),
+      ...overrides,
+    ],
     // Failures are shown to the user through the error panel, not retried silently.
     retry: (retryCount, error) => null,
     child: const _ResolveItRouterApp(),

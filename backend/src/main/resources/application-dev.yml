@@ -5,3 +5,12 @@ spring:
     url: ${RESOLVEIT_DB_URL:jdbc:postgresql://localhost:${RESOLVEIT_DB_PORT:5432}/resolveit}
     username: ${RESOLVEIT_DB_USERNAME:resolveit}
     password: ${RESOLVEIT_DB_PASSWORD:resolveit}
+  flyway:
+    # Dev only: also load the seed users (db/dev-seed, RIT-US-04). Shared dev password, see README.
+    locations: classpath:db/migration,classpath:db/dev-seed
+
+resolveit:
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5000}
+  session:
+    # Without RESOLVEIT_SESSION_SIGNING_KEY, use a random key per run (sessions end on restart).
+    allow-ephemeral-signing-key: true

@@ -1,0 +1,20 @@
+-- DEV ONLY (RIT-US-04, AB#13; dev seed users approved by Melani Shibu on 11/19/2026).
+-- Loaded only by the dev profile (spring.flyway.locations in application-dev.yml). Never in production or by the default test
+-- profile; AuthLoginIT adds this location explicitly. A production first-admin setup is future work.
+--
+-- Shared dev password: ResolveIT-Dev-2026 (documented in the README; not a real secret).
+-- Stored as a BCrypt hash (cost 10). Re-running is safe: existing users are left unchanged.
+
+INSERT INTO identity.app_user (id, email, display_name, role, password_hash, active)
+VALUES
+    ('00000000-0000-4000-8000-000000000001', 'admin@resolveit.local',     'ResolveIT Admin', 'ADMIN',
+     '$2a$10$vdxq/oWjuLrsVHtlSFeOk.kkJkbEN3UjE2aMDNauexaXvVsnVtv3u', TRUE),
+    ('00000000-0000-4000-8000-000000000002', 'agent1@resolveit.local',    'Agent One',       'SUPPORT_AGENT',
+     '$2a$10$vdxq/oWjuLrsVHtlSFeOk.kkJkbEN3UjE2aMDNauexaXvVsnVtv3u', TRUE),
+    ('00000000-0000-4000-8000-000000000003', 'agent2@resolveit.local',    'Agent Two',       'SUPPORT_AGENT',
+     '$2a$10$vdxq/oWjuLrsVHtlSFeOk.kkJkbEN3UjE2aMDNauexaXvVsnVtv3u', FALSE),
+    ('00000000-0000-4000-8000-000000000004', 'employee1@resolveit.local', 'Employee One',    'EMPLOYEE',
+     '$2a$10$vdxq/oWjuLrsVHtlSFeOk.kkJkbEN3UjE2aMDNauexaXvVsnVtv3u', TRUE),
+    ('00000000-0000-4000-8000-000000000005', 'employee2@resolveit.local', 'Employee Two',    'EMPLOYEE',
+     '$2a$10$vdxq/oWjuLrsVHtlSFeOk.kkJkbEN3UjE2aMDNauexaXvVsnVtv3u', TRUE)
+ON CONFLICT (email) DO NOTHING;

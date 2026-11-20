@@ -25,8 +25,25 @@ Prerequisites: JDK 21 and Docker Desktop (running). Commands are for Windows Pow
 4. Stop the database: `docker compose down` (add `-v` to delete its data volume)
 
 Configuration comes only from environment variables: `RESOLVEIT_DB_URL`, `RESOLVEIT_DB_USERNAME`,
-`RESOLVEIT_DB_PASSWORD`, `SERVER_PORT` (default 8080). The `dev` profile supplies the local defaults above;
-without it, the database variables are required.
+`RESOLVEIT_DB_PASSWORD`, `SERVER_PORT` (default 8080), `FRONTEND_ORIGIN` (the only browser origin allowed by CORS,
+`http://localhost:5000` in dev and tests) and `RESOLVEIT_SESSION_SIGNING_KEY` (signs the session tokens; a random
+value of at least 32 characters, never committed). The `dev` profile supplies the local defaults above; without it,
+the database variables, `FRONTEND_ORIGIN` and the signing key are required. In `dev` (and in tests) a missing signing key is replaced by a random key
+per run, so you are logged out when the backend restarts.
+
+**Dev users (dev profile only, not real secrets):** the `dev` profile seeds these users with the shared dev password
+`ResolveIT-Dev-2026` (stored as a BCrypt hash; `backend/src/main/resources/db/dev-seed`). Production and the default
+test profile never load them; only the login integration test (`AuthLoginIT`) adds the seed location explicitly.
+
+| Email | Role | Active |
+|---|---|---|
+| `admin@resolveit.local` | Admin | yes |
+| `agent1@resolveit.local` | Support Agent (shown as Technician) | yes |
+| `agent2@resolveit.local` | Support Agent (shown as Technician) | no – login is refused |
+| `employee1@resolveit.local` | Employee | yes |
+| `employee2@resolveit.local` | Employee | yes |
+
+Five failed logins in a row lock an account for 15 minutes. Sessions last 8 hours.
 
 **Port already in use?** If 5432, 1025 or 8025 is taken on your machine (for example by a Windows
 PostgreSQL service or another project's container), `docker compose` cannot publish the port and the backend
@@ -57,12 +74,11 @@ Prerequisites: Flutter stable (3.44 or later) and Chrome. Commands are for Windo
 1. Fetch dependencies: `cd frontend; flutter pub get`
 2. Start the app on the port the backend's CORS setting expects:
    `flutter run -d chrome --web-port 5000`
-   - The shell opens on the Dashboard with the navy side menu. The menu screens are placeholders until their stories arrive.
-3. Optional build-time settings (`--dart-define`, no secrets):
+   - The login screen opens. Log in with a dev user (see "Dev users" above, backend running with the `dev` profile);
+     you land on the Dashboard with your role's menu. Logout is at the bottom of the menu. The menu screens are
+     placeholders until their stories arrive.
+3. Optional build-time setting (`--dart-define`, no secrets):
    - `API_BASE_URL`: the backend API (default `http://localhost:8080/api/v1`).
-   - `DEV_ROLE`: which menu the placeholder user sees: `ADMIN` (default), `SUPPORT_AGENT` (shown as Technician) or
-     `EMPLOYEE`. This exists only until login (US-04) is built, and it grants no access.
-   - Example: `flutter run -d chrome --web-port 5000 --dart-define=DEV_ROLE=EMPLOYEE`
 
 Checks (from `frontend`):
 - `flutter analyze`

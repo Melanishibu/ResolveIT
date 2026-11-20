@@ -3,3 +3,9 @@
 spring:
   main:
     banner-mode: off
+
+resolveit:
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5000}
+  session:
+    # Tests never need a real key: a random one per run.
+    allow-ephemeral-signing-key: true

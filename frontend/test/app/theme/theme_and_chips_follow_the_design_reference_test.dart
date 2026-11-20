@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resolveit/app/app.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
+import 'package:resolveit/features/identity/identity.dart';
 import 'package:resolveit/features/incident/incident.dart';
 
 import '../../support/source_scan.dart';
@@ -148,7 +149,16 @@ void main() {
         tester.view.devicePixelRatio = 1;
         addTearDown(tester.view.reset);
 
-        await tester.pumpWidget(const ResolveItApp());
+        // AB#13 removed the placeholder user: a fake gateway supplies the signed-in user.
+        await tester.pumpWidget(
+          ResolveItApp(
+            overrides: [
+              currentUserGatewayProvider.overrideWithValue(
+                FakeCurrentUserGateway.signedInAs(Role.admin),
+              ),
+            ],
+          ),
+        );
         await tester.pumpAndSettle();
 
         final sidebar = tester.widget<Container>(

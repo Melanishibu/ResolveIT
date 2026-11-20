@@ -69,6 +69,18 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Security building blocks (AB#13): BCrypt and HS256 JWT only. No Spring Security filter
+             chain: without spring-boot-starter-security nothing is auto-configured. Versions come from
+             the Spring Security BOM that Spring Boot imports. -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+
         <!-- Modules -->
         <dependency>
             <groupId>org.springframework.modulith</groupId>

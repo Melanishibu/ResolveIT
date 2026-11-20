@@ -45,6 +45,27 @@ public final class ErrorCodeRegistry {
                 "Something went wrong on our side",
                 "ResolveIT couldn't complete the request because of an unexpected error.",
                 "Try again in a moment. If it keeps happening, contact the ResolveIT administrator and quote the reference shown under Details."));
+
+        // Identity (AB#13). The credentials message never says whether the email or the password was wrong.
+        register(new RegisteredErrorCode(
+                "AUTH_INVALID_CREDENTIALS", 401, Set.of(),
+                "Email or password is incorrect",
+                "The email address and password you entered don't match an active ResolveIT account.",
+                "Check both and try again. After 5 failed attempts in a row, login is blocked for 15 minutes."
+                        + " If you forgot your password, contact your ResolveIT administrator."));
+        register(new RegisteredErrorCode(
+                "AUTH_LOGIN_TEMPORARILY_BLOCKED", 429, Set.of("retryAfterMinutes"),
+                "Login is temporarily blocked",
+                "There were 5 failed login attempts in a row for this account, so login is blocked for security"
+                        + " for about {retryAfterMinutes} more minute(s).",
+                "Wait until the block ends, then log in with the correct password."
+                        + " If you don't remember it, contact your ResolveIT administrator."));
+        register(new RegisteredErrorCode(
+                "AUTH_UNAUTHENTICATED", 401, Set.of(),
+                "You're not logged in",
+                "Your session has ended or is no longer valid, for example after you logged out, after 8 hours,"
+                        + " or because your account was deactivated.",
+                "Log in again with your email address and password."));
     }
 
     private ErrorCodeRegistry() {

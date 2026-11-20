@@ -234,4 +234,62 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorNetworkUnavailableNextStep =>
       'Check your network connection and try again in a moment.';
+
+  @override
+  String get errorAuthInvalidCredentialsTitle =>
+      'Email or password is incorrect';
+
+  @override
+  String get errorAuthInvalidCredentialsWhy =>
+      'The email address and password you entered don\'t match an active ResolveIT account.';
+
+  @override
+  String get errorAuthInvalidCredentialsNextStep =>
+      'Check both and try again. After 5 failed attempts in a row, login is blocked for 15 minutes. If you forgot your password, contact your ResolveIT administrator.';
+
+  @override
+  String get errorAuthLoginTemporarilyBlockedTitle =>
+      'Login is temporarily blocked';
+
+  @override
+  String errorAuthLoginTemporarilyBlockedWhy(String retryAfterMinutes) {
+    return 'There were 5 failed login attempts in a row for this account, so login is blocked for security for about $retryAfterMinutes more minute(s).';
+  }
+
+  @override
+  String get errorAuthLoginTemporarilyBlockedNextStep =>
+      'Wait until the block ends, then log in with the correct password. If you don\'t remember it, contact your ResolveIT administrator.';
+
+  @override
+  String get errorAuthUnauthenticatedTitle => 'You\'re not logged in';
+
+  @override
+  String get errorAuthUnauthenticatedWhy =>
+      'Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.';
+
+  @override
+  String get errorAuthUnauthenticatedNextStep =>
+      'Log in again with your email address and password.';
+
+  @override
+  String get loginTitle => 'Log in to ResolveIT';
+
+  @override
+  String get loginSubtitle =>
+      'IT Service Desk – use your work email and password.';
+
+  @override
+  String get loginEmailLabel => 'Email';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginButton => 'Log in';
+
+  @override
+  String get loginEmailRequired => 'Enter your email address.';
+
+  @override
+  String get loginPasswordRequired => 'Enter your password.';
 }
