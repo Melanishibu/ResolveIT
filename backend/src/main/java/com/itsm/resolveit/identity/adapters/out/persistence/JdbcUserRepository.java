@@ -40,6 +40,14 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> lockById(UserId id) {
+        return jdbc.sql("SELECT " + COLUMNS + " FROM identity.app_user WHERE id = :id FOR UPDATE")
+                .param("id", id.value())
+                .query(JdbcUserRepository::toUser)
+                .optional();
+    }
+
+    @Override
     public Optional<User> findById(UserId id) {
         return jdbc.sql("SELECT " + COLUMNS + " FROM identity.app_user WHERE id = :id")
                 .param("id", id.value())

@@ -23,7 +23,11 @@ public enum IdentityErrorCode implements ErrorCode {
     /** The set-password link is older than 24 hours (RIT-US-07). */
     AUTH_TOKEN_EXPIRED(Set.of()),
     /** The new password breaks the policy: 12–128 characters, a letter and a digit, not the email (RIT-US-07). */
-    PASSWORD_POLICY_VIOLATION(Set.of());
+    PASSWORD_POLICY_VIOLATION(Set.of()),
+    /** No user with this id (RIT-US-08). */
+    USER_NOT_FOUND(Set.of("id")),
+    /** An Admin tried to deactivate their own account (RIT-US-08). */
+    USER_CANNOT_DEACTIVATE_SELF(Set.of());
 
     private final Set<String> requiredParams;
 

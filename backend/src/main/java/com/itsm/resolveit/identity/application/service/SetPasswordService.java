@@ -44,7 +44,7 @@ public class SetPasswordService implements SetPasswordUseCase {
         Instant now = clock.instant();
         Invitation invitation = invitations.findByTokenHash(command.token().hash())
                 .orElseThrow(InvitationTokenInvalidException::new);
-        User user = users.findById(invitation.userId()).orElseThrow(InvitationTokenInvalidException::new);
+        User user = users.lockById(invitation.userId()).orElseThrow(InvitationTokenInvalidException::new);
         invitation.use(now);
         NewPassword password = NewPassword.forUser(command.newPassword(), user.email());
         user.setPassword(hasher.hash(password));

@@ -42,6 +42,11 @@ final class IdentityFakes {
         }
 
         @Override
+        public Optional<User> lockById(UserId id) {
+            return findById(id);
+        }
+
+        @Override
         public Optional<User> findById(UserId id) {
             return Optional.ofNullable(byId.get(id));
         }

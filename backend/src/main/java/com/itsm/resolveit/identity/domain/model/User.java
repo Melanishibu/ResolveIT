@@ -20,7 +20,7 @@ public final class User {
     private final Role role;
     private final Department department;
     private PasswordHash passwordHash;
-    private final boolean active;
+    private boolean active;
     private int failedLoginAttempts;
     private Instant lockedUntil;
 
@@ -58,6 +58,37 @@ public final class User {
                                     int failedLoginAttempts, Instant lockedUntil) {
         return new User(id, email, displayName, role, department, passwordHash, active, failedLoginAttempts,
                 lockedUntil);
+    }
+
+    /**
+     * An Admin deactivates this user (RIT-US-08): they can no longer log in, and their sessions are
+     * refused on the next request. An Admin cannot deactivate themselves.
+     *
+     * @param by the Admin who deactivates
+     * @return whether the state changed (deactivating an inactive user changes nothing)
+     */
+    public boolean deactivate(UserId by) {
+        if (id.equals(by)) {
+            throw new UserCannotDeactivateSelfException();
+        }
+        if (!active) {
+            return false;
+        }
+        active = false;
+        return true;
+    }
+
+    /**
+     * An Admin activates this user again (RIT-US-08).
+     *
+     * @return whether the state changed (activating an active user changes nothing)
+     */
+    public boolean activate() {
+        if (active) {
+            return false;
+        }
+        active = true;
+        return true;
     }
 
     /**

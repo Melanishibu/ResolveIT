@@ -16,6 +16,9 @@ public interface UserRepository {
 
     Optional<User> findById(UserId id);
 
+    /** Loads the user and locks it until the current transaction ends (status and password changes). */
+    Optional<User> lockById(UserId id);
+
     /** Whether a user with this email exists (emails are stored in lower case, so this is case-insensitive). */
     boolean existsByEmail(EmailAddress email);
 
