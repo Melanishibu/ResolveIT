@@ -1,0 +1,33 @@
+# ResolveIT backend – base configuration.
+# Every environment-specific value comes from an environment variable. Dev defaults live only in
+# application-dev.yml; tests use application-test.yml and Testcontainers. No secrets in this file.
+spring:
+  application:
+    name: resolveit
+  datasource:
+    url: ${RESOLVEIT_DB_URL}
+    username: ${RESOLVEIT_DB_USERNAME}
+    password: ${RESOLVEIT_DB_PASSWORD}
+  flyway:
+    # One PostgreSQL schema per bounded context. The Flyway history table lives in the first one.
+    schemas: identity,incident
+    create-schemas: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      base-path: /api/v1
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  api-docs:
+    path: /api/docs
+  swagger-ui:
+    path: /api/docs/ui

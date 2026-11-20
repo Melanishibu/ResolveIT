@@ -1,0 +1,39 @@
+{
+  "description" : "ResolveIT error-code registry. Generated from ErrorCodeRegistry; do not edit by hand. Regenerate: cd backend; .\\mvnw.cmd test \"-Dtest=ErrorCodeContractTest\" \"-DupdateContracts=true\"",
+  "errorCodes" : [ {
+    "code" : "INTERNAL_ERROR",
+    "httpStatus" : 500,
+    "requiredParams" : [ "traceId" ],
+    "title" : "Something went wrong on our side",
+    "why" : "ResolveIT couldn't complete the request because of an unexpected error.",
+    "nextStep" : "Try again in a moment. If it keeps happening, contact the ResolveIT administrator and quote the reference shown under Details."
+  }, {
+    "code" : "METHOD_NOT_ALLOWED",
+    "httpStatus" : 405,
+    "requiredParams" : [ "method", "path" ],
+    "title" : "This action isn't available here",
+    "why" : "{path} does not accept {method} requests.",
+    "nextStep" : "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator."
+  }, {
+    "code" : "REQUEST_NOT_SUPPORTED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "path" ],
+    "title" : "This request can't be processed",
+    "why" : "The request to {path} uses a format or option that ResolveIT doesn't support.",
+    "nextStep" : "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator."
+  }, {
+    "code" : "RESOURCE_NOT_FOUND",
+    "httpStatus" : 404,
+    "requiredParams" : [ "path" ],
+    "title" : "This page or item doesn't exist",
+    "why" : "Nothing is available at {path}. The link may be outdated or mistyped.",
+    "nextStep" : "Check the address, or go back to the dashboard and open the item from there."
+  }, {
+    "code" : "VALIDATION_FAILED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "fields" ],
+    "title" : "Some information is missing or invalid",
+    "why" : "The request could not be accepted because these fields are missing or invalid: {fields}.",
+    "nextStep" : "Correct the highlighted fields and submit again."
+  } ]
+}

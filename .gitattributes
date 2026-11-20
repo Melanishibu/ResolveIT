@@ -1,0 +1,5 @@
+# Shell scripts must keep LF (Linux CI agents); Windows scripts keep CRLF.
+backend/mvnw text eol=lf
+*.cmd text eol=crlf
+# Generated contract files are compared byte-for-byte by tests.
+contracts/*.json text eol=lf
