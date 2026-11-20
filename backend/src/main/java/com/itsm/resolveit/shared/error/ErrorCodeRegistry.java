@@ -90,6 +90,24 @@ public final class ErrorCodeRegistry {
                 "This role can't be given to a new user",
                 "New users can only be Technicians or Employees; the role {role} can't be created here.",
                 "Choose Technician or Employee and create the user again."));
+        // Set password from a one-time link (AB#49).
+        register(new RegisteredErrorCode(
+                "AUTH_TOKEN_INVALID", 400, Set.of(),
+                "This link can't be used",
+                "The link to set your password is not valid or was already used. Each link works only once.",
+                "If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new"
+                        + " invitation."));
+        register(new RegisteredErrorCode(
+                "AUTH_TOKEN_EXPIRED", 400, Set.of(),
+                "This link has expired",
+                "Links to set a password are valid for 24 hours, and this one is older.",
+                "Ask your ResolveIT administrator for a new invitation."));
+        register(new RegisteredErrorCode(
+                "PASSWORD_POLICY_VIOLATION", 400, Set.of(),
+                "This password isn't strong enough",
+                "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your"
+                        + " email address.",
+                "Choose a password that meets these rules and try again."));
     }
 
     private ErrorCodeRegistry() {

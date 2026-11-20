@@ -173,6 +173,29 @@
   "loginEmailRequired": "Enter your email address.",
   "loginPasswordRequired": "Enter your password.",
 
+  "errorAuthTokenInvalidTitle": "This link can't be used",
+  "errorAuthTokenInvalidWhy": "The link to set your password is not valid or was already used. Each link works only once.",
+  "errorAuthTokenInvalidNextStep": "If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation.",
+
+  "errorAuthTokenExpiredTitle": "This link has expired",
+  "errorAuthTokenExpiredWhy": "Links to set a password are valid for 24 hours, and this one is older.",
+  "errorAuthTokenExpiredNextStep": "Ask your ResolveIT administrator for a new invitation.",
+
+  "errorPasswordPolicyViolationTitle": "This password isn't strong enough",
+  "errorPasswordPolicyViolationWhy": "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+  "errorPasswordPolicyViolationNextStep": "Choose a password that meets these rules and try again.",
+
+  "setPasswordTitle": "Set your password",
+  "setPasswordSubtitle": "Choose the password you will use to log in to ResolveIT.",
+  "setPasswordPolicy": "Your password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+  "setPasswordNewLabel": "New password",
+  "setPasswordConfirmLabel": "Confirm password",
+  "setPasswordButton": "Set password",
+  "setPasswordRequired": "Enter a password.",
+  "setPasswordConfirmRequired": "Enter the password again.",
+  "setPasswordMismatch": "The passwords don't match. Type the same password in both fields.",
+  "setPasswordSuccess": "Your password is set. Log in with your email address and the new password.",
+
   "categoryHardware": "Hardware",
   "categorySoftware": "Software",
   "categoryNetwork": "Network",

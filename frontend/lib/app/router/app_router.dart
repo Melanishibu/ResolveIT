@@ -43,7 +43,7 @@ List<RouteBase> devComponentRoutes() => [
 ];
 
 /// Where the session state sends the user (AB#13, AB#14):
-/// - signed out → `/login` (dev routes stay reachable in debug builds);
+/// - signed out → `/login` (the public auth pages and, in debug builds, the dev routes stay reachable);
 /// - signed in on `/login` → the dashboard;
 /// - signed in on a page that isn't in the role's menu → the "not allowed" page;
 /// - still loading or backend unreachable → stay (the shell shows loading or the error panel).
@@ -52,7 +52,7 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   if (session.isLoading || !session.hasValue) return null;
   final user = session.value;
   if (user == null) {
-    if (path != LoginView.path && !path.startsWith('/dev/')) {
+    if (!publicAuthPaths.contains(path) && !path.startsWith('/dev/')) {
       return LoginView.path;
     }
     return null;

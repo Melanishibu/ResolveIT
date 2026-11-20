@@ -2,6 +2,7 @@ package com.itsm.resolveit.identity.adapters.out.integration;
 
 import com.itsm.resolveit.identity.application.port.out.DomainEventPublisher;
 import com.itsm.resolveit.identity.application.port.out.EmailSender;
+import com.itsm.resolveit.identity.application.port.out.PasswordHasher;
 import com.itsm.resolveit.identity.application.port.out.PasswordVerifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -26,6 +27,11 @@ class IdentitySecurityConfig {
     @Bean
     PasswordVerifier passwordVerifier() {
         return new BCryptPasswordVerifier(new BCryptPasswordEncoder());
+    }
+
+    @Bean
+    PasswordHasher passwordHasher() {
+        return new BCryptPasswordHasher(new BCryptPasswordEncoder());
     }
 
     @Bean

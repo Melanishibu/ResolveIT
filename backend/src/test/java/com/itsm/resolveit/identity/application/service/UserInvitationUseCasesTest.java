@@ -136,5 +136,10 @@ class UserInvitationUseCasesTest {
         public Optional<Invitation> findById(InvitationId id) {
             return Optional.ofNullable(byId.get(id));
         }
+
+        @Override
+        public Optional<Invitation> findByTokenHash(String tokenHash) {
+            return byId.values().stream().filter(i -> i.tokenHash().equals(tokenHash)).findFirst();
+        }
     }
 }

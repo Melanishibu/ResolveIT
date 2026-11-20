@@ -6,11 +6,12 @@ import 'package:resolveit/features/auth/data/datasource/auth_remote_datasource.d
 import 'package:resolveit/features/auth/domain/entity/current_user.dart';
 import 'package:resolveit/features/auth/domain/entity/login_credentials.dart';
 import 'package:resolveit/features/auth/domain/repository/current_user_repository.dart';
+import 'package:resolveit/features/auth/domain/repository/password_repository.dart';
 import 'package:resolveit/features/auth/domain/repository/session_repository.dart';
 
-/// Implements both auth contracts on the auth REST API; API errors become [Failure]s.
+/// Implements the auth contracts on the auth REST API; API errors become [Failure]s.
 final class ApiAuthRepository
-    implements CurrentUserRepository, SessionRepository {
+    implements CurrentUserRepository, SessionRepository, PasswordRepository {
   ApiAuthRepository(this._remote);
 
   final AuthRemoteDataSource _remote;
@@ -30,6 +31,21 @@ final class ApiAuthRepository
   Future<Result<void>> logOut() async {
     try {
       await _remote.logOut();
+      return const Success<void>(null);
+    } on DioException catch (exception) {
+      return Failure(mapDioException(exception));
+    }
+  }
+
+  @override
+  Future<Result<void>> setPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      // Without a session there is no XSRF-TOKEN cookie yet: fetch one first (RIT-US-07).
+      await _remote.fetchCsrfToken();
+      await _remote.setPassword(token: token, newPassword: newPassword);
       return const Success<void>(null);
     } on DioException catch (exception) {
       return Failure(mapDioException(exception));

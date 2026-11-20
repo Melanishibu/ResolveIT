@@ -12,4 +12,10 @@ public interface InvitationRepository {
     void save(Invitation invitation);
 
     Optional<Invitation> findById(InvitationId id);
+
+    /**
+     * The invitation whose token has this SHA-256 hash. Inside a transaction, a second caller with the
+     * same hash waits until the first one commits (single use, RIT-US-07).
+     */
+    Optional<Invitation> findByTokenHash(String tokenHash);
 }

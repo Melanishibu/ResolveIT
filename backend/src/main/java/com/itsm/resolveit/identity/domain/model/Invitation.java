@@ -46,12 +46,33 @@ public final class Invitation {
 
     /** The email was handed to the mail server. */
     public void markSent() {
-        status = InvitationStatus.SENT;
+        if (status != InvitationStatus.USED) { // a link used meanwhile stays used (RIT-US-07)
+            status = InvitationStatus.SENT;
+        }
     }
 
     /** Sending failed; the user stays created. */
     public void markSendFailed() {
-        status = InvitationStatus.SEND_FAILED;
+        if (status != InvitationStatus.USED) {
+            status = InvitationStatus.SEND_FAILED;
+        }
+    }
+
+    /**
+     * The user sets their password with this invitation (RIT-US-07): single use, valid for 24 hours.
+     * Works whether the email was sent or not (PENDING, SENT, SEND_FAILED).
+     *
+     * @throws InvitationTokenInvalidException if it was already used
+     * @throws InvitationTokenExpiredException if it is older than 24 hours
+     */
+    public void use(Instant now) {
+        if (status == InvitationStatus.USED) {
+            throw new InvitationTokenInvalidException();
+        }
+        if (isExpiredAt(now)) {
+            throw new InvitationTokenExpiredException();
+        }
+        status = InvitationStatus.USED;
     }
 
     public boolean isExpiredAt(Instant now) {

@@ -29,6 +29,20 @@
     "why" : "There were 5 failed login attempts in a row for this account, so login is blocked for security for about {retryAfterMinutes} more minute(s).",
     "nextStep" : "Wait until the block ends, then log in with the correct password. If you don't remember it, contact your ResolveIT administrator."
   }, {
+    "code" : "AUTH_TOKEN_EXPIRED",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This link has expired",
+    "why" : "Links to set a password are valid for 24 hours, and this one is older.",
+    "nextStep" : "Ask your ResolveIT administrator for a new invitation."
+  }, {
+    "code" : "AUTH_TOKEN_INVALID",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This link can't be used",
+    "why" : "The link to set your password is not valid or was already used. Each link works only once.",
+    "nextStep" : "If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation."
+  }, {
     "code" : "AUTH_UNAUTHENTICATED",
     "httpStatus" : 401,
     "requiredParams" : [ ],
@@ -49,6 +63,13 @@
     "title" : "This action isn't available here",
     "why" : "{path} does not accept {method} requests.",
     "nextStep" : "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator."
+  }, {
+    "code" : "PASSWORD_POLICY_VIOLATION",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This password isn't strong enough",
+    "why" : "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+    "nextStep" : "Choose a password that meets these rules and try again."
   }, {
     "code" : "REQUEST_NOT_SUPPORTED",
     "httpStatus" : 400,

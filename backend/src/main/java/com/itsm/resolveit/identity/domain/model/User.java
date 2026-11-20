@@ -19,7 +19,7 @@ public final class User {
     private final DisplayName displayName;
     private final Role role;
     private final Department department;
-    private final PasswordHash passwordHash;
+    private PasswordHash passwordHash;
     private final boolean active;
     private int failedLoginAttempts;
     private Instant lockedUntil;
@@ -58,6 +58,15 @@ public final class User {
                                     int failedLoginAttempts, Instant lockedUntil) {
         return new User(id, email, displayName, role, department, passwordHash, active, failedLoginAttempts,
                 lockedUntil);
+    }
+
+    /**
+     * The user set a new password (RIT-US-07). A fresh password also ends any failed-login count and lock.
+     */
+    public void setPassword(PasswordHash newHash) {
+        this.passwordHash = Objects.requireNonNull(newHash, "newHash");
+        this.failedLoginAttempts = 0;
+        this.lockedUntil = null;
     }
 
     /**

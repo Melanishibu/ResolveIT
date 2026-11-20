@@ -7,6 +7,9 @@ import com.itsm.resolveit.identity.application.port.in.LogInCommand;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
 import com.itsm.resolveit.identity.application.port.in.LogOutUseCase;
 import com.itsm.resolveit.identity.application.port.in.LoginResult;
+import com.itsm.resolveit.identity.application.port.in.SetPasswordCommand;
+import com.itsm.resolveit.identity.application.port.in.SetPasswordUseCase;
+import com.itsm.resolveit.identity.domain.model.InvitationToken;
 import com.itsm.resolveit.identity.domain.model.SessionToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Login, logout and "who am I" (RIT-US-04). Paths are relative to the API base {@code /api/v1}. */
+/** Login, logout, "who am I" (RIT-US-04) and set password (RIT-US-07). Paths are relative to the API base {@code /api/v1}. */
 @RestController
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Authentication", description = "Log in, log out and read the current user")
@@ -34,9 +37,11 @@ class AuthController {
 
     private final LogInUseCase logIn;
     private final LogOutUseCase logOut;
+    private final SetPasswordUseCase setPassword;
     private final SessionCookies cookies;
 
-    AuthController(LogInUseCase logIn, LogOutUseCase logOut, SessionCookies cookies) {
+    AuthController(LogInUseCase logIn, LogOutUseCase logOut, SetPasswordUseCase setPassword, SessionCookies cookies) {
+        this.setPassword = setPassword;
         this.logIn = logIn;
         this.logOut = logOut;
         this.cookies = cookies;
@@ -76,6 +81,33 @@ class AuthController {
                 .header(HttpHeaders.SET_COOKIE, cookies.clearedSession().toString())
                 .header(HttpHeaders.SET_COOKIE, cookies.clearedXsrfToken().toString())
                 .build();
+    }
+
+    @GetMapping("/csrf")
+    @PublicEndpoint
+    @Operation(summary = "Get a CSRF token",
+            description = "Sets only the XSRF-TOKEN cookie, so that a page used without a session (set password,"
+                    + " RIT-US-07) can send the X-XSRF-TOKEN header on its state-changing request. No session.")
+    @ApiResponse(responseCode = "204", description = "XSRF-TOKEN cookie set")
+    ResponseEntity<Void> csrf() {
+        return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookies.newXsrfToken().toString()).build();
+    }
+
+    @PostMapping("/password/set")
+    @PublicEndpoint
+    @Operation(summary = "Set a password from a one-time link",
+            description = "Checks the token (single use, valid 24 h) and the password policy (12–128 characters,"
+                    + " a letter and a digit, not the email), stores the hash and audits PASSWORD_SET. No automatic"
+                    + " login: the user logs in afterwards. CSRF-protected: call GET /auth/csrf first without a session.")
+    @ApiResponse(responseCode = "204", description = "Password set")
+    @ApiResponse(responseCode = "400", description = "AUTH_TOKEN_INVALID, AUTH_TOKEN_EXPIRED, PASSWORD_POLICY_VIOLATION"
+            + " or VALIDATION_FAILED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "403", description = "AUTH_CSRF_INVALID (X-XSRF-TOKEN header missing or not matching)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    ResponseEntity<Void> setPassword(@Valid @RequestBody SetPasswordRequest request) {
+        setPassword.setPassword(new SetPasswordCommand(InvitationToken.of(request.token()), request.newPassword()));
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")

@@ -25,6 +25,19 @@ final class AuthRemoteDataSource {
 
   /// `POST /auth/logout`.
   Future<void> logOut() => _dio.post<Object?>('/auth/logout');
+
+  /// `GET /auth/csrf`: the backend sets the `XSRF-TOKEN` cookie, which the XSRF interceptor then sends
+  /// back as a header (needed without a session, RIT-US-07).
+  Future<void> fetchCsrfToken() => _dio.get<Object?>('/auth/csrf');
+
+  /// `POST /auth/password/set` with the token from the link.
+  Future<void> setPassword({
+    required String token,
+    required String newPassword,
+  }) => _dio.post<Object?>(
+    '/auth/password/set',
+    data: {'token': token, 'newPassword': newPassword},
+  );
 }
 
 /// Data model: maps the API's `{id, name, email, role}` to a [CurrentUser]; null when the body is

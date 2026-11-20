@@ -112,6 +112,21 @@ final class ErrorMessageCatalog {
       why: (l, p) => l.errorUserRoleNotAllowedWhy(p('role')),
       nextStep: (l, _) => l.errorUserRoleNotAllowedNextStep,
     ),
+    'AUTH_TOKEN_INVALID': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthTokenInvalidTitle,
+      why: (l, _) => l.errorAuthTokenInvalidWhy,
+      nextStep: (l, _) => l.errorAuthTokenInvalidNextStep,
+    ),
+    'AUTH_TOKEN_EXPIRED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthTokenExpiredTitle,
+      why: (l, _) => l.errorAuthTokenExpiredWhy,
+      nextStep: (l, _) => l.errorAuthTokenExpiredNextStep,
+    ),
+    'PASSWORD_POLICY_VIOLATION': ErrorCatalogEntry(
+      title: (l, _) => l.errorPasswordPolicyViolationTitle,
+      why: (l, _) => l.errorPasswordPolicyViolationWhy,
+      nextStep: (l, _) => l.errorPasswordPolicyViolationNextStep,
+    ),
     'VALIDATION_FAILED': ErrorCatalogEntry(
       title: (l, _) => l.errorValidationFailedTitle,
       why: (l, p) => l.errorValidationFailedWhy(p('fields')),

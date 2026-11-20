@@ -17,7 +17,13 @@ public enum IdentityErrorCode implements ErrorCode {
     /** A user with this email already exists (case-insensitive) (RIT-US-06). */
     USER_EMAIL_TAKEN(Set.of("email")),
     /** Admins can only create Support Agents and Employees (RIT-US-06). */
-    USER_ROLE_NOT_ALLOWED(Set.of("role"));
+    USER_ROLE_NOT_ALLOWED(Set.of("role")),
+    /** The set-password link is unknown or was already used (RIT-US-07). */
+    AUTH_TOKEN_INVALID(Set.of()),
+    /** The set-password link is older than 24 hours (RIT-US-07). */
+    AUTH_TOKEN_EXPIRED(Set.of()),
+    /** The new password breaks the policy: 12–128 characters, a letter and a digit, not the email (RIT-US-07). */
+    PASSWORD_POLICY_VIOLATION(Set.of());
 
     private final Set<String> requiredParams;
 

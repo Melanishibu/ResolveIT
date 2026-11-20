@@ -383,6 +383,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginPasswordRequired => 'Enter your password.';
 
   @override
+  String get errorAuthTokenInvalidTitle => 'This link can\'t be used';
+
+  @override
+  String get errorAuthTokenInvalidWhy =>
+      'The link to set your password is not valid or was already used. Each link works only once.';
+
+  @override
+  String get errorAuthTokenInvalidNextStep =>
+      'If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation.';
+
+  @override
+  String get errorAuthTokenExpiredTitle => 'This link has expired';
+
+  @override
+  String get errorAuthTokenExpiredWhy =>
+      'Links to set a password are valid for 24 hours, and this one is older.';
+
+  @override
+  String get errorAuthTokenExpiredNextStep =>
+      'Ask your ResolveIT administrator for a new invitation.';
+
+  @override
+  String get errorPasswordPolicyViolationTitle =>
+      'This password isn\'t strong enough';
+
+  @override
+  String get errorPasswordPolicyViolationWhy =>
+      'A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.';
+
+  @override
+  String get errorPasswordPolicyViolationNextStep =>
+      'Choose a password that meets these rules and try again.';
+
+  @override
+  String get setPasswordTitle => 'Set your password';
+
+  @override
+  String get setPasswordSubtitle =>
+      'Choose the password you will use to log in to ResolveIT.';
+
+  @override
+  String get setPasswordPolicy =>
+      'Your password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.';
+
+  @override
+  String get setPasswordNewLabel => 'New password';
+
+  @override
+  String get setPasswordConfirmLabel => 'Confirm password';
+
+  @override
+  String get setPasswordButton => 'Set password';
+
+  @override
+  String get setPasswordRequired => 'Enter a password.';
+
+  @override
+  String get setPasswordConfirmRequired => 'Enter the password again.';
+
+  @override
+  String get setPasswordMismatch =>
+      'The passwords don\'t match. Type the same password in both fields.';
+
+  @override
+  String get setPasswordSuccess =>
+      'Your password is set. Log in with your email address and the new password.';
+
+  @override
   String get categoryHardware => 'Hardware';
 
   @override

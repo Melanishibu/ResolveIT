@@ -53,6 +53,15 @@ public class JdbcInvitationRepository implements InvitationRepository {
                 .optional();
     }
 
+    @Override
+    public Optional<Invitation> findByTokenHash(String tokenHash) {
+        // FOR UPDATE: two submits of the same link wait for each other, so the link is used once (RIT-US-07).
+        return jdbc.sql("SELECT " + COLUMNS + " FROM identity.invitation WHERE token_hash = :tokenHash FOR UPDATE")
+                .param("tokenHash", tokenHash)
+                .query(JdbcInvitationRepository::toInvitation)
+                .optional();
+    }
+
     static Invitation toInvitation(ResultSet row, int rowNumber) throws SQLException {
         return Invitation.reconstitute(
                 new InvitationId(row.getObject("id", UUID.class)),

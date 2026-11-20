@@ -2,7 +2,6 @@ package com.itsm.resolveit.identity.adapters.out.integration;
 
 import com.itsm.resolveit.identity.application.port.out.PasswordVerifier;
 import com.itsm.resolveit.identity.domain.model.PasswordHash;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.HexFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class BCryptPasswordVerifier implements PasswordVerifier {
 
     /** BCrypt only reads the first 72 bytes; longer input can never have been hashed by us. */
-    static final int BCRYPT_MAX_BYTES = 72;
+    static final int BCRYPT_MAX_BYTES = LongPasswords.BCRYPT_MAX_BYTES;
 
     private final BCryptPasswordEncoder encoder;
     private final String dummyHash;
@@ -25,6 +24,11 @@ public class BCryptPasswordVerifier implements PasswordVerifier {
 
     @Override
     public boolean matches(String rawPassword, PasswordHash hash) {
+        if (hash.value().startsWith(LongPasswords.MARKER)) {
+            // A password over 72 bytes, stored pre-hashed (RIT-US-07, see LongPasswords).
+            return encoder.matches(LongPasswords.preHash(rawPassword),
+                    hash.value().substring(LongPasswords.MARKER.length()));
+        }
         if (tooLongForBCrypt(rawPassword)) {
             verifyAgainstDummy("");
             return false;
@@ -39,6 +43,6 @@ public class BCryptPasswordVerifier implements PasswordVerifier {
     }
 
     private static boolean tooLongForBCrypt(String rawPassword) {
-        return rawPassword.getBytes(StandardCharsets.UTF_8).length > BCRYPT_MAX_BYTES;
+        return LongPasswords.tooLongForBCrypt(rawPassword);
     }
 }

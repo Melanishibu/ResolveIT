@@ -730,6 +730,120 @@ abstract class AppLocalizations {
   /// **'Enter your password.'**
   String get loginPasswordRequired;
 
+  /// No description provided for @errorAuthTokenInvalidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This link can\'t be used'**
+  String get errorAuthTokenInvalidTitle;
+
+  /// No description provided for @errorAuthTokenInvalidWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The link to set your password is not valid or was already used. Each link works only once.'**
+  String get errorAuthTokenInvalidWhy;
+
+  /// No description provided for @errorAuthTokenInvalidNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation.'**
+  String get errorAuthTokenInvalidNextStep;
+
+  /// No description provided for @errorAuthTokenExpiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This link has expired'**
+  String get errorAuthTokenExpiredTitle;
+
+  /// No description provided for @errorAuthTokenExpiredWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Links to set a password are valid for 24 hours, and this one is older.'**
+  String get errorAuthTokenExpiredWhy;
+
+  /// No description provided for @errorAuthTokenExpiredNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your ResolveIT administrator for a new invitation.'**
+  String get errorAuthTokenExpiredNextStep;
+
+  /// No description provided for @errorPasswordPolicyViolationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This password isn\'t strong enough'**
+  String get errorPasswordPolicyViolationTitle;
+
+  /// No description provided for @errorPasswordPolicyViolationWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.'**
+  String get errorPasswordPolicyViolationWhy;
+
+  /// No description provided for @errorPasswordPolicyViolationNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a password that meets these rules and try again.'**
+  String get errorPasswordPolicyViolationNextStep;
+
+  /// No description provided for @setPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your password'**
+  String get setPasswordTitle;
+
+  /// No description provided for @setPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the password you will use to log in to ResolveIT.'**
+  String get setPasswordSubtitle;
+
+  /// No description provided for @setPasswordPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.'**
+  String get setPasswordPolicy;
+
+  /// No description provided for @setPasswordNewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get setPasswordNewLabel;
+
+  /// No description provided for @setPasswordConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get setPasswordConfirmLabel;
+
+  /// No description provided for @setPasswordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set password'**
+  String get setPasswordButton;
+
+  /// No description provided for @setPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a password.'**
+  String get setPasswordRequired;
+
+  /// No description provided for @setPasswordConfirmRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password again.'**
+  String get setPasswordConfirmRequired;
+
+  /// No description provided for @setPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The passwords don\'t match. Type the same password in both fields.'**
+  String get setPasswordMismatch;
+
+  /// No description provided for @setPasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password is set. Log in with your email address and the new password.'**
+  String get setPasswordSuccess;
+
   /// No description provided for @categoryHardware.
   ///
   /// In en, this message translates to:

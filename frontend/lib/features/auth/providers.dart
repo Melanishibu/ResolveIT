@@ -3,11 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:resolveit/features/auth/data/repository/api_auth_repository.dart';
 import 'package:resolveit/features/auth/domain/repository/current_user_repository.dart';
+import 'package:resolveit/features/auth/domain/repository/password_repository.dart';
 import 'package:resolveit/features/auth/domain/repository/session_repository.dart';
 import 'package:resolveit/features/auth/domain/usecase/load_current_user.dart';
 import 'package:resolveit/features/auth/domain/usecase/log_in.dart';
 import 'package:resolveit/features/auth/domain/usecase/log_out.dart';
+import 'package:resolveit/features/auth/domain/usecase/set_password.dart';
 import 'package:resolveit/features/auth/interactor/auth_interactor.dart';
+import 'package:resolveit/features/auth/interactor/password_interactor.dart';
 
 /// The HTTP client of the auth API. The composition root (`lib/app/app.dart`) binds it to the
 /// shared API client; features never import the composition root.
@@ -41,4 +44,15 @@ final authInteractorProvider = Provider<AuthInteractor>(
     LogIn(ref.watch(sessionRepositoryProvider)),
     LogOut(ref.watch(sessionRepositoryProvider)),
   ),
+);
+
+/// Set a password from a one-time link (RIT-US-07). Tests override it with a fake.
+final passwordRepositoryProvider = Provider<PasswordRepository>(
+  (ref) => ref.watch(apiAuthRepositoryProvider),
+);
+
+/// What the set-password presenter calls.
+final passwordInteractorProvider = Provider<PasswordInteractor>(
+  (ref) =>
+      PasswordInteractor(SetPassword(ref.watch(passwordRepositoryProvider))),
 );
