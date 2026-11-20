@@ -245,10 +245,10 @@ class _ComponentGalleryViewState extends State<ComponentGalleryView> {
                   context.appColors.statusResolved,
                 ),
                 (
-                  'Overdue',
+                  'Closed',
                   '1',
-                  Icons.warning_amber,
-                  context.appColors.priorityHigh,
+                  Icons.archive_outlined,
+                  context.appColors.statusClosed,
                 ),
               ])
                 StatCard(label: label, value: value, icon: icon, tone: tone),

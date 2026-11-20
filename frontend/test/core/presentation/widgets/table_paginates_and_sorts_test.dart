@@ -98,7 +98,9 @@ void main() {
     expect(button('table-next-page').onPressed, isNull);
   });
 
-  testWidgets('an empty table reads "Showing 0–0 of 0"', (tester) async {
+  // PR !4 review (thread 28): with no rows the footer and paging are hidden; screens show an
+  // EmptyState instead.
+  testWidgets('an empty table shows no footer and no paging', (tester) async {
     await tester.pumpWidget(
       componentTestApp(
         AppDataTable<int>(
@@ -113,6 +115,11 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Showing 0–0 of 0'), findsOneWidget);
+    expect(find.byKey(const Key('table-footer-summary')), findsNothing);
+    expect(find.textContaining('Showing'), findsNothing);
+    expect(find.byKey(const Key('table-page-1')), findsNothing);
+    expect(find.byKey(const Key('table-previous-page')), findsNothing);
+    expect(find.byKey(const Key('table-next-page')), findsNothing);
+    expect(find.text('N'), findsOneWidget, reason: 'the header row stays');
   });
 }

@@ -116,13 +116,15 @@ class AppDataTable<T> extends StatelessWidget {
             ],
           ),
         ),
-        _Footer(
-          page: page,
-          pageSize: pageSize,
-          totalItems: totalItems,
-          pageCount: pageCount,
-          onPageChanged: onPageChanged,
-        ),
+        // No rows: no footer and no paging; screens show an EmptyState instead.
+        if (totalItems > 0)
+          _Footer(
+            page: page,
+            pageSize: pageSize,
+            totalItems: totalItems,
+            pageCount: pageCount,
+            onPageChanged: onPageChanged,
+          ),
       ],
     );
   }
