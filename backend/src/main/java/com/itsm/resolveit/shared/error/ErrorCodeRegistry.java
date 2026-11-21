@@ -141,6 +141,12 @@ public final class ErrorCodeRegistry {
                 "This person can't take incidents",
                 "Incidents can only be assigned to active Technicians.",
                 "Choose an active Technician from the list."));
+        // Comments (AB#53).
+        register(new RegisteredErrorCode(
+                "INCIDENT_CLOSED", 409, Set.of(),
+                "This incident is closed",
+                "A closed incident is final, so it takes no new comments.",
+                "If the problem is back, report a new incident and mention this one."));
     }
 
     private ErrorCodeRegistry() {

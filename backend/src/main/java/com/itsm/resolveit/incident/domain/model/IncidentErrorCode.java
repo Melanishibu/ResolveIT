@@ -13,7 +13,9 @@ public enum IncidentErrorCode implements ErrorCode {
     /** The action is not allowed in the incident's current status (allowed transitions, RIT-US-14). */
     INCIDENT_INVALID_TRANSITION(Set.of("status")),
     /** The chosen assignee is not an active Support Agent (RIT-US-14). */
-    ASSIGNEE_NOT_ACTIVE_AGENT(Set.of());
+    ASSIGNEE_NOT_ACTIVE_AGENT(Set.of()),
+    /** A CLOSED incident takes no comments (BR-013, RIT-US-20). */
+    INCIDENT_CLOSED(Set.of());
 
     private final Set<String> requiredParams;
 

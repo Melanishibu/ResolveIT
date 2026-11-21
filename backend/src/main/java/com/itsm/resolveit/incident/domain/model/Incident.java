@@ -191,6 +191,14 @@ public final class Incident {
                 IncidentStatus.IN_PROGRESS.name(), now);
     }
 
+    /** {@code author} comments on this incident (RIT-US-20). A CLOSED incident takes no comments (BR-013). */
+    public IncidentComment comment(UUID commentId, UUID author, CommentText text, Instant now) {
+        if (status == IncidentStatus.CLOSED) {
+            throw new IncidentClosedException();
+        }
+        return new IncidentComment(commentId, id, author, text, now);
+    }
+
     public IncidentAuditEntry creationEntry() {
         return new IncidentAuditEntry(id, createdBy, IncidentAuditAction.CREATED, null,
                 ticketNumber.value() + ", priority " + priority.name() + ", category " + category.name(), createdAt);

@@ -64,6 +64,13 @@
     "why" : "Your role only lets you see incidents you reported or that are assigned to you.",
     "nextStep" : "Open one of your own incidents, or ask your ResolveIT administrator if you need access."
   }, {
+    "code" : "INCIDENT_CLOSED",
+    "httpStatus" : 409,
+    "requiredParams" : [ ],
+    "title" : "This incident is closed",
+    "why" : "A closed incident is final, so it takes no new comments.",
+    "nextStep" : "If the problem is back, report a new incident and mention this one."
+  }, {
     "code" : "INCIDENT_INVALID_TRANSITION",
     "httpStatus" : 409,
     "requiredParams" : [ "status" ],

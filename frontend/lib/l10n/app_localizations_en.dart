@@ -770,6 +770,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Work started. The incident is now In Progress.';
 
   @override
+  String get commentsEmpty => 'No comments yet.';
+
+  @override
+  String get commentsInputLabel => 'Add a comment';
+
+  @override
+  String get commentsInputHint =>
+      'Ask a question or share an update (up to 1000 characters).';
+
+  @override
+  String get commentsAdd => 'Add comment';
+
+  @override
+  String get errorIncidentClosedTitle => 'This incident is closed';
+
+  @override
+  String get errorIncidentClosedWhy =>
+      'A closed incident is final, so it takes no new comments.';
+
+  @override
+  String get errorIncidentClosedNextStep =>
+      'If the problem is back, report a new incident and mention this one.';
+
+  @override
   String get assignPanelTitle => 'Assign to a Technician';
 
   @override

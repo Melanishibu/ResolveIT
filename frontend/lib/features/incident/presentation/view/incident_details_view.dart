@@ -5,7 +5,9 @@ import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/comments/comments.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_details.dart';
+import 'package:resolveit/features/incident/domain/entity/incident_status.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
@@ -90,6 +92,9 @@ class _Details extends ConsumerWidget {
     });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
+    final commentCount = ref
+        .watch(incidentCommentsPresenterProvider(incident.id))
+        .count;
     void startWork() => ref
         .read(incidentStatusPresenterProvider(incident.id).notifier)
         .startWork();
@@ -162,10 +167,10 @@ class _Details extends ConsumerWidget {
               child: _Overview(incident: incident),
             ),
             AppTab(
-              label: l10n.incidentDetailsComments(0),
-              child: EmptyState(
-                icon: Icons.chat_bubble_outline,
-                message: l10n.incidentDetailsCommentsLater,
+              label: l10n.incidentDetailsComments(commentCount),
+              child: IncidentCommentsTab(
+                incidentId: incident.id,
+                canComment: incident.status != IncidentStatus.closed,
               ),
             ),
             AppTab(

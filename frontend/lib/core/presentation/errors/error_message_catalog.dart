@@ -142,6 +142,11 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorAssigneeNotActiveAgentWhy,
       nextStep: (l, _) => l.errorAssigneeNotActiveAgentNextStep,
     ),
+    'INCIDENT_CLOSED': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentClosedTitle,
+      why: (l, _) => l.errorIncidentClosedWhy,
+      nextStep: (l, _) => l.errorIncidentClosedNextStep,
+    ),
     'USER_NOT_FOUND': ErrorCatalogEntry(
       title: (l, _) => l.errorUserNotFoundTitle,
       why: (l, p) => l.errorUserNotFoundWhy(p('id')),
