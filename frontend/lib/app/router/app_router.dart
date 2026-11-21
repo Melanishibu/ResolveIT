@@ -45,7 +45,9 @@ List<RouteBase> devComponentRoutes() => [
 /// Where the session state sends the user (AB#13, AB#14):
 /// - signed out → `/login` (the public auth pages and, in debug builds, the dev routes stay reachable);
 /// - signed in on `/login` → the dashboard;
-/// - signed in on a page that isn't in the role's menu → the "not allowed" page;
+/// - signed in on a page the role may not open → the "not allowed" page. [mayOpen] decides, from the
+///   permission table, not from the menu: the Admin may open Create Incident without a menu entry
+///   (bug AB#181);
 /// - still loading or backend unreachable → stay (the shell shows loading or the error panel).
 /// The backend enforces every rule; the router only keeps users on pages their role may use.
 String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
@@ -59,7 +61,7 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   }
   if (path == LoginView.path) return MenuDestination.dashboard.path;
   final destination = MenuDestination.forLocation(path);
-  if (destination != null && !menuFor(user.role).contains(destination)) {
+  if (destination != null && !mayOpen(user.role, destination)) {
     return NotAllowedView.path;
   }
   return null;

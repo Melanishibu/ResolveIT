@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resolveit/core/domain/incident_permissions.dart';
 import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
@@ -41,6 +42,16 @@ enum MenuDestination {
     return best;
   }
 }
+
+/// Whether [role] may open [destination]'s page. This is the route guard's rule, taken from the
+/// permission table in the common rules (AB#14), and it is deliberately separate from [menuFor]:
+/// a role may open a page that its menu doesn't list. Example (bug AB#181): the Admin may create
+/// incidents and reaches `/incidents/new` through the "+ Create Incident" button (AB#39), but the
+/// Admin menu has no Create Incident entry (Update 01). The backend still enforces every rule.
+bool mayOpen(Role role, MenuDestination destination) => switch (destination) {
+  MenuDestination.createIncident => mayCreateIncident(role),
+  _ => menuFor(role).contains(destination),
+};
 
 /// Menu per role (story AB#11, Update 01 of 11/20/2026). The backend enforces access;
 /// this only decides what the menu offers.
