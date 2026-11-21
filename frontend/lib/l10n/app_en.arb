@@ -313,6 +313,7 @@
   "incidentListEmpty": "No incidents to show yet.",
   "incidentListNumber": "Incident #",
   "incidentListOpen": "View",
+  "statusStartedDone": "Work started. The incident is now In Progress.",
   "assignPanelTitle": "Assign to a Technician",
   "assignPanelAgent": "Technician",
   "assignPanelDone": "Assigned to {name}.",

@@ -157,6 +157,40 @@ public final class Incident {
         return new IncidentAuditEntry(id, adminId, action, previous, agentId.toString(), now);
     }
 
+    /**
+     * The status action that moves this incident to {@code target}, per the allowed-transitions table (RIT-US-15).
+     * Anything not in the table, including every change of a CLOSED incident, is an invalid transition.
+     */
+    public IncidentAction statusActionFor(IncidentStatus target) {
+        Objects.requireNonNull(target, "target");
+        IncidentAction action = switch (status) {
+            case ASSIGNED -> target == IncidentStatus.IN_PROGRESS ? IncidentAction.START : null;
+            case IN_PROGRESS -> target == IncidentStatus.RESOLVED ? IncidentAction.RESOLVE : null;
+            case RESOLVED -> switch (target) {
+                case IN_PROGRESS -> IncidentAction.REOPEN;
+                case CLOSED -> IncidentAction.CLOSE;
+                default -> null;
+            };
+            case OPEN, CLOSED -> null;
+        };
+        if (action == null) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        return action;
+    }
+
+    /** Start work (RIT-US-15): ASSIGNED → IN_PROGRESS. Returns the STARTED audit entry. */
+    public IncidentAuditEntry startWork(UUID actorId, Instant now) {
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.ASSIGNED) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.IN_PROGRESS;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.STARTED, IncidentStatus.ASSIGNED.name(),
+                IncidentStatus.IN_PROGRESS.name(), now);
+    }
+
     public IncidentAuditEntry creationEntry() {
         return new IncidentAuditEntry(id, createdBy, IncidentAuditAction.CREATED, null,
                 ticketNumber.value() + ", priority " + priority.name() + ", category " + category.name(), createdAt);

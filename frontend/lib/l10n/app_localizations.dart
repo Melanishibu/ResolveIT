@@ -1414,6 +1414,12 @@ abstract class AppLocalizations {
   /// **'View'**
   String get incidentListOpen;
 
+  /// No description provided for @statusStartedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Work started. The incident is now In Progress.'**
+  String get statusStartedDone;
+
   /// No description provided for @assignPanelTitle.
   ///
   /// In en, this message translates to:

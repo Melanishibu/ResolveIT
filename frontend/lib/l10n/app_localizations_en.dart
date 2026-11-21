@@ -766,6 +766,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentListOpen => 'View';
 
   @override
+  String get statusStartedDone =>
+      'Work started. The incident is now In Progress.';
+
+  @override
   String get assignPanelTitle => 'Assign to a Technician';
 
   @override

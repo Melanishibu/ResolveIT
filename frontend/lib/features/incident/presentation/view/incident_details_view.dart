@@ -8,6 +8,7 @@ import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_details.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
+import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
@@ -82,10 +83,22 @@ class _Details extends ConsumerWidget {
         );
       }
     });
+    ref.listen(incidentStatusPresenterProvider(incident.id), (previous, next) {
+      if (next.started != null && previous?.started == null) {
+        AppToast.success(context, l10n.statusStartedDone);
+      }
+    });
+    final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
+    final statusFailure = statusState.failure;
+    void startWork() => ref
+        .read(incidentStatusPresenterProvider(incident.id).notifier)
+        .startWork();
     void choose(IncidentAction action) {
       if (action == IncidentAction.assign ||
           action == IncidentAction.reassign) {
         ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      } else if (action == IncidentAction.start) {
+        startWork();
       }
     }
 
@@ -98,6 +111,14 @@ class _Details extends ConsumerWidget {
           actions: [
             PriorityChip(incident.priority),
             StatusChip(incident.status),
+            if (incident.allowedActions.contains(IncidentAction.start))
+              AppButton(
+                key: const Key('incident-start-work'),
+                label: l10n.incidentActionStart,
+                icon: Icons.play_arrow,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving ? null : startWork,
+              ),
             if (incident.allowedActions.isNotEmpty)
               PopupMenuButton<IncidentAction>(
                 key: const Key('incident-details-actions'),
@@ -129,6 +150,10 @@ class _Details extends ConsumerWidget {
           ],
         ),
         SizedBox(height: spacing.l),
+        if (statusFailure != null) ...[
+          ErrorPanel(key: const Key('status-error'), failure: statusFailure),
+          SizedBox(height: spacing.l),
+        ],
         AssignIncidentPanel(incidentId: incident.id),
         AppTabs(
           tabs: [
@@ -253,4 +278,6 @@ String _actionLabel(AppLocalizations l10n, IncidentAction action) =>
 
 /// Actions whose stories are built; the others stay visible but disabled.
 bool _isAvailable(IncidentAction action) =>
-    action == IncidentAction.assign || action == IncidentAction.reassign;
+    action == IncidentAction.assign ||
+    action == IncidentAction.reassign ||
+    action == IncidentAction.start;

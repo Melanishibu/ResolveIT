@@ -50,10 +50,13 @@ class IncidentController {
     private final ListIncidentsUseCase listIncidents;
 
     private final com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident;
+    private final com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeStatus;
 
     IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails,
                        ListIncidentsUseCase listIncidents,
-                       com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident) {
+                       com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident,
+                       com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeStatus) {
+        this.changeStatus = changeStatus;
         this.reportIncident = reportIncident;
         this.incidentDetails = incidentDetails;
         this.listIncidents = listIncidents;
@@ -131,6 +134,30 @@ class IncidentController {
         return IncidentDetailsResponse.of(assignIncident.assign(
                 new com.itsm.resolveit.incident.application.port.in.AssignIncidentCommand(actor,
                         new IncidentId(incidentId(id)), agentId)));
+    }
+
+    /** Body of {@code PATCH /tickets/{id}/status}. */
+    record ChangeStatusRequest(@jakarta.validation.constraints.NotBlank String targetStatus, String resolutionNotes,
+                               String reason) {
+    }
+
+    @org.springframework.web.bind.annotation.PatchMapping("/{id}/status")
+    @Operation(summary = "Change an incident's status",
+            description = "One endpoint for all transitions (RIT-US-15). Built so far: start work"
+                    + " (ASSIGNED → IN_PROGRESS), audited as STARTED.",
+            security = @SecurityRequirement(name = SESSION_SCHEME))
+    @ApiResponse(responseCode = "200", description = "OK: the incident as the caller now sees it")
+    @ApiResponse(responseCode = "403", description = "INCIDENT_ACCESS_DENIED or AUTH_FORBIDDEN",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "409", description = "INCIDENT_INVALID_TRANSITION",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    IncidentDetailsResponse changeStatus(Actor actor, @PathVariable("id") String id,
+                                         @Valid @RequestBody ChangeStatusRequest request) {
+        com.itsm.resolveit.incident.domain.model.IncidentStatus target = field("targetStatus",
+                () -> com.itsm.resolveit.incident.domain.model.IncidentStatus.valueOf(request.targetStatus()));
+        return IncidentDetailsResponse.of(changeStatus.changeStatus(
+                new com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusCommand(actor,
+                        new IncidentId(incidentId(id)), target, request.resolutionNotes(), request.reason())));
     }
 
     /** A malformed id is answered as not found, like an unknown one. */
