@@ -81,6 +81,7 @@ class ProblemDetailsExceptionHandler {
         for (Throwable cause = ex.getCause(); cause != null; cause = cause.getCause()) {
             if (cause instanceof JacksonException jackson) {
                 String path = jackson.getPath().stream()
+                        .filter(reference -> reference.getPropertyName() != null || reference.getIndex() >= 0)
                         .map(reference -> reference.getPropertyName() != null
                                 ? reference.getPropertyName() : String.valueOf(reference.getIndex()))
                         .collect(Collectors.joining("."));

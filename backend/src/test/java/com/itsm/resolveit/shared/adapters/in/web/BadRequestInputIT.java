@@ -67,6 +67,7 @@ class BadRequestInputIT {
                 "{\"active\":\"maybe\"}");
 
         assertValidationFailed(response, "active");
+        assertThat(response.body()).as("the raw input is never echoed").doesNotContain("maybe");
     }
 
     @Test
