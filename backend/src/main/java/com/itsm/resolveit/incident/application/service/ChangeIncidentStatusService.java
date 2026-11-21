@@ -14,6 +14,7 @@ import com.itsm.resolveit.incident.domain.model.IncidentAction;
 import com.itsm.resolveit.incident.domain.model.IncidentInvalidTransitionException;
 import com.itsm.resolveit.incident.domain.model.IncidentNotFoundException;
 import com.itsm.resolveit.incident.domain.model.ResolutionNotes;
+import com.itsm.resolveit.incident.domain.model.ReopenReason;
 import com.itsm.resolveit.incident.domain.model.Viewer;
 import java.time.Clock;
 import java.util.Objects;
@@ -22,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * One endpoint for all status changes (RIT-US-15). Order of checks: the incident must be visible (403
  * INCIDENT_ACCESS_DENIED), the target must be an allowed transition (409), and the caller's role must allow that
- * action on this incident (403 AUTH_FORBIDDEN). Start work, resolve and close are built; reopen follows in
- * RIT-US-17 and is answered as an invalid transition until then.
+ * action on this incident (403 AUTH_FORBIDDEN). Start work, resolve, reopen and close are built here; assign and
+ * reassign have their own endpoint.
  */
 public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase {
 
@@ -57,6 +58,7 @@ public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase 
             case RESOLVE -> incident.resolve(new ResolutionNotes(command.resolutionNotes()), viewer.userId(),
                     clock.instant());
             case CLOSE -> incident.close(viewer.userId(), clock.instant());
+            case REOPEN -> incident.reopen(new ReopenReason(command.reason()), viewer.userId(), clock.instant());
             default -> throw new IncidentInvalidTransitionException(incident.status());
         });
         incidents.save(incident);

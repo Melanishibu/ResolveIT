@@ -777,6 +777,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusClosedDone => 'Incident closed.';
 
   @override
+  String get statusReopenedDone =>
+      'Incident reopened. It is In Progress again.';
+
+  @override
+  String get reopenPanelTitle => 'Reopen this incident';
+
+  @override
+  String get reopenPanelReason => 'Reason';
+
+  @override
+  String get reopenPanelReasonHint =>
+      'What still doesn\'t work? (10 to 500 characters)';
+
+  @override
+  String get errorIncidentReopenReasonRequiredTitle =>
+      'Say why you\'re reopening';
+
+  @override
+  String errorIncidentReopenReasonRequiredWhy(String min, String max) {
+    return 'A resolved incident can only be reopened with a reason of $min to $max characters, so the Technician knows what is still wrong.';
+  }
+
+  @override
+  String get errorIncidentReopenReasonRequiredNextStep =>
+      'Describe what still doesn\'t work, then reopen again.';
+
+  @override
   String closeConfirmTitle(String ticketNumber) {
     return 'Close $ticketNumber?';
   }

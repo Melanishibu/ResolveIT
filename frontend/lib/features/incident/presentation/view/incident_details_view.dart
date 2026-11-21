@@ -13,6 +13,7 @@ import 'package:resolveit/features/incident/presentation/presenter/assign_incide
 import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/resolve_incident_panel.dart';
+import 'package:resolveit/features/incident/presentation/view/reopen_incident_panel.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/features/incident/widgets/status_chip.dart';
@@ -96,6 +97,9 @@ class _Details extends ConsumerWidget {
       if (next.closed != null && previous?.closed == null) {
         AppToast.success(context, l10n.statusClosedDone);
       }
+      if (next.reopened != null && previous?.reopened == null) {
+        AppToast.success(context, l10n.statusReopenedDone);
+      }
     });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
@@ -123,6 +127,10 @@ class _Details extends ConsumerWidget {
       if (action == IncidentAction.assign ||
           action == IncidentAction.reassign) {
         ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      } else if (action == IncidentAction.reopen) {
+        ref
+            .read(incidentStatusPresenterProvider(incident.id).notifier)
+            .openReopen();
       } else if (action == IncidentAction.close) {
         confirmClose();
       } else if (action == IncidentAction.resolve) {
@@ -188,6 +196,7 @@ class _Details extends ConsumerWidget {
         ],
         AssignIncidentPanel(incidentId: incident.id),
         ResolveIncidentPanel(incidentId: incident.id),
+        ReopenIncidentPanel(incidentId: incident.id),
         AppTabs(
           tabs: [
             AppTab(
@@ -315,4 +324,5 @@ bool _isAvailable(IncidentAction action) =>
     action == IncidentAction.reassign ||
     action == IncidentAction.start ||
     action == IncidentAction.resolve ||
-    action == IncidentAction.close;
+    action == IncidentAction.close ||
+    action == IncidentAction.reopen;

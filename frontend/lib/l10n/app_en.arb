@@ -316,6 +316,16 @@
   "statusStartedDone": "Work started. The incident is now In Progress.",
   "statusResolvedDone": "Incident resolved. The reporter can now close or reopen it.",
   "statusClosedDone": "Incident closed.",
+  "statusReopenedDone": "Incident reopened. It is In Progress again.",
+  "reopenPanelTitle": "Reopen this incident",
+  "reopenPanelReason": "Reason",
+  "reopenPanelReasonHint": "What still doesn't work? (10 to 500 characters)",
+  "errorIncidentReopenReasonRequiredTitle": "Say why you're reopening",
+  "errorIncidentReopenReasonRequiredWhy": "A resolved incident can only be reopened with a reason of {min} to {max} characters, so the Technician knows what is still wrong.",
+  "@errorIncidentReopenReasonRequiredWhy": {
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
+  "errorIncidentReopenReasonRequiredNextStep": "Describe what still doesn't work, then reopen again.",
   "closeConfirmTitle": "Close {ticketNumber}?",
   "@closeConfirmTitle": {
     "placeholders": { "ticketNumber": { "type": "String" } }

@@ -231,6 +231,22 @@ public final class Incident {
         return new IncidentComment(commentId, id, author, text, now);
     }
 
+    /**
+     * Reopen (RIT-US-17): RESOLVED → IN_PROGRESS with a reason. The previous resolution notes stay in the history.
+     * Returns the REOPENED audit entry (reason as new value).
+     */
+    public IncidentAuditEntry reopen(ReopenReason reason, UUID actorId, Instant now) {
+        Objects.requireNonNull(reason, "reason");
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.RESOLVED) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.IN_PROGRESS;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.REOPENED, IncidentStatus.RESOLVED.name(),
+                reason.value(), now);
+    }
+
     /** Close (RIT-US-18): RESOLVED → CLOSED, which is final. Returns the CLOSED audit entry. */
     public IncidentAuditEntry close(UUID actorId, Instant now) {
         Objects.requireNonNull(actorId, "actorId");

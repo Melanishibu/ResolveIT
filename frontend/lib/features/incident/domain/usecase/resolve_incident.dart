@@ -26,3 +26,17 @@ final class CloseIncident {
   Future<Result<IncidentDetails>> call(String incidentId) =>
       _repository.transition(incidentId, IncidentStatus.closed);
 }
+
+/// Reopen a resolved incident with a reason: RESOLVED → IN_PROGRESS (RIT-US-17). The backend checks the reason.
+final class ReopenIncident {
+  const ReopenIncident(this._repository);
+
+  final IncidentTransitionRepository _repository;
+
+  Future<Result<IncidentDetails>> call(String incidentId, String reason) =>
+      _repository.transition(
+        incidentId,
+        IncidentStatus.inProgress,
+        reason: reason,
+      );
+}

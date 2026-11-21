@@ -85,6 +85,13 @@
     "why" : "ResolveIT has no incident at this address. The link may be outdated or mistyped.",
     "nextStep" : "Go back to your incident list and open the incident from there."
   }, {
+    "code" : "INCIDENT_REOPEN_REASON_REQUIRED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "max", "min" ],
+    "title" : "Say why you're reopening",
+    "why" : "A resolved incident can only be reopened with a reason of {min} to {max} characters, so the Technician knows what is still wrong.",
+    "nextStep" : "Describe what still doesn't work, then reopen again."
+  }, {
     "code" : "INCIDENT_RESOLUTION_NOTES_REQUIRED",
     "httpStatus" : 400,
     "requiredParams" : [ "max", "min" ],

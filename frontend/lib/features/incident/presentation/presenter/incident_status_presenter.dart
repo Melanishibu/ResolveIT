@@ -14,6 +14,8 @@ final class IncidentStatusState {
     this.isResolveOpen = false,
     this.resolved,
     this.closed,
+    this.isReopenOpen = false,
+    this.reopened,
   });
 
   final bool isSaving;
@@ -32,6 +34,12 @@ final class IncidentStatusState {
 
   /// Set after the incident was closed, for the success toast.
   final IncidentDetails? closed;
+
+  /// The reopen panel (reason input) is shown.
+  final bool isReopenOpen;
+
+  /// Set after the incident was reopened, for the success toast.
+  final IncidentDetails? reopened;
 }
 
 final incidentStatusPresenterProvider = NotifierProvider.autoDispose
@@ -77,6 +85,27 @@ class IncidentStatusPresenter extends Notifier<IncidentStatusState> {
         ref.invalidate(incidentDetailsPresenterProvider(incidentId));
       case Failure(:final failure):
         state = IncidentStatusState(failure: failure);
+    }
+  }
+
+  /// The user chose Reopen: show the reason panel (RIT-US-17).
+  void openReopen() => state = const IncidentStatusState(isReopenOpen: true);
+
+  void cancelReopen() => state = const IncidentStatusState();
+
+  Future<void> reopen(String reason) async {
+    if (state.isSaving) return;
+    state = const IncidentStatusState(isSaving: true, isReopenOpen: true);
+    final result = await ref
+        .read(incidentStatusInteractorProvider)
+        .reopen(incidentId, reason);
+    if (!ref.mounted) return;
+    switch (result) {
+      case Success(:final value):
+        state = IncidentStatusState(reopened: value);
+        ref.invalidate(incidentDetailsPresenterProvider(incidentId));
+      case Failure(:final failure):
+        state = IncidentStatusState(failure: failure, isReopenOpen: true);
     }
   }
 
