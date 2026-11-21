@@ -5,7 +5,12 @@ import com.itsm.resolveit.incident.application.port.in.GetIncidentDetailsQuery;
 import com.itsm.resolveit.incident.application.port.in.GetIncidentDetailsUseCase;
 import com.itsm.resolveit.incident.domain.model.IncidentId;
 import com.itsm.resolveit.incident.domain.model.IncidentNotFoundException;
+import com.itsm.resolveit.incident.application.port.in.ListIncidentsQuery;
+import com.itsm.resolveit.incident.application.port.in.ListIncidentsQuery.SortField;
+import com.itsm.resolveit.incident.application.port.in.ListIncidentsUseCase;
+import java.util.Map;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.itsm.resolveit.incident.application.port.in.ReportIncidentCommand;
@@ -42,9 +47,43 @@ class IncidentController {
     private final ReportIncidentUseCase reportIncident;
     private final GetIncidentDetailsUseCase incidentDetails;
 
-    IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails) {
+    private final ListIncidentsUseCase listIncidents;
+
+    IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails,
+                       ListIncidentsUseCase listIncidents) {
         this.reportIncident = reportIncident;
         this.incidentDetails = incidentDetails;
+        this.listIncidents = listIncidents;
+    }
+
+    private static final Map<String, SortField> SORT_FIELDS = Map.of(
+            "createdAt", SortField.CREATED_AT, "updatedAt", SortField.UPDATED_AT, "priority", SortField.PRIORITY,
+            "status", SortField.STATUS, "ticketNumber", SortField.TICKET_NUMBER);
+
+    @GetMapping
+    @Operation(summary = "List incidents",
+            description = "The incidents the caller may see (Admin all, Agent assigned, Employee own), paged."
+                    + " sort = createdAt|updatedAt|priority|status|ticketNumber,asc|desc (default createdAt,desc).",
+            security = @SecurityRequirement(name = SESSION_SCHEME))
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_FAILED for page, size or sort",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    IncidentListResponse list(Actor actor, @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "20") int size,
+                              @RequestParam(defaultValue = "createdAt,desc") String sort) {
+        if (page < 0) {
+            throw new InvalidFieldException("page");
+        }
+        if (size < 1 || size > 100) {
+            throw new InvalidFieldException("size");
+        }
+        String[] parts = sort.split(",", -1);
+        SortField field = SORT_FIELDS.get(parts[0]);
+        if (field == null || parts.length > 2 || (parts.length == 2 && !parts[1].matches("asc|desc"))) {
+            throw new InvalidFieldException("sort");
+        }
+        boolean ascending = parts.length == 2 && parts[1].equals("asc");
+        return IncidentListResponse.of(listIncidents.list(new ListIncidentsQuery(actor, page, size, field, ascending)));
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_list_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_list_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/list_incidents.dart';
+import 'package:resolveit/features/incident/interactor/incident_list_interactor.dart';
 import 'package:resolveit/features/incident/data/datasource/incident_remote_datasource.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_repository.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_repository.dart';
@@ -41,5 +45,17 @@ final incidentDetailsInteractorProvider = Provider<IncidentDetailsInteractor>(
 final reportIncidentInteractorProvider = Provider<ReportIncidentInteractor>(
   (ref) => ReportIncidentInteractor(
     ReportIncident(ref.watch(incidentRepositoryProvider)),
+  ),
+);
+
+/// The incident list (RIT-US-11). Tests override it with a fake.
+final incidentListRepositoryProvider = Provider<IncidentListRepository>(
+  (ref) => ApiIncidentListRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// What the incident list presenter calls.
+final incidentListInteractorProvider = Provider<IncidentListInteractor>(
+  (ref) => IncidentListInteractor(
+    ListIncidents(ref.watch(incidentListRepositoryProvider)),
   ),
 );

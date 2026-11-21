@@ -19,14 +19,18 @@ public final class Incident {
     private final Title title;
     private final Description description;
     private final Category category;
-    private final Priority priority;
-    private final IncidentStatus status;
+    private Priority priority;
+    private IncidentStatus status;
     private final UUID createdBy;
     private final Instant createdAt;
-    private final Instant updatedAt;
+    private Instant updatedAt;
+    /** The Support Agent working on it; null until assigned (RIT-US-12). */
+    private UUID assignedTo;
 
     private Incident(IncidentId id, TicketNumber ticketNumber, Title title, Description description, Category category,
-                     Priority priority, IncidentStatus status, UUID createdBy, Instant createdAt, Instant updatedAt) {
+                     Priority priority, IncidentStatus status, UUID createdBy, Instant createdAt, Instant updatedAt,
+                     UUID assignedTo) {
+        this.assignedTo = assignedTo;
         this.id = Objects.requireNonNull(id, "id");
         this.ticketNumber = Objects.requireNonNull(ticketNumber, "ticketNumber");
         this.title = Objects.requireNonNull(title, "title");
@@ -43,7 +47,7 @@ public final class Incident {
     public static Incident report(IncidentId id, TicketNumber ticketNumber, Title title, Description description,
                                   Category category, Priority priority, UUID reporter, Instant now) {
         return new Incident(id, ticketNumber, title, description, category, priority, IncidentStatus.OPEN, reporter,
-                now, now);
+                now, now, null);
     }
 
     /** Rebuilds a stored incident that was never changed after it was reported (updated = created). */
@@ -58,8 +62,21 @@ public final class Incident {
     public static Incident reconstitute(IncidentId id, TicketNumber ticketNumber, Title title, Description description,
                                         Category category, Priority priority, IncidentStatus status, UUID createdBy,
                                         Instant createdAt, Instant updatedAt) {
+        return reconstitute(id, ticketNumber, title, description, category, priority, status, createdBy, createdAt,
+                updatedAt, null);
+    }
+
+    /** Rebuilds a stored incident with its assignee (null if unassigned). */
+    public static Incident reconstitute(IncidentId id, TicketNumber ticketNumber, Title title, Description description,
+                                        Category category, Priority priority, IncidentStatus status, UUID createdBy,
+                                        Instant createdAt, Instant updatedAt, UUID assignedTo) {
         return new Incident(id, ticketNumber, title, description, category, priority, status, createdBy, createdAt,
-                updatedAt);
+                updatedAt, assignedTo);
+    }
+
+    /** The assigned Support Agent, if any. */
+    public java.util.Optional<UUID> assignedTo() {
+        return java.util.Optional.ofNullable(assignedTo);
     }
 
     /**
@@ -116,9 +133,8 @@ public final class Incident {
         return createdBy.equals(viewer.userId());
     }
 
-    /** No incident can be assigned before RIT-US-12 adds the assignee, so no Support Agent sees one yet. */
     private boolean isAssignedTo(Viewer viewer) {
-        return false;
+        return viewer.userId().equals(assignedTo);
     }
 
     /** The CREATED audit entry: new value = ticket number, priority and category (RIT-US-09 spec). */
