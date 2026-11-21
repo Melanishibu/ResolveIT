@@ -1377,6 +1377,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change priority'**
   String get incidentActionChangePriority;
+
+  /// No description provided for @incidentListSubtitleAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All incidents, newest first.'**
+  String get incidentListSubtitleAll;
+
+  /// No description provided for @incidentListSubtitleAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Incidents assigned to you, newest first.'**
+  String get incidentListSubtitleAssigned;
+
+  /// No description provided for @incidentListSubtitleOwn.
+  ///
+  /// In en, this message translates to:
+  /// **'Incidents you reported, newest first.'**
+  String get incidentListSubtitleOwn;
+
+  /// No description provided for @incidentListEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No incidents to show yet.'**
+  String get incidentListEmpty;
+
+  /// No description provided for @incidentListNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident #'**
+  String get incidentListNumber;
+
+  /// No description provided for @incidentListOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get incidentListOpen;
 }
 
 class _AppLocalizationsDelegate

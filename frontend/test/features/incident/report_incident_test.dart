@@ -38,7 +38,7 @@ void main() {
       find.text(l10nEn.createIncidentSuccess('INC-2026-00001')),
       findsOneWidget,
     );
-    expect(_router(tester).state.uri.path, '/my-incidents');
+    expect(_router(tester).state.uri.path, '/incidents/i-1');
   });
 
   testWidgets('TC-004 Empty title is rejected', (tester) async {

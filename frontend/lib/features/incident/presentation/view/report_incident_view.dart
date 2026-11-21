@@ -8,6 +8,7 @@ import 'package:resolveit/features/incident/domain/entity/incident_category.dart
 import 'package:resolveit/features/incident/domain/entity/new_incident.dart';
 import 'package:resolveit/features/incident/domain/entity/priority.dart';
 import 'package:resolveit/features/incident/presentation/presenter/report_incident_presenter.dart';
+import 'package:resolveit/features/incident/presentation/view/incident_details_view.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/help_panel.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
@@ -75,7 +76,7 @@ class _ReportIncidentViewState extends ConsumerState<ReportIncidentView> {
           context,
           l10n.createIncidentSuccess(reported.ticketNumber),
         );
-        context.go(_returnPath());
+        context.go(IncidentDetailsView.pathFor(reported.id));
       }
     });
     final state = ref.watch(reportIncidentPresenterProvider);

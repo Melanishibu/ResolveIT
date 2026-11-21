@@ -745,4 +745,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get incidentActionChangePriority => 'Change priority';
+
+  @override
+  String get incidentListSubtitleAll => 'All incidents, newest first.';
+
+  @override
+  String get incidentListSubtitleAssigned =>
+      'Incidents assigned to you, newest first.';
+
+  @override
+  String get incidentListSubtitleOwn => 'Incidents you reported, newest first.';
+
+  @override
+  String get incidentListEmpty => 'No incidents to show yet.';
+
+  @override
+  String get incidentListNumber => 'Incident #';
+
+  @override
+  String get incidentListOpen => 'View';
 }
