@@ -72,17 +72,30 @@ Workflow and Hard rules below.
 - **Code review and QA (11/21/2026):** Claude may perform and close the Code review tasks (independent sub-agent
   review) and the QA tasks (API-level QA and automated UI tests), with the agreed honest wording. Visual browser
   checks remain Melani's.
-- **Bugs found in testing (11/21/2026):**
+- **Bugs found in testing (11/21/2026, life cycle amended 11/21/2026):**
   - Log each finding immediately as a Bug or an Issue, following the `safe-agile` rules. Tag it `found-in-review`
-    or `found-in-qa`.
+    or `found-in-qa`. A Bug is logged as a **child of its story**.
   - Fix a Bug on `bugfix/<bug id>-<name>` from `development`:
     1. Write a regression test and confirm it fails.
     2. Write the fix.
     3. Commit with `AB#<bug id>`.
     4. Get an independent review.
     5. Open a PR into `development`, or into the integration branch when Melani is away.
-  - Set the Bug Active when starting and Resolved when the fix is merged, each time with an evidence comment.
-    Melani closes Bugs.
+  - Melani completes bugfix PRs. After she completes one, carry on with Resolved, verification and Closed without
+    waiting for another instruction.
+  - Bug life cycle, with an evidence comment on every state change:
+    - **New:** logged as a child of its story.
+    - **Active:** the fix has started on `bugfix/<bug id>-<name>`.
+    - **Resolved:** the fix PR is merged into `development`. The comment gives `!n` and the commit.
+    - **Closed:** only after verification on `development`:
+      - the "ResolveIT CI" run for the merge is green;
+      - the regression test passes;
+      - the Bug's repro steps, re-run against a local build of `development`, now behave as expected.
+
+      Comment: "Closed by Claude Code under Melani Shibu's authorisation of 11/21/2026; verified on development:
+      <CI run>, <test name>, <re-check result>".
+  - If verification fails, set the Bug back to Active, explain why in a comment, and fix it again.
+  - When all child Bugs of a story are Closed, set the story back to Resolved, with an evidence comment.
   - Issues are only logged, not fixed, unless they are planned.
 - **Closing tasks:** Claude may close its own `claude` tasks once their work is merged, with evidence.
 - **Branch names:** `feature/<id>-<name>`, `bugfix/<bug id>-<name>`, `chore/<id>-<name>`, `integration/<name>`.
