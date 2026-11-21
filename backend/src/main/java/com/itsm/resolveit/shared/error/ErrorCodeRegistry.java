@@ -153,6 +153,12 @@ public final class ErrorCodeRegistry {
                 "Add resolution notes",
                 "An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.",
                 "Describe what you did to fix it, then resolve again."));
+        // Reopen (AB#45).
+        register(new RegisteredErrorCode(
+                "INCIDENT_REOPEN_REASON_REQUIRED", 400, Set.of("min", "max"),
+                "Say why you're reopening",
+                "A resolved incident can only be reopened with a reason of {min} to {max} characters, so the Technician knows what is still wrong.",
+                "Describe what still doesn't work, then reopen again."));
     }
 
     private ErrorCodeRegistry() {

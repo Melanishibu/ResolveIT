@@ -1432,6 +1432,48 @@ abstract class AppLocalizations {
   /// **'Incident closed.'**
   String get statusClosedDone;
 
+  /// No description provided for @statusReopenedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident reopened. It is In Progress again.'**
+  String get statusReopenedDone;
+
+  /// No description provided for @reopenPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen this incident'**
+  String get reopenPanelTitle;
+
+  /// No description provided for @reopenPanelReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get reopenPanelReason;
+
+  /// No description provided for @reopenPanelReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What still doesn\'t work? (10 to 500 characters)'**
+  String get reopenPanelReasonHint;
+
+  /// No description provided for @errorIncidentReopenReasonRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Say why you\'re reopening'**
+  String get errorIncidentReopenReasonRequiredTitle;
+
+  /// No description provided for @errorIncidentReopenReasonRequiredWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'A resolved incident can only be reopened with a reason of {min} to {max} characters, so the Technician knows what is still wrong.'**
+  String errorIncidentReopenReasonRequiredWhy(String min, String max);
+
+  /// No description provided for @errorIncidentReopenReasonRequiredNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what still doesn\'t work, then reopen again.'**
+  String get errorIncidentReopenReasonRequiredNextStep;
+
   /// No description provided for @closeConfirmTitle.
   ///
   /// In en, this message translates to:

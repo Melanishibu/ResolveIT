@@ -17,7 +17,9 @@ public enum IncidentErrorCode implements ErrorCode {
     /** A CLOSED incident takes no comments (BR-013, RIT-US-20). */
     INCIDENT_CLOSED(Set.of()),
     /** Resolving needs notes of 10–2000 characters (RIT-US-16). */
-    INCIDENT_RESOLUTION_NOTES_REQUIRED(Set.of("min", "max"));
+    INCIDENT_RESOLUTION_NOTES_REQUIRED(Set.of("min", "max")),
+    /** Reopening needs a reason of 10–500 characters (RIT-US-17). */
+    INCIDENT_REOPEN_REASON_REQUIRED(Set.of("min", "max"));
 
     private final Set<String> requiredParams;
 

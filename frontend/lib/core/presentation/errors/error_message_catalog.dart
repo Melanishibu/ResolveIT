@@ -148,6 +148,11 @@ final class ErrorMessageCatalog {
           l.errorIncidentResolutionNotesRequiredWhy(p('min'), p('max')),
       nextStep: (l, _) => l.errorIncidentResolutionNotesRequiredNextStep,
     ),
+    'INCIDENT_REOPEN_REASON_REQUIRED': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentReopenReasonRequiredTitle,
+      why: (l, p) => l.errorIncidentReopenReasonRequiredWhy(p('min'), p('max')),
+      nextStep: (l, _) => l.errorIncidentReopenReasonRequiredNextStep,
+    ),
     'INCIDENT_CLOSED': ErrorCatalogEntry(
       title: (l, _) => l.errorIncidentClosedTitle,
       why: (l, _) => l.errorIncidentClosedWhy,
