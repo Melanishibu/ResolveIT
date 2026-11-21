@@ -6,7 +6,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.itsm.resolveit.TestcontainersConfiguration;
 import com.itsm.resolveit.testsupport.AuthApiClient;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,11 +37,28 @@ class LoginLockoutEnumerationIT {
     @Autowired
     private JdbcClient jdbc;
 
+    /** Every email this test touched, so it can leave the shared database as it found it. */
+    private final List<String> usedEmails = new ArrayList<>();
+
+    /**
+     * Removes the probe users and counter rows again. Other ITs share this Spring context and database
+     * (for example {@code ApiSetupIT} expects no users at all), so this test must not leave rows behind.
+     */
+    @AfterEach
+    void removeProbeRows() {
+        for (String email : usedEmails) {
+            jdbc.sql("DELETE FROM identity.app_user WHERE email = :email").param("email", email).update();
+            jdbc.sql("DELETE FROM identity.unknown_email_login_attempt WHERE email = :email")
+                    .param("email", email)
+                    .update();
+        }
+    }
+
     @Test
     void unknownEmailGetsTheSameResponsesAsARealOneAfterFiveFailures() throws Exception {
         String suffix = uniqueSuffix();
         String realAccount = insertAccount("lockout-real-" + suffix + "@resolveit.local", true);
-        String unknownEmail = "lockout-unknown-" + suffix + "@resolveit.local";
+        String unknownEmail = used("lockout-unknown-" + suffix + "@resolveit.local");
 
         assertSameResponsesForEveryAttempt(realAccount, unknownEmail);
     }
@@ -47,7 +67,7 @@ class LoginLockoutEnumerationIT {
     void lockedInactiveAccountAnswersLikeAnUnknownEmail() throws Exception {
         String suffix = uniqueSuffix();
         String inactiveAccount = insertAccount("lockout-inactive-" + suffix + "@resolveit.local", false);
-        String unknownEmail = "lockout-nobody-" + suffix + "@resolveit.local";
+        String unknownEmail = used("lockout-nobody-" + suffix + "@resolveit.local");
 
         assertSameResponsesForEveryAttempt(inactiveAccount, unknownEmail);
     }
@@ -71,7 +91,13 @@ class LoginLockoutEnumerationIT {
         }
     }
 
+    private String used(String email) {
+        usedEmails.add(email);
+        return email;
+    }
+
     private String insertAccount(String email, boolean active) {
+        used(email);
         jdbc.sql("""
                 INSERT INTO identity.app_user (id, email, display_name, role, department, password_hash, active)
                 VALUES (:id, :email, 'Lockout Probe', 'EMPLOYEE', 'QA', NULL, :active)
