@@ -774,6 +774,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Incident resolved. The reporter can now close or reopen it.';
 
   @override
+  String get statusClosedDone => 'Incident closed.';
+
+  @override
+  String closeConfirmTitle(String ticketNumber) {
+    return 'Close $ticketNumber?';
+  }
+
+  @override
+  String get closeConfirmMessage =>
+      'A closed incident is final: it can\'t be reopened, commented on or changed. If the problem comes back, report a new incident.';
+
+  @override
   String get resolvePanelTitle => 'Resolve this incident';
 
   @override

@@ -231,6 +231,18 @@ public final class Incident {
         return new IncidentComment(commentId, id, author, text, now);
     }
 
+    /** Close (RIT-US-18): RESOLVED → CLOSED, which is final. Returns the CLOSED audit entry. */
+    public IncidentAuditEntry close(UUID actorId, Instant now) {
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.RESOLVED) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.CLOSED;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.CLOSED, IncidentStatus.RESOLVED.name(),
+                IncidentStatus.CLOSED.name(), now);
+    }
+
     public IncidentAuditEntry creationEntry() {
         return new IncidentAuditEntry(id, createdBy, IncidentAuditAction.CREATED, null,
                 ticketNumber.value() + ", priority " + priority.name() + ", category " + category.name(), createdAt);

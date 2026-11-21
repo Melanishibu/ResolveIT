@@ -315,6 +315,12 @@
   "incidentListOpen": "View",
   "statusStartedDone": "Work started. The incident is now In Progress.",
   "statusResolvedDone": "Incident resolved. The reporter can now close or reopen it.",
+  "statusClosedDone": "Incident closed.",
+  "closeConfirmTitle": "Close {ticketNumber}?",
+  "@closeConfirmTitle": {
+    "placeholders": { "ticketNumber": { "type": "String" } }
+  },
+  "closeConfirmMessage": "A closed incident is final: it can't be reopened, commented on or changed. If the problem comes back, report a new incident.",
   "resolvePanelTitle": "Resolve this incident",
   "resolvePanelNotes": "Resolution notes",
   "resolvePanelNotesHint": "What did you do to fix it? (10 to 2000 characters)",

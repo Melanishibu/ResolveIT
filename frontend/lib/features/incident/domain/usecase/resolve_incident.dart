@@ -16,3 +16,13 @@ final class ResolveIncident {
         resolutionNotes: notes,
       );
 }
+
+/// Close a resolved incident: RESOLVED → CLOSED, final (RIT-US-18).
+final class CloseIncident {
+  const CloseIncident(this._repository);
+
+  final IncidentTransitionRepository _repository;
+
+  Future<Result<IncidentDetails>> call(String incidentId) =>
+      _repository.transition(incidentId, IncidentStatus.closed);
+}

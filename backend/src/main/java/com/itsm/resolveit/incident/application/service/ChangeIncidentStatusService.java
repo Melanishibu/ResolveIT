@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * One endpoint for all status changes (RIT-US-15). Order of checks: the incident must be visible (403
  * INCIDENT_ACCESS_DENIED), the target must be an allowed transition (409), and the caller's role must allow that
- * action on this incident (403 AUTH_FORBIDDEN). Start work and resolve are built; reopen and close follow in
- * RIT-US-17 and RIT-US-18 and are answered as invalid transitions until then.
+ * action on this incident (403 AUTH_FORBIDDEN). Start work, resolve and close are built; reopen follows in
+ * RIT-US-17 and is answered as an invalid transition until then.
  */
 public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase {
 
@@ -56,6 +56,7 @@ public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase 
             case START -> incident.startWork(viewer.userId(), clock.instant());
             case RESOLVE -> incident.resolve(new ResolutionNotes(command.resolutionNotes()), viewer.userId(),
                     clock.instant());
+            case CLOSE -> incident.close(viewer.userId(), clock.instant());
             default -> throw new IncidentInvalidTransitionException(incident.status());
         });
         incidents.save(incident);

@@ -1426,6 +1426,24 @@ abstract class AppLocalizations {
   /// **'Incident resolved. The reporter can now close or reopen it.'**
   String get statusResolvedDone;
 
+  /// No description provided for @statusClosedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident closed.'**
+  String get statusClosedDone;
+
+  /// No description provided for @closeConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close {ticketNumber}?'**
+  String closeConfirmTitle(String ticketNumber);
+
+  /// No description provided for @closeConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A closed incident is final: it can\'t be reopened, commented on or changed. If the problem comes back, report a new incident.'**
+  String get closeConfirmMessage;
+
   /// No description provided for @resolvePanelTitle.
   ///
   /// In en, this message translates to:

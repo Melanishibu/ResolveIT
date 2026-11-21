@@ -13,6 +13,7 @@ final class IncidentStatusState {
     this.started,
     this.isResolveOpen = false,
     this.resolved,
+    this.closed,
   });
 
   final bool isSaving;
@@ -28,6 +29,9 @@ final class IncidentStatusState {
 
   /// Set after the incident was resolved, for the success toast.
   final IncidentDetails? resolved;
+
+  /// Set after the incident was closed, for the success toast.
+  final IncidentDetails? closed;
 }
 
 final incidentStatusPresenterProvider = NotifierProvider.autoDispose
@@ -53,6 +57,23 @@ class IncidentStatusPresenter extends Notifier<IncidentStatusState> {
     switch (result) {
       case Success(:final value):
         state = IncidentStatusState(started: value);
+        ref.invalidate(incidentDetailsPresenterProvider(incidentId));
+      case Failure(:final failure):
+        state = IncidentStatusState(failure: failure);
+    }
+  }
+
+  /// Close a resolved incident (RIT-US-18); the view asks for confirmation first.
+  Future<void> close() async {
+    if (state.isSaving) return;
+    state = const IncidentStatusState(isSaving: true);
+    final result = await ref
+        .read(incidentStatusInteractorProvider)
+        .close(incidentId);
+    if (!ref.mounted) return;
+    switch (result) {
+      case Success(:final value):
+        state = IncidentStatusState(closed: value);
         ref.invalidate(incidentDetailsPresenterProvider(incidentId));
       case Failure(:final failure):
         state = IncidentStatusState(failure: failure);

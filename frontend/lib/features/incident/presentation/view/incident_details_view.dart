@@ -93,6 +93,9 @@ class _Details extends ConsumerWidget {
       if (next.resolved != null && previous?.resolved == null) {
         AppToast.success(context, l10n.statusResolvedDone);
       }
+      if (next.closed != null && previous?.closed == null) {
+        AppToast.success(context, l10n.statusClosedDone);
+      }
     });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
@@ -102,10 +105,26 @@ class _Details extends ConsumerWidget {
     void startWork() => ref
         .read(incidentStatusPresenterProvider(incident.id).notifier)
         .startWork();
+    Future<void> confirmClose() async {
+      final confirmed = await showConfirmDialog(
+        context,
+        title: l10n.closeConfirmTitle(incident.ticketNumber),
+        message: l10n.closeConfirmMessage,
+        confirmLabel: l10n.incidentActionClose,
+      );
+      if (confirmed) {
+        await ref
+            .read(incidentStatusPresenterProvider(incident.id).notifier)
+            .close();
+      }
+    }
+
     void choose(IncidentAction action) {
       if (action == IncidentAction.assign ||
           action == IncidentAction.reassign) {
         ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      } else if (action == IncidentAction.close) {
+        confirmClose();
       } else if (action == IncidentAction.resolve) {
         ref
             .read(incidentStatusPresenterProvider(incident.id).notifier)
@@ -295,4 +314,5 @@ bool _isAvailable(IncidentAction action) =>
     action == IncidentAction.assign ||
     action == IncidentAction.reassign ||
     action == IncidentAction.start ||
-    action == IncidentAction.resolve;
+    action == IncidentAction.resolve ||
+    action == IncidentAction.close;

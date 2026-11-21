@@ -98,6 +98,7 @@ final incidentStatusInteractorProvider = Provider<IncidentStatusInteractor>(
   (ref) => IncidentStatusInteractor(
     StartWork(ref.watch(incidentStatusRepositoryProvider)),
     ResolveIncident(ref.watch(incidentTransitionRepositoryProvider)),
+    CloseIncident(ref.watch(incidentTransitionRepositoryProvider)),
   ),
 );
 
