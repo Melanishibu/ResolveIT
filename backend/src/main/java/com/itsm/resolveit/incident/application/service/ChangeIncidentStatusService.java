@@ -13,6 +13,7 @@ import com.itsm.resolveit.incident.domain.model.IncidentAccessDeniedException;
 import com.itsm.resolveit.incident.domain.model.IncidentAction;
 import com.itsm.resolveit.incident.domain.model.IncidentInvalidTransitionException;
 import com.itsm.resolveit.incident.domain.model.IncidentNotFoundException;
+import com.itsm.resolveit.incident.domain.model.ResolutionNotes;
 import com.itsm.resolveit.incident.domain.model.Viewer;
 import java.time.Clock;
 import java.util.Objects;
@@ -21,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * One endpoint for all status changes (RIT-US-15). Order of checks: the incident must be visible (403
  * INCIDENT_ACCESS_DENIED), the target must be an allowed transition (409), and the caller's role must allow that
- * action on this incident (403 AUTH_FORBIDDEN). Only start work is built; resolve, reopen and close follow in
- * RIT-US-16 to RIT-US-18 and are answered as invalid transitions until then.
+ * action on this incident (403 AUTH_FORBIDDEN). Start work and resolve are built; reopen and close follow in
+ * RIT-US-17 and RIT-US-18 and are answered as invalid transitions until then.
  */
 public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase {
 
@@ -51,10 +52,12 @@ public class ChangeIncidentStatusService implements ChangeIncidentStatusUseCase 
         if (!incident.allowedActionsFor(viewer).contains(action)) {
             throw new AccessDeniedException();
         }
-        if (action != IncidentAction.START) {
-            throw new IncidentInvalidTransitionException(incident.status());
-        }
-        auditLog.append(incident.startWork(viewer.userId(), clock.instant()));
+        auditLog.append(switch (action) {
+            case START -> incident.startWork(viewer.userId(), clock.instant());
+            case RESOLVE -> incident.resolve(new ResolutionNotes(command.resolutionNotes()), viewer.userId(),
+                    clock.instant());
+            default -> throw new IncidentInvalidTransitionException(incident.status());
+        });
         incidents.save(incident);
         return details.details(new GetIncidentDetailsQuery(command.actor(), command.incidentId()));
     }

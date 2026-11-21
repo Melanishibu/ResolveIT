@@ -85,6 +85,13 @@
     "why" : "ResolveIT has no incident at this address. The link may be outdated or mistyped.",
     "nextStep" : "Go back to your incident list and open the incident from there."
   }, {
+    "code" : "INCIDENT_RESOLUTION_NOTES_REQUIRED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "max", "min" ],
+    "title" : "Add resolution notes",
+    "why" : "An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.",
+    "nextStep" : "Describe what you did to fix it, then resolve again."
+  }, {
     "code" : "INTERNAL_ERROR",
     "httpStatus" : 500,
     "requiredParams" : [ "traceId" ],

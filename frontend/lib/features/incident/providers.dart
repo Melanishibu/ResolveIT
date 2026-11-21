@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_transition_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/resolve_incident.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_status_repository.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_status_repository.dart';
 import 'package:resolveit/features/incident/domain/usecase/start_work.dart';
@@ -95,5 +97,13 @@ final incidentStatusRepositoryProvider = Provider<IncidentStatusRepository>(
 final incidentStatusInteractorProvider = Provider<IncidentStatusInteractor>(
   (ref) => IncidentStatusInteractor(
     StartWork(ref.watch(incidentStatusRepositoryProvider)),
+    ResolveIncident(ref.watch(incidentTransitionRepositoryProvider)),
   ),
 );
+
+/// Status changes with notes or a reason (RIT-US-16 to RIT-US-18). Tests override it with a fake.
+final incidentTransitionRepositoryProvider =
+    Provider<IncidentTransitionRepository>(
+      (ref) =>
+          ApiIncidentStatusRepository(ref.watch(incidentHttpClientProvider)),
+    );

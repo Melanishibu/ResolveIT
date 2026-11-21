@@ -15,7 +15,9 @@ public enum IncidentErrorCode implements ErrorCode {
     /** The chosen assignee is not an active Support Agent (RIT-US-14). */
     ASSIGNEE_NOT_ACTIVE_AGENT(Set.of()),
     /** A CLOSED incident takes no comments (BR-013, RIT-US-20). */
-    INCIDENT_CLOSED(Set.of());
+    INCIDENT_CLOSED(Set.of()),
+    /** Resolving needs notes of 10–2000 characters (RIT-US-16). */
+    INCIDENT_RESOLUTION_NOTES_REQUIRED(Set.of("min", "max"));
 
     private final Set<String> requiredParams;
 

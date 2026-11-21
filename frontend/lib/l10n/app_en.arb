@@ -314,6 +314,16 @@
   "incidentListNumber": "Incident #",
   "incidentListOpen": "View",
   "statusStartedDone": "Work started. The incident is now In Progress.",
+  "statusResolvedDone": "Incident resolved. The reporter can now close or reopen it.",
+  "resolvePanelTitle": "Resolve this incident",
+  "resolvePanelNotes": "Resolution notes",
+  "resolvePanelNotesHint": "What did you do to fix it? (10 to 2000 characters)",
+  "errorIncidentResolutionNotesRequiredTitle": "Add resolution notes",
+  "errorIncidentResolutionNotesRequiredWhy": "An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.",
+  "@errorIncidentResolutionNotesRequiredWhy": {
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
+  },
+  "errorIncidentResolutionNotesRequiredNextStep": "Describe what you did to fix it, then resolve again.",
   "commentsEmpty": "No comments yet.",
   "commentsInputLabel": "Add a comment",
   "commentsInputHint": "Ask a question or share an update (up to 1000 characters).",

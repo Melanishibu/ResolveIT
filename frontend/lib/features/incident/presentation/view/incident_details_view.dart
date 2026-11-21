@@ -12,6 +12,7 @@ import 'package:resolveit/features/incident/presentation/presenter/incident_deta
 import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
+import 'package:resolveit/features/incident/presentation/view/resolve_incident_panel.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/features/incident/widgets/status_chip.dart';
@@ -89,6 +90,9 @@ class _Details extends ConsumerWidget {
       if (next.started != null && previous?.started == null) {
         AppToast.success(context, l10n.statusStartedDone);
       }
+      if (next.resolved != null && previous?.resolved == null) {
+        AppToast.success(context, l10n.statusResolvedDone);
+      }
     });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
@@ -102,6 +106,10 @@ class _Details extends ConsumerWidget {
       if (action == IncidentAction.assign ||
           action == IncidentAction.reassign) {
         ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      } else if (action == IncidentAction.resolve) {
+        ref
+            .read(incidentStatusPresenterProvider(incident.id).notifier)
+            .openResolve();
       } else if (action == IncidentAction.start) {
         startWork();
       }
@@ -160,6 +168,7 @@ class _Details extends ConsumerWidget {
           SizedBox(height: spacing.l),
         ],
         AssignIncidentPanel(incidentId: incident.id),
+        ResolveIncidentPanel(incidentId: incident.id),
         AppTabs(
           tabs: [
             AppTab(
@@ -285,4 +294,5 @@ String _actionLabel(AppLocalizations l10n, IncidentAction action) =>
 bool _isAvailable(IncidentAction action) =>
     action == IncidentAction.assign ||
     action == IncidentAction.reassign ||
-    action == IncidentAction.start;
+    action == IncidentAction.start ||
+    action == IncidentAction.resolve;

@@ -1420,6 +1420,48 @@ abstract class AppLocalizations {
   /// **'Work started. The incident is now In Progress.'**
   String get statusStartedDone;
 
+  /// No description provided for @statusResolvedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident resolved. The reporter can now close or reopen it.'**
+  String get statusResolvedDone;
+
+  /// No description provided for @resolvePanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve this incident'**
+  String get resolvePanelTitle;
+
+  /// No description provided for @resolvePanelNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution notes'**
+  String get resolvePanelNotes;
+
+  /// No description provided for @resolvePanelNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you do to fix it? (10 to 2000 characters)'**
+  String get resolvePanelNotesHint;
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add resolution notes'**
+  String get errorIncidentResolutionNotesRequiredTitle;
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.'**
+  String errorIncidentResolutionNotesRequiredWhy(String min, String max);
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what you did to fix it, then resolve again.'**
+  String get errorIncidentResolutionNotesRequiredNextStep;
+
   /// No description provided for @commentsEmpty.
   ///
   /// In en, this message translates to:

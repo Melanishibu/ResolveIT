@@ -5,12 +5,14 @@ import 'package:resolveit/features/incident/domain/entity/incident_details.dart'
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
 import 'package:resolveit/features/incident/providers.dart';
 
-/// State of the status actions on the details screen (RIT-US-15).
+/// State of the status actions on the details screen (RIT-US-15, RIT-US-16).
 final class IncidentStatusState {
   const IncidentStatusState({
     this.isSaving = false,
     this.failure,
     this.started,
+    this.isResolveOpen = false,
+    this.resolved,
   });
 
   final bool isSaving;
@@ -20,6 +22,12 @@ final class IncidentStatusState {
 
   /// Set after work was started, for the success toast.
   final IncidentDetails? started;
+
+  /// The resolve panel (notes input) is shown.
+  final bool isResolveOpen;
+
+  /// Set after the incident was resolved, for the success toast.
+  final IncidentDetails? resolved;
 }
 
 final incidentStatusPresenterProvider = NotifierProvider.autoDispose
@@ -48,6 +56,27 @@ class IncidentStatusPresenter extends Notifier<IncidentStatusState> {
         ref.invalidate(incidentDetailsPresenterProvider(incidentId));
       case Failure(:final failure):
         state = IncidentStatusState(failure: failure);
+    }
+  }
+
+  /// The user chose Resolve: show the notes panel.
+  void openResolve() => state = const IncidentStatusState(isResolveOpen: true);
+
+  void cancelResolve() => state = const IncidentStatusState();
+
+  Future<void> resolve(String notes) async {
+    if (state.isSaving) return;
+    state = const IncidentStatusState(isSaving: true, isResolveOpen: true);
+    final result = await ref
+        .read(incidentStatusInteractorProvider)
+        .resolve(incidentId, notes);
+    if (!ref.mounted) return;
+    switch (result) {
+      case Success(:final value):
+        state = IncidentStatusState(resolved: value);
+        ref.invalidate(incidentDetailsPresenterProvider(incidentId));
+      case Failure(:final failure):
+        state = IncidentStatusState(failure: failure, isResolveOpen: true);
     }
   }
 }

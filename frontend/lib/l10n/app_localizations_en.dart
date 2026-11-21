@@ -770,6 +770,33 @@ class AppLocalizationsEn extends AppLocalizations {
       'Work started. The incident is now In Progress.';
 
   @override
+  String get statusResolvedDone =>
+      'Incident resolved. The reporter can now close or reopen it.';
+
+  @override
+  String get resolvePanelTitle => 'Resolve this incident';
+
+  @override
+  String get resolvePanelNotes => 'Resolution notes';
+
+  @override
+  String get resolvePanelNotesHint =>
+      'What did you do to fix it? (10 to 2000 characters)';
+
+  @override
+  String get errorIncidentResolutionNotesRequiredTitle =>
+      'Add resolution notes';
+
+  @override
+  String errorIncidentResolutionNotesRequiredWhy(String min, String max) {
+    return 'An incident can only be resolved with notes of $min to $max characters, so the reporter knows what was done.';
+  }
+
+  @override
+  String get errorIncidentResolutionNotesRequiredNextStep =>
+      'Describe what you did to fix it, then resolve again.';
+
+  @override
   String get commentsEmpty => 'No comments yet.';
 
   @override
