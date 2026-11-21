@@ -50,6 +50,20 @@
     "why" : "Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.",
     "nextStep" : "Log in again with your email address and password."
   }, {
+    "code" : "INCIDENT_ACCESS_DENIED",
+    "httpStatus" : 403,
+    "requiredParams" : [ ],
+    "title" : "You can't open this incident",
+    "why" : "Your role only lets you see incidents you reported or that are assigned to you.",
+    "nextStep" : "Open one of your own incidents, or ask your ResolveIT administrator if you need access."
+  }, {
+    "code" : "INCIDENT_NOT_FOUND",
+    "httpStatus" : 404,
+    "requiredParams" : [ ],
+    "title" : "This incident doesn't exist",
+    "why" : "ResolveIT has no incident at this address. The link may be outdated or mistyped.",
+    "nextStep" : "Go back to your incident list and open the incident from there."
+  }, {
     "code" : "INTERNAL_ERROR",
     "httpStatus" : 500,
     "requiredParams" : [ "traceId" ],

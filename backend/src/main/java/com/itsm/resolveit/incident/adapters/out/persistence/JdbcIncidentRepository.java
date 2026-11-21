@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 public class JdbcIncidentRepository implements IncidentRepository {
 
     private static final String COLUMNS =
-            "id, ticket_number, title, description, category, priority, status, created_by, created_at";
+            "id, ticket_number, title, description, category, priority, status, created_by, created_at, updated_at";
 
     private final JdbcClient jdbc;
 
@@ -38,14 +38,15 @@ public class JdbcIncidentRepository implements IncidentRepository {
     public void save(Incident incident) {
         jdbc.sql("""
                 INSERT INTO incident.incident
-                    (id, ticket_number, title, description, category, priority, status, created_by, created_at)
-                VALUES (:id, :ticketNumber, :title, :description, :category, :priority, :status, :createdBy, :createdAt)
+                    (id, ticket_number, title, description, category, priority, status, created_by, created_at, updated_at)
+                VALUES (:id, :ticketNumber, :title, :description, :category, :priority, :status, :createdBy, :createdAt, :updatedAt)
                 ON CONFLICT (id) DO UPDATE SET
                     title = EXCLUDED.title,
                     description = EXCLUDED.description,
                     category = EXCLUDED.category,
                     priority = EXCLUDED.priority,
-                    status = EXCLUDED.status
+                    status = EXCLUDED.status,
+                    updated_at = EXCLUDED.updated_at
                 """)
                 .param("id", incident.id().value())
                 .param("ticketNumber", incident.ticketNumber().value())
@@ -56,6 +57,7 @@ public class JdbcIncidentRepository implements IncidentRepository {
                 .param("status", incident.status().name())
                 .param("createdBy", incident.createdBy())
                 .param("createdAt", incident.createdAt().atOffset(ZoneOffset.UTC))
+                .param("updatedAt", incident.updatedAt().atOffset(ZoneOffset.UTC))
                 .update();
     }
 
@@ -77,6 +79,7 @@ public class JdbcIncidentRepository implements IncidentRepository {
                 Priority.valueOf(row.getString("priority")),
                 IncidentStatus.valueOf(row.getString("status")),
                 row.getObject("created_by", UUID.class),
-                row.getObject("created_at", OffsetDateTime.class).toInstant());
+                row.getObject("created_at", OffsetDateTime.class).toInstant(),
+                row.getObject("updated_at", OffsetDateTime.class).toInstant());
     }
 }

@@ -1161,6 +1161,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incident {ticketNumber} created. The support team will pick it up.'**
   String createIncidentSuccess(String ticketNumber);
+
+  /// No description provided for @errorIncidentNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This incident doesn\'t exist'**
+  String get errorIncidentNotFoundTitle;
+
+  /// No description provided for @errorIncidentNotFoundWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'ResolveIT has no incident at this address. The link may be outdated or mistyped.'**
+  String get errorIncidentNotFoundWhy;
+
+  /// No description provided for @errorIncidentNotFoundNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to your incident list and open the incident from there.'**
+  String get errorIncidentNotFoundNextStep;
+
+  /// No description provided for @errorIncidentAccessDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t open this incident'**
+  String get errorIncidentAccessDeniedTitle;
+
+  /// No description provided for @errorIncidentAccessDeniedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your role only lets you see incidents you reported or that are assigned to you.'**
+  String get errorIncidentAccessDeniedWhy;
+
+  /// No description provided for @errorIncidentAccessDeniedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Open one of your own incidents, or ask your ResolveIT administrator if you need access.'**
+  String get errorIncidentAccessDeniedNextStep;
+
+  /// No description provided for @incidentDetailsBackToMyIncidents.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to My Incidents'**
+  String get incidentDetailsBackToMyIncidents;
+
+  /// No description provided for @incidentDetailsBackToIncidents.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Incidents'**
+  String get incidentDetailsBackToIncidents;
+
+  /// No description provided for @incidentDetailsActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get incidentDetailsActions;
+
+  /// No description provided for @incidentDetailsActionLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Available in a later release'**
+  String get incidentDetailsActionLater;
+
+  /// No description provided for @incidentDetailsOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get incidentDetailsOverview;
+
+  /// No description provided for @incidentDetailsComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments ({count})'**
+  String incidentDetailsComments(int count);
+
+  /// No description provided for @incidentDetailsHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get incidentDetailsHistory;
+
+  /// No description provided for @incidentDetailsInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident Information'**
+  String get incidentDetailsInformation;
+
+  /// No description provided for @incidentDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get incidentDetailsTitle;
+
+  /// No description provided for @incidentDetailsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get incidentDetailsDescription;
+
+  /// No description provided for @incidentDetailsCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get incidentDetailsCategory;
+
+  /// No description provided for @incidentDetailsPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get incidentDetailsPriority;
+
+  /// No description provided for @incidentDetailsStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get incidentDetailsStatus;
+
+  /// No description provided for @incidentDetailsCreatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created by'**
+  String get incidentDetailsCreatedBy;
+
+  /// No description provided for @incidentDetailsCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Created at'**
+  String get incidentDetailsCreatedAt;
+
+  /// No description provided for @incidentDetailsAssignedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to'**
+  String get incidentDetailsAssignedTo;
+
+  /// No description provided for @incidentDetailsNotAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Not assigned'**
+  String get incidentDetailsNotAssigned;
+
+  /// No description provided for @incidentDetailsInactiveAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'inactive'**
+  String get incidentDetailsInactiveAssignee;
+
+  /// No description provided for @incidentDetailsDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Department'**
+  String get incidentDetailsDepartment;
+
+  /// No description provided for @incidentDetailsResolutionNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution notes'**
+  String get incidentDetailsResolutionNotes;
+
+  /// No description provided for @incidentDetailsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get incidentDetailsNone;
+
+  /// No description provided for @incidentDetailsCommentsLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments arrive in a later release.'**
+  String get incidentDetailsCommentsLater;
+
+  /// No description provided for @incidentDetailsHistoryLater.
+  ///
+  /// In en, this message translates to:
+  /// **'The history arrives in a later release.'**
+  String get incidentDetailsHistoryLater;
+
+  /// No description provided for @incidentActionAssign.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign'**
+  String get incidentActionAssign;
+
+  /// No description provided for @incidentActionReassign.
+  ///
+  /// In en, this message translates to:
+  /// **'Reassign'**
+  String get incidentActionReassign;
+
+  /// No description provided for @incidentActionStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start work'**
+  String get incidentActionStart;
+
+  /// No description provided for @incidentActionResolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve'**
+  String get incidentActionResolve;
+
+  /// No description provided for @incidentActionReopen.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen'**
+  String get incidentActionReopen;
+
+  /// No description provided for @incidentActionClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get incidentActionClose;
+
+  /// No description provided for @incidentActionChangePriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Change priority'**
+  String get incidentActionChangePriority;
 }
 
 class _AppLocalizationsDelegate

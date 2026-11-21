@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/features/incident/data/datasource/incident_remote_datasource.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_repository.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_repository.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_details_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_details_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/get_incident_details.dart';
+import 'package:resolveit/features/incident/interactor/incident_details_interactor.dart';
 import 'package:resolveit/features/incident/domain/usecase/report_incident.dart';
 import 'package:resolveit/features/incident/interactor/report_incident_interactor.dart';
 
@@ -18,6 +22,18 @@ final incidentHttpClientProvider = Provider<Dio>(
 final incidentRepositoryProvider = Provider<IncidentRepository>(
   (ref) => ApiIncidentRepository(
     IncidentRemoteDataSource(ref.watch(incidentHttpClientProvider)),
+  ),
+);
+
+/// One incident from the backend (RIT-US-10). Tests override it with a fake.
+final incidentDetailsRepositoryProvider = Provider<IncidentDetailsRepository>(
+  (ref) => ApiIncidentDetailsRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// What the incident details presenter calls.
+final incidentDetailsInteractorProvider = Provider<IncidentDetailsInteractor>(
+  (ref) => IncidentDetailsInteractor(
+    GetIncidentDetails(ref.watch(incidentDetailsRepositoryProvider)),
   ),
 );
 

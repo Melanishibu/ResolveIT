@@ -629,4 +629,120 @@ class AppLocalizationsEn extends AppLocalizations {
   String createIncidentSuccess(String ticketNumber) {
     return 'Incident $ticketNumber created. The support team will pick it up.';
   }
+
+  @override
+  String get errorIncidentNotFoundTitle => 'This incident doesn\'t exist';
+
+  @override
+  String get errorIncidentNotFoundWhy =>
+      'ResolveIT has no incident at this address. The link may be outdated or mistyped.';
+
+  @override
+  String get errorIncidentNotFoundNextStep =>
+      'Go back to your incident list and open the incident from there.';
+
+  @override
+  String get errorIncidentAccessDeniedTitle => 'You can\'t open this incident';
+
+  @override
+  String get errorIncidentAccessDeniedWhy =>
+      'Your role only lets you see incidents you reported or that are assigned to you.';
+
+  @override
+  String get errorIncidentAccessDeniedNextStep =>
+      'Open one of your own incidents, or ask your ResolveIT administrator if you need access.';
+
+  @override
+  String get incidentDetailsBackToMyIncidents => 'Back to My Incidents';
+
+  @override
+  String get incidentDetailsBackToIncidents => 'Back to Incidents';
+
+  @override
+  String get incidentDetailsActions => 'Actions';
+
+  @override
+  String get incidentDetailsActionLater => 'Available in a later release';
+
+  @override
+  String get incidentDetailsOverview => 'Overview';
+
+  @override
+  String incidentDetailsComments(int count) {
+    return 'Comments ($count)';
+  }
+
+  @override
+  String get incidentDetailsHistory => 'History';
+
+  @override
+  String get incidentDetailsInformation => 'Incident Information';
+
+  @override
+  String get incidentDetailsTitle => 'Title';
+
+  @override
+  String get incidentDetailsDescription => 'Description';
+
+  @override
+  String get incidentDetailsCategory => 'Category';
+
+  @override
+  String get incidentDetailsPriority => 'Priority';
+
+  @override
+  String get incidentDetailsStatus => 'Status';
+
+  @override
+  String get incidentDetailsCreatedBy => 'Created by';
+
+  @override
+  String get incidentDetailsCreatedAt => 'Created at';
+
+  @override
+  String get incidentDetailsAssignedTo => 'Assigned to';
+
+  @override
+  String get incidentDetailsNotAssigned => 'Not assigned';
+
+  @override
+  String get incidentDetailsInactiveAssignee => 'inactive';
+
+  @override
+  String get incidentDetailsDepartment => 'Department';
+
+  @override
+  String get incidentDetailsResolutionNotes => 'Resolution notes';
+
+  @override
+  String get incidentDetailsNone => '—';
+
+  @override
+  String get incidentDetailsCommentsLater =>
+      'Comments arrive in a later release.';
+
+  @override
+  String get incidentDetailsHistoryLater =>
+      'The history arrives in a later release.';
+
+  @override
+  String get incidentActionAssign => 'Assign';
+
+  @override
+  String get incidentActionReassign => 'Reassign';
+
+  @override
+  String get incidentActionStart => 'Start work';
+
+  @override
+  String get incidentActionResolve => 'Resolve';
+
+  @override
+  String get incidentActionReopen => 'Reopen';
+
+  @override
+  String get incidentActionClose => 'Close';
+
+  @override
+  String get incidentActionChangePriority => 'Change priority';
 }
