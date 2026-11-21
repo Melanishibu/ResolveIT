@@ -11,11 +11,13 @@ import java.util.Set;
  * An incident as its viewer sees it (RIT-US-10): the incident, the reporter as known to the identity context
  * at display time (empty if that user no longer exists) and the actions the viewer may take.
  */
-public record IncidentDetailsView(Incident incident, Optional<UserSummary> reporter, Set<IncidentAction> allowedActions) {
+public record IncidentDetailsView(Incident incident, Optional<UserSummary> reporter, Optional<UserSummary> assignee,
+                                  Set<IncidentAction> allowedActions) {
 
     public IncidentDetailsView {
         Objects.requireNonNull(incident, "incident");
         Objects.requireNonNull(reporter, "reporter");
+        Objects.requireNonNull(assignee, "assignee");
         allowedActions = Set.copyOf(allowedActions);
     }
 }

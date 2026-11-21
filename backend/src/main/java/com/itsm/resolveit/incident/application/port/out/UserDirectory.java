@@ -12,6 +12,9 @@ public interface UserDirectory {
 
     Optional<UserSummary> find(UUID userId);
 
+    /** Whether the user is an active Support Agent (assignment rule, RIT-US-14). */
+    boolean isActiveSupportAgent(UUID userId);
+
     /** A user as shown on an incident. */
     record UserSummary(UUID id, String name, String department, boolean active) {
 

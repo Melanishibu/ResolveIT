@@ -130,6 +130,17 @@ public final class ErrorCodeRegistry {
                 "You can't open this incident",
                 "Your role only lets you see incidents you reported or that are assigned to you.",
                 "Open one of your own incidents, or ask your ResolveIT administrator if you need access."));
+        // Assignment and lifecycle (AB#42).
+        register(new RegisteredErrorCode(
+                "INCIDENT_INVALID_TRANSITION", 409, Set.of("status"),
+                "This action isn't possible right now",
+                "The incident is {status}, and this action isn't allowed in that status.",
+                "Reload the incident to see its current status and the actions it allows."));
+        register(new RegisteredErrorCode(
+                "ASSIGNEE_NOT_ACTIVE_AGENT", 422, Set.of(),
+                "This person can't take incidents",
+                "Incidents can only be assigned to active Technicians.",
+                "Choose an active Technician from the list."));
     }
 
     private ErrorCodeRegistry() {

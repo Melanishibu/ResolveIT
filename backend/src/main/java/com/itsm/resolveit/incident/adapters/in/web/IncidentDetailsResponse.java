@@ -6,7 +6,7 @@ import com.itsm.resolveit.incident.domain.model.IncidentAction;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
-/** One incident as its viewer sees it (RIT-US-10). Assignee and resolution notes are null until US-12/US-14. */
+/** One incident as its viewer sees it (RIT-US-10). The assignee is null until assigned; resolution notes until RIT-US-15. */
 @Schema(description = "Incident details with the actions the caller may take")
 record IncidentDetailsResponse(
         String id,
@@ -32,10 +32,15 @@ record IncidentDetailsResponse(
         Person creator = view.reporter()
                 .map(user -> new Person(user.id().toString(), user.name(), user.department(), user.active()))
                 .orElse(new Person(incident.createdBy().toString(), null, null, false));
+        Person assignee = incident.assignedTo()
+                .map(id -> view.assignee()
+                        .map(user -> new Person(user.id().toString(), user.name(), user.department(), user.active()))
+                        .orElse(new Person(id.toString(), null, null, false)))
+                .orElse(null);
         List<String> actions = view.allowedActions().stream().sorted().map(IncidentAction::name).toList();
         return new IncidentDetailsResponse(incident.id().toString(), incident.ticketNumber().value(),
                 incident.title().value(), incident.description().value(), incident.category().name(),
-                incident.priority().name(), incident.status().name(), creator, null, null,
+                incident.priority().name(), incident.status().name(), creator, assignee, null,
                 incident.createdAt().toString(), incident.updatedAt().toString(), actions);
     }
 }

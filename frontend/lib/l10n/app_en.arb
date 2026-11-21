@@ -312,5 +312,20 @@
   "incidentListSubtitleOwn": "Incidents you reported, newest first.",
   "incidentListEmpty": "No incidents to show yet.",
   "incidentListNumber": "Incident #",
-  "incidentListOpen": "View"
+  "incidentListOpen": "View",
+  "assignPanelTitle": "Assign to a Technician",
+  "assignPanelAgent": "Technician",
+  "assignPanelDone": "Assigned to {name}.",
+  "@assignPanelDone": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "errorIncidentInvalidTransitionTitle": "This action isn't possible right now",
+  "errorIncidentInvalidTransitionWhy": "The incident is {status}, and this action isn't allowed in that status.",
+  "@errorIncidentInvalidTransitionWhy": {
+    "placeholders": { "status": { "type": "String" } }
+  },
+  "errorIncidentInvalidTransitionNextStep": "Reload the incident to see its current status and the actions it allows.",
+  "errorAssigneeNotActiveAgentTitle": "This person can't take incidents",
+  "errorAssigneeNotActiveAgentWhy": "Incidents can only be assigned to active Technicians.",
+  "errorAssigneeNotActiveAgentNextStep": "Choose an active Technician from the list."
 }

@@ -49,11 +49,15 @@ class IncidentController {
 
     private final ListIncidentsUseCase listIncidents;
 
+    private final com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident;
+
     IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails,
-                       ListIncidentsUseCase listIncidents) {
+                       ListIncidentsUseCase listIncidents,
+                       com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident) {
         this.reportIncident = reportIncident;
         this.incidentDetails = incidentDetails;
         this.listIncidents = listIncidents;
+        this.assignIncident = assignIncident;
     }
 
     private static final Map<String, SortField> SORT_FIELDS = Map.of(
@@ -104,6 +108,38 @@ class IncidentController {
         }
         return IncidentDetailsResponse.of(
                 incidentDetails.details(new GetIncidentDetailsQuery(actor, new IncidentId(incidentId))));
+    }
+
+    /** Body of {@code PATCH /tickets/{id}/assign}. */
+    record AssignRequest(@jakarta.validation.constraints.NotBlank String agentId) {
+    }
+
+    @org.springframework.web.bind.annotation.PatchMapping("/{id}/assign")
+    @Operation(summary = "Assign or reassign an incident (Admin)",
+            description = "OPEN → ASSIGNED, or reassign while ASSIGNED (RIT-US-14). Audited as ASSIGNED or REASSIGNED.",
+            security = @SecurityRequirement(name = SESSION_SCHEME))
+    @ApiResponse(responseCode = "200", description = "OK: the incident as the Admin now sees it")
+    @ApiResponse(responseCode = "403", description = "AUTH_FORBIDDEN (not an Admin)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "409", description = "INCIDENT_INVALID_TRANSITION",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "422", description = "ASSIGNEE_NOT_ACTIVE_AGENT",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    IncidentDetailsResponse assign(Actor actor, @PathVariable("id") String id,
+                                   @Valid @RequestBody AssignRequest request) {
+        UUID agentId = field("agentId", () -> UUID.fromString(request.agentId()));
+        return IncidentDetailsResponse.of(assignIncident.assign(
+                new com.itsm.resolveit.incident.application.port.in.AssignIncidentCommand(actor,
+                        new IncidentId(incidentId(id)), agentId)));
+    }
+
+    /** A malformed id is answered as not found, like an unknown one. */
+    private static UUID incidentId(String id) {
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException malformed) {
+            throw new IncidentNotFoundException();
+        }
     }
 
     @PostMapping

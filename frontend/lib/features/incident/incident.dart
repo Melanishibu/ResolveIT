@@ -9,6 +9,8 @@ export 'package:resolveit/features/incident/domain/repository/incident_repositor
 export 'package:resolveit/features/incident/presentation/router/incident_routes.dart';
 export 'package:resolveit/features/incident/domain/entity/incident_details.dart';
 export 'package:resolveit/features/incident/domain/repository/incident_details_repository.dart';
+export 'package:resolveit/features/incident/domain/entity/assignable_agent.dart';
+export 'package:resolveit/features/incident/domain/repository/incident_assignment_repository.dart';
 export 'package:resolveit/features/incident/domain/entity/incident_list.dart';
 export 'package:resolveit/features/incident/domain/repository/incident_list_repository.dart';
 export 'package:resolveit/features/incident/presentation/view/incident_list_view.dart';
@@ -19,7 +21,8 @@ export 'package:resolveit/features/incident/providers.dart'
         incidentHttpClientProvider,
         incidentRepositoryProvider,
         incidentDetailsRepositoryProvider,
-        incidentListRepositoryProvider;
+        incidentListRepositoryProvider,
+        incidentAssignmentRepositoryProvider;
 export 'package:resolveit/features/incident/widgets/category_label.dart';
 export 'package:resolveit/features/incident/widgets/priority_chip.dart';
 export 'package:resolveit/features/incident/widgets/status_chip.dart';

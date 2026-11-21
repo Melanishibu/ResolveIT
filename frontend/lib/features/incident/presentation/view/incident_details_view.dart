@@ -7,6 +7,8 @@ import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_details.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
+import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
+import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/features/incident/widgets/status_chip.dart';
@@ -62,15 +64,31 @@ class IncidentDetailsView extends ConsumerWidget {
   }
 }
 
-class _Details extends StatelessWidget {
+class _Details extends ConsumerWidget {
   const _Details({required this.incident});
 
   final IncidentDetails incident;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final spacing = context.spacing;
+    ref.listen(assignIncidentPresenterProvider(incident.id), (previous, next) {
+      final assigned = next.assigned;
+      if (assigned != null && previous?.assigned == null) {
+        AppToast.success(
+          context,
+          l10n.assignPanelDone(assigned.assignee?.name ?? ''),
+        );
+      }
+    });
+    void choose(IncidentAction action) {
+      if (action == IncidentAction.assign ||
+          action == IncidentAction.reassign) {
+        ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -84,16 +102,24 @@ class _Details extends StatelessWidget {
               PopupMenuButton<IncidentAction>(
                 key: const Key('incident-details-actions'),
                 tooltip: l10n.incidentDetailsActions,
+                onSelected: choose,
                 itemBuilder: (context) => [
                   for (final action in incident.allowedActions)
-                    PopupMenuItem<IncidentAction>(
-                      key: Key('incident-action-${action.code}'),
-                      enabled: false,
-                      value: action,
-                      child: Text(
-                        '${_actionLabel(l10n, action)} · ${l10n.incidentDetailsActionLater}',
+                    if (_isAvailable(action))
+                      PopupMenuItem<IncidentAction>(
+                        key: Key('incident-action-${action.code}'),
+                        value: action,
+                        child: Text(_actionLabel(l10n, action)),
+                      )
+                    else
+                      PopupMenuItem<IncidentAction>(
+                        key: Key('incident-action-${action.code}'),
+                        enabled: false,
+                        value: action,
+                        child: Text(
+                          '${_actionLabel(l10n, action)} · ${l10n.incidentDetailsActionLater}',
+                        ),
                       ),
-                    ),
                 ],
                 child: Padding(
                   padding: EdgeInsets.all(spacing.s),
@@ -103,6 +129,7 @@ class _Details extends StatelessWidget {
           ],
         ),
         SizedBox(height: spacing.l),
+        AssignIncidentPanel(incidentId: incident.id),
         AppTabs(
           tabs: [
             AppTab(
@@ -223,3 +250,7 @@ String _actionLabel(AppLocalizations l10n, IncidentAction action) =>
       IncidentAction.close => l10n.incidentActionClose,
       IncidentAction.changePriority => l10n.incidentActionChangePriority,
     };
+
+/// Actions whose stories are built; the others stay visible but disabled.
+bool _isAvailable(IncidentAction action) =>
+    action == IncidentAction.assign || action == IncidentAction.reassign;

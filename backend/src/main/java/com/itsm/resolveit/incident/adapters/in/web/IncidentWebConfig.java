@@ -31,6 +31,14 @@ class IncidentWebConfig {
     }
 
     @Bean
+    com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncidentUseCase(
+            IncidentRepository incidents, UserDirectory users, IncidentAuditLog auditLog,
+            GetIncidentDetailsUseCase details, ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.incident.application.service.AssignIncidentService(incidents, users, auditLog,
+                details, clock.getIfAvailable(Clock::systemUTC));
+    }
+
+    @Bean
     ReportIncidentUseCase reportIncidentUseCase(IncidentRepository incidents, TicketNumberGenerator ticketNumbers,
                                                 IncidentAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new ReportIncidentService(incidents, ticketNumbers, auditLog, clock.getIfAvailable(Clock::systemUTC));

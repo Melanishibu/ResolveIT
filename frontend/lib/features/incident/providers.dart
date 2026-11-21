@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_assignment_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_assignment_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/assign_incident.dart';
+import 'package:resolveit/features/incident/interactor/incident_assignment_interactor.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_list_repository.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_list_repository.dart';
 import 'package:resolveit/features/incident/domain/usecase/list_incidents.dart';
@@ -59,3 +63,21 @@ final incidentListInteractorProvider = Provider<IncidentListInteractor>(
     ListIncidents(ref.watch(incidentListRepositoryProvider)),
   ),
 );
+
+/// Assignment (RIT-US-14). Tests override it with a fake.
+final incidentAssignmentRepositoryProvider =
+    Provider<IncidentAssignmentRepository>(
+      (ref) => ApiIncidentAssignmentRepository(
+        ref.watch(incidentHttpClientProvider),
+      ),
+    );
+
+/// What the assign panel's presenter calls.
+final incidentAssignmentInteractorProvider =
+    Provider<IncidentAssignmentInteractor>((ref) {
+      final repository = ref.watch(incidentAssignmentRepositoryProvider);
+      return IncidentAssignmentInteractor(
+        ListAssignableAgents(repository),
+        AssignIncident(repository),
+      );
+    });

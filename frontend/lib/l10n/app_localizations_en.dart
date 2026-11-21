@@ -764,4 +764,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get incidentListOpen => 'View';
+
+  @override
+  String get assignPanelTitle => 'Assign to a Technician';
+
+  @override
+  String get assignPanelAgent => 'Technician';
+
+  @override
+  String assignPanelDone(String name) {
+    return 'Assigned to $name.';
+  }
+
+  @override
+  String get errorIncidentInvalidTransitionTitle =>
+      'This action isn\'t possible right now';
+
+  @override
+  String errorIncidentInvalidTransitionWhy(String status) {
+    return 'The incident is $status, and this action isn\'t allowed in that status.';
+  }
+
+  @override
+  String get errorIncidentInvalidTransitionNextStep =>
+      'Reload the incident to see its current status and the actions it allows.';
+
+  @override
+  String get errorAssigneeNotActiveAgentTitle =>
+      'This person can\'t take incidents';
+
+  @override
+  String get errorAssigneeNotActiveAgentWhy =>
+      'Incidents can only be assigned to active Technicians.';
+
+  @override
+  String get errorAssigneeNotActiveAgentNextStep =>
+      'Choose an active Technician from the list.';
 }

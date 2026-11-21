@@ -138,6 +138,25 @@ public final class Incident {
     }
 
     /** The CREATED audit entry: new value = ticket number, priority and category (RIT-US-09 spec). */
+    /**
+     * An Admin assigns the incident to a Support Agent (RIT-US-14): OPEN → ASSIGNED, or a reassignment that stays
+     * ASSIGNED. Any other status is an invalid transition. Returns the audit entry (actor = the Admin).
+     */
+    public IncidentAuditEntry assignTo(UUID agentId, UUID adminId, Instant now) {
+        Objects.requireNonNull(agentId, "agentId");
+        Objects.requireNonNull(adminId, "adminId");
+        IncidentAuditAction action = switch (status) {
+            case OPEN -> IncidentAuditAction.ASSIGNED;
+            case ASSIGNED -> IncidentAuditAction.REASSIGNED;
+            default -> throw new IncidentInvalidTransitionException(status);
+        };
+        String previous = assignedTo == null ? null : assignedTo.toString();
+        assignedTo = agentId;
+        status = IncidentStatus.ASSIGNED;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, adminId, action, previous, agentId.toString(), now);
+    }
+
     public IncidentAuditEntry creationEntry() {
         return new IncidentAuditEntry(id, createdBy, IncidentAuditAction.CREATED, null,
                 ticketNumber.value() + ", priority " + priority.name() + ", category " + category.name(), createdAt);

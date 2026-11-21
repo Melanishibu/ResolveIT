@@ -1413,6 +1413,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get incidentListOpen;
+
+  /// No description provided for @assignPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to a Technician'**
+  String get assignPanelTitle;
+
+  /// No description provided for @assignPanelAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician'**
+  String get assignPanelAgent;
+
+  /// No description provided for @assignPanelDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to {name}.'**
+  String assignPanelDone(String name);
+
+  /// No description provided for @errorIncidentInvalidTransitionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This action isn\'t possible right now'**
+  String get errorIncidentInvalidTransitionTitle;
+
+  /// No description provided for @errorIncidentInvalidTransitionWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The incident is {status}, and this action isn\'t allowed in that status.'**
+  String errorIncidentInvalidTransitionWhy(String status);
+
+  /// No description provided for @errorIncidentInvalidTransitionNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload the incident to see its current status and the actions it allows.'**
+  String get errorIncidentInvalidTransitionNextStep;
+
+  /// No description provided for @errorAssigneeNotActiveAgentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This person can\'t take incidents'**
+  String get errorAssigneeNotActiveAgentTitle;
+
+  /// No description provided for @errorAssigneeNotActiveAgentWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Incidents can only be assigned to active Technicians.'**
+  String get errorAssigneeNotActiveAgentWhy;
+
+  /// No description provided for @errorAssigneeNotActiveAgentNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an active Technician from the list.'**
+  String get errorAssigneeNotActiveAgentNextStep;
 }
 
 class _AppLocalizationsDelegate

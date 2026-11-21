@@ -132,6 +132,16 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorIncidentAccessDeniedWhy,
       nextStep: (l, _) => l.errorIncidentAccessDeniedNextStep,
     ),
+    'INCIDENT_INVALID_TRANSITION': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentInvalidTransitionTitle,
+      why: (l, p) => l.errorIncidentInvalidTransitionWhy(p('status')),
+      nextStep: (l, _) => l.errorIncidentInvalidTransitionNextStep,
+    ),
+    'ASSIGNEE_NOT_ACTIVE_AGENT': ErrorCatalogEntry(
+      title: (l, _) => l.errorAssigneeNotActiveAgentTitle,
+      why: (l, _) => l.errorAssigneeNotActiveAgentWhy,
+      nextStep: (l, _) => l.errorAssigneeNotActiveAgentNextStep,
+    ),
     'USER_NOT_FOUND': ErrorCatalogEntry(
       title: (l, _) => l.errorUserNotFoundTitle,
       why: (l, p) => l.errorUserNotFoundWhy(p('id')),
