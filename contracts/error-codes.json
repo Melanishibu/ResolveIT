@@ -1,6 +1,55 @@
 {
   "description" : "ResolveIT error-code registry. Generated from ErrorCodeRegistry; do not edit by hand. Regenerate: cd backend; .\\mvnw.cmd test \"-Dtest=ErrorCodeContractTest\" \"-DupdateContracts=true\"",
   "errorCodes" : [ {
+    "code" : "AUTH_CSRF_INVALID",
+    "httpStatus" : 403,
+    "requiredParams" : [ ],
+    "title" : "This request couldn't be verified",
+    "why" : "The security token that protects your session was missing or didn't match, so ResolveIT refused the change.",
+    "nextStep" : "Reload the page and try again. If it keeps happening, log out and log in again."
+  }, {
+    "code" : "AUTH_FORBIDDEN",
+    "httpStatus" : 403,
+    "requiredParams" : [ ],
+    "title" : "You don't have access to this",
+    "why" : "Your role doesn't allow this action or page in ResolveIT.",
+    "nextStep" : "If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard."
+  }, {
+    "code" : "AUTH_INVALID_CREDENTIALS",
+    "httpStatus" : 401,
+    "requiredParams" : [ ],
+    "title" : "Email or password is incorrect",
+    "why" : "The email address and password you entered don't match an active ResolveIT account.",
+    "nextStep" : "Check both and try again. After 5 failed attempts in a row, login is blocked for 15 minutes. If you forgot your password, contact your ResolveIT administrator."
+  }, {
+    "code" : "AUTH_LOGIN_TEMPORARILY_BLOCKED",
+    "httpStatus" : 429,
+    "requiredParams" : [ "retryAfterMinutes" ],
+    "title" : "Login is temporarily blocked",
+    "why" : "There were 5 failed login attempts in a row for this account, so login is blocked for security for about {retryAfterMinutes} more minute(s).",
+    "nextStep" : "Wait until the block ends, then log in with the correct password. If you don't remember it, contact your ResolveIT administrator."
+  }, {
+    "code" : "AUTH_TOKEN_EXPIRED",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This link has expired",
+    "why" : "Links to set a password are valid for 24 hours, and this one is older.",
+    "nextStep" : "Ask your ResolveIT administrator for a new invitation."
+  }, {
+    "code" : "AUTH_TOKEN_INVALID",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This link can't be used",
+    "why" : "The link to set your password is not valid or was already used. Each link works only once.",
+    "nextStep" : "If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation."
+  }, {
+    "code" : "AUTH_UNAUTHENTICATED",
+    "httpStatus" : 401,
+    "requiredParams" : [ ],
+    "title" : "You're not logged in",
+    "why" : "Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.",
+    "nextStep" : "Log in again with your email address and password."
+  }, {
     "code" : "INTERNAL_ERROR",
     "httpStatus" : 500,
     "requiredParams" : [ "traceId" ],
@@ -15,6 +64,13 @@
     "why" : "{path} does not accept {method} requests.",
     "nextStep" : "Reload the page and try again. If it keeps happening, report it to the ResolveIT administrator."
   }, {
+    "code" : "PASSWORD_POLICY_VIOLATION",
+    "httpStatus" : 400,
+    "requiredParams" : [ ],
+    "title" : "This password isn't strong enough",
+    "why" : "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+    "nextStep" : "Choose a password that meets these rules and try again."
+  }, {
     "code" : "REQUEST_NOT_SUPPORTED",
     "httpStatus" : 400,
     "requiredParams" : [ "path" ],
@@ -28,6 +84,34 @@
     "title" : "This page or item doesn't exist",
     "why" : "Nothing is available at {path}. The link may be outdated or mistyped.",
     "nextStep" : "Check the address, or go back to the dashboard and open the item from there."
+  }, {
+    "code" : "USER_CANNOT_DEACTIVATE_SELF",
+    "httpStatus" : 409,
+    "requiredParams" : [ ],
+    "title" : "You can't deactivate your own account",
+    "why" : "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
+    "nextStep" : "Ask another Admin to deactivate your account if that is really needed."
+  }, {
+    "code" : "USER_EMAIL_TAKEN",
+    "httpStatus" : 409,
+    "requiredParams" : [ "email" ],
+    "title" : "This email address is already in use",
+    "why" : "A ResolveIT user with the email address {email} already exists. Email addresses are unique, regardless of upper or lower case.",
+    "nextStep" : "Use a different email address, or find the existing user in User Management."
+  }, {
+    "code" : "USER_NOT_FOUND",
+    "httpStatus" : 404,
+    "requiredParams" : [ "id" ],
+    "title" : "This user doesn't exist",
+    "why" : "ResolveIT has no user with the id {id}. The list may be out of date.",
+    "nextStep" : "Reload User Management and pick the user again."
+  }, {
+    "code" : "USER_ROLE_NOT_ALLOWED",
+    "httpStatus" : 400,
+    "requiredParams" : [ "role" ],
+    "title" : "This role can't be given to a new user",
+    "why" : "New users can only be Technicians or Employees; the role {role} can't be created here.",
+    "nextStep" : "Choose Technician or Employee and create the user again."
   }, {
     "code" : "VALIDATION_FAILED",
     "httpStatus" : 400,

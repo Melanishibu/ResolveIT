@@ -5,3 +5,19 @@ spring:
     url: ${RESOLVEIT_DB_URL:jdbc:postgresql://localhost:${RESOLVEIT_DB_PORT:5432}/resolveit}
     username: ${RESOLVEIT_DB_USERNAME:resolveit}
     password: ${RESOLVEIT_DB_PASSWORD:resolveit}
+  flyway:
+    # Dev only: also load the seed users (db/dev-seed, RIT-US-04). Shared dev password, see README.
+    locations: classpath:db/migration,classpath:db/dev-seed
+  mail:
+    # Mailpit from docker-compose.yml (web UI http://localhost:8025, or RESOLVEIT_MAILPIT_UI_PORT).
+    host: ${RESOLVEIT_SMTP_HOST:localhost}
+    port: ${RESOLVEIT_SMTP_PORT:${RESOLVEIT_MAILPIT_SMTP_PORT:1025}}
+
+resolveit:
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5000}
+  frontend-base-url: ${FRONTEND_BASE_URL:http://localhost:5000}
+  mail:
+    from: ${RESOLVEIT_MAIL_FROM:ResolveIT <no-reply@resolveit.local>}
+  session:
+    # Without RESOLVEIT_SESSION_SIGNING_KEY, use a random key per run (sessions end on restart).
+    allow-ephemeral-signing-key: true

@@ -50,6 +50,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Transactional email (AB#48): invitation emails through SMTP (Mailpit locally) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Persistence -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,6 +73,18 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- Security building blocks (AB#13): BCrypt and HS256 JWT only. No Spring Security filter
+             chain: without spring-boot-starter-security nothing is auto-configured. Versions come from
+             the Spring Security BOM that Spring Boot imports. -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
 
         <!-- Modules -->

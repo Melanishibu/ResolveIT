@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
-import 'package:resolveit/features/identity/identity.dart';
+import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/incident/incident.dart';
 
 void main() {

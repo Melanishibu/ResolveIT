@@ -108,5 +108,164 @@
 
   "errorNetworkUnavailableTitle": "Can't reach ResolveIT",
   "errorNetworkUnavailableWhy": "The app couldn't connect to the ResolveIT server.",
-  "errorNetworkUnavailableNextStep": "Check your network connection and try again in a moment."
+  "errorNetworkUnavailableNextStep": "Check your network connection and try again in a moment.",
+
+  "errorAuthInvalidCredentialsTitle": "Email or password is incorrect",
+  "errorAuthInvalidCredentialsWhy": "The email address and password you entered don't match an active ResolveIT account.",
+  "errorAuthInvalidCredentialsNextStep": "Check both and try again. After 5 failed attempts in a row, login is blocked for 15 minutes. If you forgot your password, contact your ResolveIT administrator.",
+
+  "errorAuthLoginTemporarilyBlockedTitle": "Login is temporarily blocked",
+  "errorAuthLoginTemporarilyBlockedWhy": "There were 5 failed login attempts in a row for this account, so login is blocked for security for about {retryAfterMinutes} more minute(s).",
+  "@errorAuthLoginTemporarilyBlockedWhy": {
+    "placeholders": { "retryAfterMinutes": { "type": "String" } }
+  },
+  "errorAuthLoginTemporarilyBlockedNextStep": "Wait until the block ends, then log in with the correct password. If you don't remember it, contact your ResolveIT administrator.",
+
+  "errorAuthUnauthenticatedTitle": "You're not logged in",
+  "errorAuthUnauthenticatedWhy": "Your session has ended or is no longer valid, for example after you logged out, after 8 hours, or because your account was deactivated.",
+  "errorAuthUnauthenticatedNextStep": "Log in again with your email address and password.",
+
+  "errorAuthForbiddenTitle": "You don't have access to this",
+  "errorAuthForbiddenWhy": "Your role doesn't allow this action or page in ResolveIT.",
+  "errorAuthForbiddenNextStep": "If you need it for your work, ask your ResolveIT administrator. Otherwise go back to the dashboard.",
+
+  "errorAuthCsrfInvalidTitle": "This request couldn't be verified",
+  "errorAuthCsrfInvalidWhy": "The security token that protects your session was missing or didn't match, so ResolveIT refused the change.",
+  "errorAuthCsrfInvalidNextStep": "Reload the page and try again. If it keeps happening, log out and log in again.",
+
+  "notAllowedBackToDashboard": "Back to the dashboard",
+
+  "errorUserEmailTakenTitle": "This email address is already in use",
+  "errorUserEmailTakenWhy": "A ResolveIT user with the email address {email} already exists. Email addresses are unique, regardless of upper or lower case.",
+  "@errorUserEmailTakenWhy": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "errorUserEmailTakenNextStep": "Use a different email address, or find the existing user in User Management.",
+
+  "errorUserRoleNotAllowedTitle": "This role can't be given to a new user",
+  "errorUserRoleNotAllowedWhy": "New users can only be Technicians or Employees; the role {role} can't be created here.",
+  "@errorUserRoleNotAllowedWhy": {
+    "placeholders": { "role": { "type": "String" } }
+  },
+  "errorUserRoleNotAllowedNextStep": "Choose Technician or Employee and create the user again.",
+
+  "createUserTitle": "Add user",
+  "createUserSubtitle": "The new user gets an email with a link to set their own password.",
+  "createUserNameLabel": "Name",
+  "createUserEmailLabel": "Email",
+  "createUserRoleLabel": "Role",
+  "createUserDepartmentLabel": "Department",
+  "createUserButton": "Create user",
+  "createUserNameRequired": "Enter the user's name.",
+  "createUserEmailRequired": "Enter the user's email address.",
+  "createUserRoleRequired": "Choose a role.",
+  "createUserDepartmentRequired": "Enter the user's department.",
+  "createUserSuccess": "User created. The invitation email goes to {email}.",
+  "@createUserSuccess": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+
+  "loginTitle": "Log in to ResolveIT",
+  "loginSubtitle": "IT Service Desk – use your work email and password.",
+  "loginEmailLabel": "Email",
+  "loginPasswordLabel": "Password",
+  "loginButton": "Log in",
+  "loginEmailRequired": "Enter your email address.",
+  "loginPasswordRequired": "Enter your password.",
+
+  "errorAuthTokenInvalidTitle": "This link can't be used",
+  "errorAuthTokenInvalidWhy": "The link to set your password is not valid or was already used. Each link works only once.",
+  "errorAuthTokenInvalidNextStep": "If you already set your password, log in. Otherwise ask your ResolveIT administrator for a new invitation.",
+
+  "errorAuthTokenExpiredTitle": "This link has expired",
+  "errorAuthTokenExpiredWhy": "Links to set a password are valid for 24 hours, and this one is older.",
+  "errorAuthTokenExpiredNextStep": "Ask your ResolveIT administrator for a new invitation.",
+
+  "errorPasswordPolicyViolationTitle": "This password isn't strong enough",
+  "errorPasswordPolicyViolationWhy": "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+  "errorPasswordPolicyViolationNextStep": "Choose a password that meets these rules and try again.",
+
+  "errorUserNotFoundTitle": "This user doesn't exist",
+  "errorUserNotFoundWhy": "ResolveIT has no user with the id {id}. The list may be out of date.",
+  "@errorUserNotFoundWhy": {
+    "placeholders": { "id": { "type": "String" } }
+  },
+  "errorUserNotFoundNextStep": "Reload User Management and pick the user again.",
+
+  "errorUserCannotDeactivateSelfTitle": "You can't deactivate your own account",
+  "errorUserCannotDeactivateSelfWhy": "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
+  "errorUserCannotDeactivateSelfNextStep": "Ask another Admin to deactivate your account if that is really needed.",
+
+  "userListSubtitle": "Everyone who can use ResolveIT, with their role and status.",
+  "userListAdd": "Add user",
+  "userListSearchHint": "Search by name or email",
+  "userListRoleFilter": "Role",
+  "userListStatusFilter": "Status",
+  "userListAllRoles": "All Roles",
+  "userListAllStatuses": "All Statuses",
+  "userListName": "Name",
+  "userListEmail": "Email",
+  "userListRole": "Role",
+  "userListDepartment": "Department",
+  "userListStatus": "Status",
+  "userListInvitation": "Invitation",
+  "userListActions": "Actions",
+  "userListActivate": "Activate",
+  "userListDeactivate": "Deactivate",
+  "userListDeactivateTitle": "Deactivate {name}?",
+  "@userListDeactivateTitle": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListDeactivateMessage": "They will no longer be able to log in, and any open session ends with their next request. Their incidents stay as they are. You can activate them again at any time.",
+  "userListActivated": "{name} is active again and can log in.",
+  "@userListActivated": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListDeactivated": "{name} is deactivated.",
+  "@userListDeactivated": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "userListEmpty": "No users match these filters.",
+  "invitationPending": "Pending",
+  "invitationAccepted": "Accepted",
+  "invitationExpired": "Expired",
+  "invitationSendFailed": "Email failed",
+  "invitationNone": "–",
+
+  "setPasswordTitle": "Set your password",
+  "setPasswordSubtitle": "Choose the password you will use to log in to ResolveIT.",
+  "setPasswordPolicy": "Your password needs 12 to 128 characters, at least one letter and one digit, and must not be your email address.",
+  "setPasswordNewLabel": "New password",
+  "setPasswordConfirmLabel": "Confirm password",
+  "setPasswordButton": "Set password",
+  "setPasswordRequired": "Enter a password.",
+  "setPasswordConfirmRequired": "Enter the password again.",
+  "setPasswordMismatch": "The passwords don't match. Type the same password in both fields.",
+  "setPasswordSuccess": "Your password is set. Log in with your email address and the new password.",
+
+  "categoryHardware": "Hardware",
+  "categorySoftware": "Software",
+  "categoryNetwork": "Network",
+  "categoryAccess": "Access",
+  "categoryOther": "Other",
+
+  "createIncidentSubtitle": "Describe the problem and the support team will pick it up.",
+  "createIncidentHelpTitle": "We're here to help!",
+  "createIncidentHelpBody": "Tell us what happened, when it started and what you already tried. A clear title and description help the support team solve it faster.",
+  "createIncidentTitleLabel": "Title",
+  "createIncidentTitleHint": "For example: Laptop won't start",
+  "createIncidentCategoryLabel": "Category",
+  "createIncidentPriorityLabel": "Priority",
+  "createIncidentDescriptionLabel": "Description",
+  "createIncidentDescriptionHint": "What happened, since when, and what you already tried.",
+  "createIncidentCancel": "Cancel",
+  "createIncidentSubmit": "Submit Incident",
+  "createIncidentTitleRequired": "Enter a title (up to 120 characters).",
+  "createIncidentCategoryRequired": "Choose a category.",
+  "createIncidentPriorityRequired": "Choose a priority.",
+  "createIncidentDescriptionRequired": "Enter a description (up to 2000 characters).",
+  "createIncidentSuccess": "Incident {ticketNumber} created. The support team will pick it up.",
+  "@createIncidentSuccess": {
+    "placeholders": { "ticketNumber": { "type": "String" } }
+  }
 }

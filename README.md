@@ -25,8 +25,34 @@ Prerequisites: JDK 21 and Docker Desktop (running). Commands are for Windows Pow
 4. Stop the database: `docker compose down` (add `-v` to delete its data volume)
 
 Configuration comes only from environment variables: `RESOLVEIT_DB_URL`, `RESOLVEIT_DB_USERNAME`,
-`RESOLVEIT_DB_PASSWORD`, `SERVER_PORT` (default 8080). The `dev` profile supplies the local defaults above;
-without it, the database variables are required.
+`RESOLVEIT_DB_PASSWORD`, `SERVER_PORT` (default 8080), `FRONTEND_ORIGIN` (the only browser origin allowed by CORS,
+`http://localhost:5000` in dev and tests) and `RESOLVEIT_SESSION_SIGNING_KEY` (signs the session tokens; a random
+value of at least 32 characters, never committed). The `dev` profile supplies the local defaults above; without it,
+the database variables, `FRONTEND_ORIGIN` and the signing key are required. In `dev` (and in tests) a missing signing key is replaced by a random key
+per run, so you are logged out when the backend restarts.
+
+**Dev users (dev profile only, not real secrets):** the `dev` profile seeds these users with the shared dev password
+`ResolveIT-Dev-2026` (stored as a BCrypt hash; `backend/src/main/resources/db/dev-seed`). Production and the default
+test profile never load them; only the login integration test (`AuthLoginIT`) adds the seed location explicitly.
+
+| Email | Role | Active |
+|---|---|---|
+| `admin@resolveit.local` | Admin | yes |
+| `agent1@resolveit.local` | Support Agent (shown as Technician) | yes |
+| `agent2@resolveit.local` | Support Agent (shown as Technician) | no – login is refused |
+| `employee1@resolveit.local` | Employee | yes |
+| `employee2@resolveit.local` | Employee | yes |
+
+Five failed logins in a row lock an account for 15 minutes. Sessions last 8 hours.
+
+**Invitation emails and Mailpit (RIT-US-06):** when an Admin creates a user (User Management → Add user), the user
+gets an email with a one-time link to set their password (valid 24 hours). Locally these emails go to **Mailpit**
+from `docker-compose.yml`: open http://localhost:8025 (or your `RESOLVEIT_MAILPIT_UI_PORT`) to read them. Emails
+never contain a password. Settings (environment variables; the `dev` profile has the local defaults):
+`RESOLVEIT_SMTP_HOST` / `RESOLVEIT_SMTP_PORT` (dev: `localhost` / `RESOLVEIT_MAILPIT_SMTP_PORT` or 1025),
+`RESOLVEIT_MAIL_FROM` (dev: `ResolveIT <no-reply@resolveit.local>`), and `FRONTEND_BASE_URL` for the link
+(dev: `http://localhost:5000`). If the mail server is down, the user is still created and the invitation shows
+`SEND_FAILED`.
 
 **Port already in use?** If 5432, 1025 or 8025 is taken on your machine (for example by a Windows
 PostgreSQL service or another project's container), `docker compose` cannot publish the port and the backend
@@ -47,6 +73,19 @@ with `[Environment]::SetEnvironmentVariable("RESOLVEIT_DB_PORT", $null, "User")`
 Build and test (unit, integration, ArchUnit, Spring Modulith and error-gate tests; needs Docker for
 Testcontainers): `cd backend; .\mvnw.cmd clean verify`. Tests always run with the `test` profile, never `dev`.
 
+**Request protection and authorisation (RIT-US-05):** every ResolveIT endpoint needs a valid session (401
+`AUTH_UNAUTHENTICATED`) unless it is marked `@PublicEndpoint`, and every POST/PUT/PATCH/DELETE needs the
+`X-XSRF-TOKEN` header equal to the `XSRF-TOKEN` cookie (403 `AUTH_CSRF_INVALID`; only login is `@CsrfExempt`).
+Controllers take an `Actor` parameter and pass it to the use case, which checks it first:
+`actor.require(Permission.MANAGE_USERS)` (403 `AUTH_FORBIDDEN`). `Permission` holds the unconditional rows of the
+permission table; rules like "if assigned" belong to the incident domain.
+
+**Authorisation test harness:** for each new endpoint, add one test to an integration test that loads the dev seed
+(see `AuthorizationHarnessIT`), using `com.itsm.resolveit.testsupport.AuthorizationMatrix` (public, usable from any
+module's tests): one expected status per role plus anonymous (always 401: the session is checked before CSRF), for example
+`new AuthorizationMatrix(port).endpoint("GET", "/api/v1/...").expect(Role.ADMIN, 200).expect(Role.SUPPORT_AGENT, 403)
+.expect(Role.EMPLOYEE, 403).expectAnonymous(401).verify()`. State-changing requests are sent with the CSRF token.
+
 Error codes: the registry `ErrorCodeRegistry` is published as `contracts/error-codes.json`. After changing
 the registry, regenerate the file with `cd backend; .\mvnw.cmd test "-Dtest=ErrorCodeContractTest" "-DupdateContracts=true"`
 and commit it.
@@ -57,12 +96,11 @@ Prerequisites: Flutter stable (3.44 or later) and Chrome. Commands are for Windo
 1. Fetch dependencies: `cd frontend; flutter pub get`
 2. Start the app on the port the backend's CORS setting expects:
    `flutter run -d chrome --web-port 5000`
-   - The shell opens on the Dashboard with the navy side menu. The menu screens are placeholders until their stories arrive.
-3. Optional build-time settings (`--dart-define`, no secrets):
+   - The login screen opens. Log in with a dev user (see "Dev users" above, backend running with the `dev` profile);
+     you land on the Dashboard with your role's menu. Logout is at the bottom of the menu. The menu screens are
+     placeholders until their stories arrive.
+3. Optional build-time setting (`--dart-define`, no secrets):
    - `API_BASE_URL`: the backend API (default `http://localhost:8080/api/v1`).
-   - `DEV_ROLE`: which menu the placeholder user sees: `ADMIN` (default), `SUPPORT_AGENT` (shown as Technician) or
-     `EMPLOYEE`. This exists only until login (US-04) is built, and it grants no access.
-   - Example: `flutter run -d chrome --web-port 5000 --dart-define=DEV_ROLE=EMPLOYEE`
 
 Checks (from `frontend`):
 - `flutter analyze`
@@ -98,11 +136,17 @@ not contain the gallery.
 `AlertDialog` or `SnackBar` directly; the message names the file and the App component to use instead. A second test
 fails on raw colours, `TextStyle`, `fontSize` or numeric paddings inside the library.
 
+**Feature folders (RIT-US-29):** every feature under `frontend/lib/features/<feature>/` uses the same folders:
+`data/datasource`, `data/repository`, `domain/entity`, `domain/repository`, `domain/usecase`, `interactor`,
+`presentation/presenter`, `presentation/router`, `presentation/view`, `widgets`, plus `providers.dart` (wiring) and the
+public barrel `<feature>.dart`. The layer rules are in `CLAUDE.md` ("Frontend feature layout") and are enforced by
+`flutter test` (import-boundary test).
+
 # Continuous integration
 `azure-pipelines.yml` defines the pipeline **ResolveIT CI** (Azure Pipelines, Microsoft-hosted `ubuntu-latest`,
 free tier: 1 parallel job, 1,800 minutes/month).
 
-- **When it runs:** on every push to `development` and `main` (pushes during a run are batched; changes to only
+- **When it runs:** on every push to `development`, `main` and `integration/*` (pushes during a run are batched; changes to only
   `README.md`, `CLAUDE.md` or `.claude/` are skipped). Pull requests are validated by a build-validation branch policy
   on `development` (set up by the project admin), not by the YAML. Feature branches do not trigger runs on their own.
 - **Backend job:** JDK 21, Maven cache, `./mvnw clean verify` (unit, ArchUnit, Modulith, error-gate and Testcontainers

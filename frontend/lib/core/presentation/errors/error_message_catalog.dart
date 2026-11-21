@@ -56,6 +56,32 @@ final class ErrorMessageCatalog {
   final Map<String, ErrorCatalogEntry> entries;
 
   static final ErrorMessageCatalog standard = ErrorMessageCatalog({
+    'AUTH_CSRF_INVALID': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthCsrfInvalidTitle,
+      why: (l, _) => l.errorAuthCsrfInvalidWhy,
+      nextStep: (l, _) => l.errorAuthCsrfInvalidNextStep,
+    ),
+    'AUTH_FORBIDDEN': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthForbiddenTitle,
+      why: (l, _) => l.errorAuthForbiddenWhy,
+      nextStep: (l, _) => l.errorAuthForbiddenNextStep,
+    ),
+    'AUTH_INVALID_CREDENTIALS': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthInvalidCredentialsTitle,
+      why: (l, _) => l.errorAuthInvalidCredentialsWhy,
+      nextStep: (l, _) => l.errorAuthInvalidCredentialsNextStep,
+    ),
+    'AUTH_LOGIN_TEMPORARILY_BLOCKED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthLoginTemporarilyBlockedTitle,
+      why: (l, p) =>
+          l.errorAuthLoginTemporarilyBlockedWhy(p('retryAfterMinutes')),
+      nextStep: (l, _) => l.errorAuthLoginTemporarilyBlockedNextStep,
+    ),
+    'AUTH_UNAUTHENTICATED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthUnauthenticatedTitle,
+      why: (l, _) => l.errorAuthUnauthenticatedWhy,
+      nextStep: (l, _) => l.errorAuthUnauthenticatedNextStep,
+    ),
     'INTERNAL_ERROR': ErrorCatalogEntry(
       title: (l, _) => l.errorInternalErrorTitle,
       why: (l, _) => l.errorInternalErrorWhy,
@@ -75,6 +101,41 @@ final class ErrorMessageCatalog {
       title: (l, _) => l.errorResourceNotFoundTitle,
       why: (l, p) => l.errorResourceNotFoundWhy(p('path')),
       nextStep: (l, _) => l.errorResourceNotFoundNextStep,
+    ),
+    'USER_EMAIL_TAKEN': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserEmailTakenTitle,
+      why: (l, p) => l.errorUserEmailTakenWhy(p('email')),
+      nextStep: (l, _) => l.errorUserEmailTakenNextStep,
+    ),
+    'USER_ROLE_NOT_ALLOWED': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserRoleNotAllowedTitle,
+      why: (l, p) => l.errorUserRoleNotAllowedWhy(p('role')),
+      nextStep: (l, _) => l.errorUserRoleNotAllowedNextStep,
+    ),
+    'AUTH_TOKEN_INVALID': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthTokenInvalidTitle,
+      why: (l, _) => l.errorAuthTokenInvalidWhy,
+      nextStep: (l, _) => l.errorAuthTokenInvalidNextStep,
+    ),
+    'AUTH_TOKEN_EXPIRED': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthTokenExpiredTitle,
+      why: (l, _) => l.errorAuthTokenExpiredWhy,
+      nextStep: (l, _) => l.errorAuthTokenExpiredNextStep,
+    ),
+    'USER_NOT_FOUND': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserNotFoundTitle,
+      why: (l, p) => l.errorUserNotFoundWhy(p('id')),
+      nextStep: (l, _) => l.errorUserNotFoundNextStep,
+    ),
+    'USER_CANNOT_DEACTIVATE_SELF': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserCannotDeactivateSelfTitle,
+      why: (l, _) => l.errorUserCannotDeactivateSelfWhy,
+      nextStep: (l, _) => l.errorUserCannotDeactivateSelfNextStep,
+    ),
+    'PASSWORD_POLICY_VIOLATION': ErrorCatalogEntry(
+      title: (l, _) => l.errorPasswordPolicyViolationTitle,
+      why: (l, _) => l.errorPasswordPolicyViolationWhy,
+      nextStep: (l, _) => l.errorPasswordPolicyViolationNextStep,
     ),
     'VALIDATION_FAILED': ErrorCatalogEntry(
       title: (l, _) => l.errorValidationFailedTitle,
