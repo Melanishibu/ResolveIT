@@ -32,7 +32,8 @@ public class GetIncidentDetailsService implements GetIncidentDetailsUseCase {
         if (!incident.isVisibleTo(viewer)) {
             throw new IncidentAccessDeniedException();
         }
-        return new IncidentDetailsView(incident, users.find(incident.createdBy()), incident.allowedActionsFor(viewer));
+        return new IncidentDetailsView(incident, users.find(incident.createdBy()),
+                incident.assignedTo().flatMap(users::find), incident.allowedActionsFor(viewer));
     }
 
     /** Translates the identity context's actor into the incident context's viewer. */

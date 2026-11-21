@@ -15,6 +15,22 @@ public class JdbcUserLookup implements UserLookup {
     }
 
     @Override
+    public boolean isActiveSupportAgent(UUID userId) {
+        return jdbc.sql("SELECT count(*) FROM identity.app_user WHERE id = :id AND role = 'SUPPORT_AGENT' AND active")
+                .param("id", userId)
+                .query(Long.class).single() > 0;
+    }
+
+    @Override
+    public java.util.List<AgentCard> activeSupportAgents() {
+        return jdbc.sql("SELECT id, display_name, email FROM identity.app_user"
+                        + " WHERE role = 'SUPPORT_AGENT' AND active ORDER BY display_name, id")
+                .query((row, n) -> new AgentCard(row.getObject("id", UUID.class), row.getString("display_name"),
+                        row.getString("email")))
+                .list();
+    }
+
+    @Override
     public Optional<UserCard> findById(UUID userId) {
         return jdbc.sql("SELECT id, display_name, department, active FROM identity.app_user WHERE id = :id")
                 .param("id", userId)

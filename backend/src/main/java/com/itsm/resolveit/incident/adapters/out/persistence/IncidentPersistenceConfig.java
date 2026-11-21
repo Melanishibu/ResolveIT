@@ -24,6 +24,12 @@ class IncidentPersistenceConfig {
     }
 
     @Bean
+    com.itsm.resolveit.incident.application.port.out.IncidentCommentRepository incidentCommentRepository(
+            JdbcClient jdbc) {
+        return new JdbcIncidentCommentRepository(jdbc);
+    }
+
+    @Bean
     TicketNumberGenerator ticketNumberGenerator(JdbcClient jdbc) {
         return new JdbcTicketNumberGenerator(jdbc);
     }

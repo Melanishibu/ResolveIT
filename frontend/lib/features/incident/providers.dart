@@ -1,5 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_status_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_status_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/start_work.dart';
+import 'package:resolveit/features/incident/interactor/incident_status_interactor.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_assignment_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_assignment_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/assign_incident.dart';
+import 'package:resolveit/features/incident/interactor/incident_assignment_interactor.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_list_repository.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_list_repository.dart';
 import 'package:resolveit/features/incident/domain/usecase/list_incidents.dart';
@@ -57,5 +65,35 @@ final incidentListRepositoryProvider = Provider<IncidentListRepository>(
 final incidentListInteractorProvider = Provider<IncidentListInteractor>(
   (ref) => IncidentListInteractor(
     ListIncidents(ref.watch(incidentListRepositoryProvider)),
+  ),
+);
+
+/// Assignment (RIT-US-14). Tests override it with a fake.
+final incidentAssignmentRepositoryProvider =
+    Provider<IncidentAssignmentRepository>(
+      (ref) => ApiIncidentAssignmentRepository(
+        ref.watch(incidentHttpClientProvider),
+      ),
+    );
+
+/// What the assign panel's presenter calls.
+final incidentAssignmentInteractorProvider =
+    Provider<IncidentAssignmentInteractor>((ref) {
+      final repository = ref.watch(incidentAssignmentRepositoryProvider);
+      return IncidentAssignmentInteractor(
+        ListAssignableAgents(repository),
+        AssignIncident(repository),
+      );
+    });
+
+/// Status changes (RIT-US-15). Tests override it with a fake.
+final incidentStatusRepositoryProvider = Provider<IncidentStatusRepository>(
+  (ref) => ApiIncidentStatusRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// What the status presenter calls.
+final incidentStatusInteractorProvider = Provider<IncidentStatusInteractor>(
+  (ref) => IncidentStatusInteractor(
+    StartWork(ref.watch(incidentStatusRepositoryProvider)),
   ),
 );

@@ -1,6 +1,13 @@
 {
   "description" : "ResolveIT error-code registry. Generated from ErrorCodeRegistry; do not edit by hand. Regenerate: cd backend; .\\mvnw.cmd test \"-Dtest=ErrorCodeContractTest\" \"-DupdateContracts=true\"",
   "errorCodes" : [ {
+    "code" : "ASSIGNEE_NOT_ACTIVE_AGENT",
+    "httpStatus" : 422,
+    "requiredParams" : [ ],
+    "title" : "This person can't take incidents",
+    "why" : "Incidents can only be assigned to active Technicians.",
+    "nextStep" : "Choose an active Technician from the list."
+  }, {
     "code" : "AUTH_CSRF_INVALID",
     "httpStatus" : 403,
     "requiredParams" : [ ],
@@ -56,6 +63,20 @@
     "title" : "You can't open this incident",
     "why" : "Your role only lets you see incidents you reported or that are assigned to you.",
     "nextStep" : "Open one of your own incidents, or ask your ResolveIT administrator if you need access."
+  }, {
+    "code" : "INCIDENT_CLOSED",
+    "httpStatus" : 409,
+    "requiredParams" : [ ],
+    "title" : "This incident is closed",
+    "why" : "A closed incident is final, so it takes no new comments.",
+    "nextStep" : "If the problem is back, report a new incident and mention this one."
+  }, {
+    "code" : "INCIDENT_INVALID_TRANSITION",
+    "httpStatus" : 409,
+    "requiredParams" : [ "status" ],
+    "title" : "This action isn't possible right now",
+    "why" : "The incident is {status}, and this action isn't allowed in that status.",
+    "nextStep" : "Reload the incident to see its current status and the actions it allows."
   }, {
     "code" : "INCIDENT_NOT_FOUND",
     "httpStatus" : 404,

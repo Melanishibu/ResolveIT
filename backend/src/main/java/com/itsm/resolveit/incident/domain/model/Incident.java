@@ -138,6 +138,67 @@ public final class Incident {
     }
 
     /** The CREATED audit entry: new value = ticket number, priority and category (RIT-US-09 spec). */
+    /**
+     * An Admin assigns the incident to a Support Agent (RIT-US-14): OPEN → ASSIGNED, or a reassignment that stays
+     * ASSIGNED. Any other status is an invalid transition. Returns the audit entry (actor = the Admin).
+     */
+    public IncidentAuditEntry assignTo(UUID agentId, UUID adminId, Instant now) {
+        Objects.requireNonNull(agentId, "agentId");
+        Objects.requireNonNull(adminId, "adminId");
+        IncidentAuditAction action = switch (status) {
+            case OPEN -> IncidentAuditAction.ASSIGNED;
+            case ASSIGNED -> IncidentAuditAction.REASSIGNED;
+            default -> throw new IncidentInvalidTransitionException(status);
+        };
+        String previous = assignedTo == null ? null : assignedTo.toString();
+        assignedTo = agentId;
+        status = IncidentStatus.ASSIGNED;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, adminId, action, previous, agentId.toString(), now);
+    }
+
+    /**
+     * The status action that moves this incident to {@code target}, per the allowed-transitions table (RIT-US-15).
+     * Anything not in the table, including every change of a CLOSED incident, is an invalid transition.
+     */
+    public IncidentAction statusActionFor(IncidentStatus target) {
+        Objects.requireNonNull(target, "target");
+        IncidentAction action = switch (status) {
+            case ASSIGNED -> target == IncidentStatus.IN_PROGRESS ? IncidentAction.START : null;
+            case IN_PROGRESS -> target == IncidentStatus.RESOLVED ? IncidentAction.RESOLVE : null;
+            case RESOLVED -> switch (target) {
+                case IN_PROGRESS -> IncidentAction.REOPEN;
+                case CLOSED -> IncidentAction.CLOSE;
+                default -> null;
+            };
+            case OPEN, CLOSED -> null;
+        };
+        if (action == null) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        return action;
+    }
+
+    /** Start work (RIT-US-15): ASSIGNED → IN_PROGRESS. Returns the STARTED audit entry. */
+    public IncidentAuditEntry startWork(UUID actorId, Instant now) {
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.ASSIGNED) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.IN_PROGRESS;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.STARTED, IncidentStatus.ASSIGNED.name(),
+                IncidentStatus.IN_PROGRESS.name(), now);
+    }
+
+    /** {@code author} comments on this incident (RIT-US-20). A CLOSED incident takes no comments (BR-013). */
+    public IncidentComment comment(UUID commentId, UUID author, CommentText text, Instant now) {
+        if (status == IncidentStatus.CLOSED) {
+            throw new IncidentClosedException();
+        }
+        return new IncidentComment(commentId, id, author, text, now);
+    }
+
     public IncidentAuditEntry creationEntry() {
         return new IncidentAuditEntry(id, createdBy, IncidentAuditAction.CREATED, null,
                 ticketNumber.value() + ", priority " + priority.name() + ", category " + category.name(), createdAt);

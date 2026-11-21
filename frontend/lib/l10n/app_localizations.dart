@@ -1413,6 +1413,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get incidentListOpen;
+
+  /// No description provided for @statusStartedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Work started. The incident is now In Progress.'**
+  String get statusStartedDone;
+
+  /// No description provided for @commentsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet.'**
+  String get commentsEmpty;
+
+  /// No description provided for @commentsInputLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment'**
+  String get commentsInputLabel;
+
+  /// No description provided for @commentsInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question or share an update (up to 1000 characters).'**
+  String get commentsInputHint;
+
+  /// No description provided for @commentsAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add comment'**
+  String get commentsAdd;
+
+  /// No description provided for @errorIncidentClosedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This incident is closed'**
+  String get errorIncidentClosedTitle;
+
+  /// No description provided for @errorIncidentClosedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'A closed incident is final, so it takes no new comments.'**
+  String get errorIncidentClosedWhy;
+
+  /// No description provided for @errorIncidentClosedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'If the problem is back, report a new incident and mention this one.'**
+  String get errorIncidentClosedNextStep;
+
+  /// No description provided for @assignPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign to a Technician'**
+  String get assignPanelTitle;
+
+  /// No description provided for @assignPanelAgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician'**
+  String get assignPanelAgent;
+
+  /// No description provided for @assignPanelDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to {name}.'**
+  String assignPanelDone(String name);
+
+  /// No description provided for @errorIncidentInvalidTransitionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This action isn\'t possible right now'**
+  String get errorIncidentInvalidTransitionTitle;
+
+  /// No description provided for @errorIncidentInvalidTransitionWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The incident is {status}, and this action isn\'t allowed in that status.'**
+  String errorIncidentInvalidTransitionWhy(String status);
+
+  /// No description provided for @errorIncidentInvalidTransitionNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload the incident to see its current status and the actions it allows.'**
+  String get errorIncidentInvalidTransitionNextStep;
+
+  /// No description provided for @errorAssigneeNotActiveAgentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This person can\'t take incidents'**
+  String get errorAssigneeNotActiveAgentTitle;
+
+  /// No description provided for @errorAssigneeNotActiveAgentWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Incidents can only be assigned to active Technicians.'**
+  String get errorAssigneeNotActiveAgentWhy;
+
+  /// No description provided for @errorAssigneeNotActiveAgentNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an active Technician from the list.'**
+  String get errorAssigneeNotActiveAgentNextStep;
 }
 
 class _AppLocalizationsDelegate

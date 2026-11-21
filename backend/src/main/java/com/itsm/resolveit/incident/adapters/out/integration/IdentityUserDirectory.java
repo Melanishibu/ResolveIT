@@ -19,6 +19,11 @@ public class IdentityUserDirectory implements UserDirectory {
     }
 
     @Override
+    public boolean isActiveSupportAgent(UUID userId) {
+        return userLookup.isActiveSupportAgent(userId);
+    }
+
+    @Override
     public Optional<UserSummary> find(UUID userId) {
         return userLookup.findById(userId)
                 .map(card -> new UserSummary(card.id(), card.name(), card.department(), card.active()));

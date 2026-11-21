@@ -31,6 +31,31 @@ class IncidentWebConfig {
     }
 
     @Bean
+    com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncidentUseCase(
+            IncidentRepository incidents, UserDirectory users, IncidentAuditLog auditLog,
+            GetIncidentDetailsUseCase details, ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.incident.application.service.AssignIncidentService(incidents, users, auditLog,
+                details, clock.getIfAvailable(Clock::systemUTC));
+    }
+
+    @Bean
+    com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeIncidentStatusUseCase(
+            IncidentRepository incidents, IncidentAuditLog auditLog, GetIncidentDetailsUseCase details,
+            ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.incident.application.service.ChangeIncidentStatusService(incidents, auditLog,
+                details, clock.getIfAvailable(Clock::systemUTC));
+    }
+
+    @Bean
+    com.itsm.resolveit.incident.application.port.in.IncidentCommentsUseCase incidentCommentsUseCase(
+            IncidentRepository incidents,
+            com.itsm.resolveit.incident.application.port.out.IncidentCommentRepository comments, UserDirectory users,
+            ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.incident.application.service.IncidentCommentsService(incidents, comments, users,
+                clock.getIfAvailable(Clock::systemUTC));
+    }
+
+    @Bean
     ReportIncidentUseCase reportIncidentUseCase(IncidentRepository incidents, TicketNumberGenerator ticketNumbers,
                                                 IncidentAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new ReportIncidentService(incidents, ticketNumbers, auditLog, clock.getIfAvailable(Clock::systemUTC));
