@@ -1405,7 +1405,7 @@ abstract class AppLocalizations {
   /// No description provided for @incidentListNumber.
   ///
   /// In en, this message translates to:
-  /// **'Number'**
+  /// **'Incident #'**
   String get incidentListNumber;
 
   /// No description provided for @incidentListOpen.

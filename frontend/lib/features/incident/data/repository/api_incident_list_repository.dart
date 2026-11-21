@@ -52,6 +52,8 @@ IncidentPage? incidentPageFromJson(Object? data) {
             priority: Priority.fromCode(item['priority'] as String),
             status: IncidentStatus.fromCode(item['status'] as String),
             assigneeName: (item['assignee'] as Map?)?['name'] as String?,
+            assigneeActive:
+                (item['assignee'] as Map?)?['active'] as bool? ?? true,
             createdAt: DateTime.parse(item['createdAt'] as String),
           ),
       ],

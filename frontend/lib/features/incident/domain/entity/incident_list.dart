@@ -50,6 +50,7 @@ final class IncidentListItem {
     required this.priority,
     required this.status,
     required this.assigneeName,
+    this.assigneeActive = true,
     required this.createdAt,
   });
 
@@ -62,6 +63,9 @@ final class IncidentListItem {
 
   /// Null when unassigned.
   final String? assigneeName;
+
+  /// False when the assigned Technician has been deactivated.
+  final bool assigneeActive;
   final DateTime createdAt;
 }
 

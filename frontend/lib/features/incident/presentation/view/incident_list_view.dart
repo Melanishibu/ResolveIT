@@ -7,7 +7,8 @@ import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_list.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_list_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/incident_details_view.dart';
-import 'package:resolveit/features/incident/widgets/category_label.dart';
+import 'package:resolveit/features/incident/presentation/view/report_incident_view.dart';
+import 'package:resolveit/core/domain/incident_permissions.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/features/incident/widgets/status_chip.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
@@ -45,6 +46,15 @@ class IncidentListView extends ConsumerWidget {
             Role.supportAgent => l10n.incidentListSubtitleAssigned,
             _ => l10n.incidentListSubtitleOwn,
           },
+          actions: [
+            if (role != null && mayCreateIncident(role))
+              AppButton(
+                key: const Key('incident-list-create'),
+                label: l10n.menuCreateIncident,
+                icon: Icons.add,
+                onPressed: () => context.go(ReportIncidentView.path),
+              ),
+          ],
         ),
         SizedBox(height: spacing.l),
         if (failure != null) ...[
@@ -88,11 +98,6 @@ class IncidentListView extends ConsumerWidget {
                   cell: (i) => Text(i.title),
                 ),
                 AppTableColumn(
-                  id: 'category',
-                  label: l10n.incidentDetailsCategory,
-                  cell: (i) => Text(categoryLabel(l10n, i.category)),
-                ),
-                AppTableColumn(
                   id: IncidentSortField.priority.name,
                   label: l10n.incidentDetailsPriority,
                   sortable: true,
@@ -104,12 +109,17 @@ class IncidentListView extends ConsumerWidget {
                   sortable: true,
                   cell: (i) => StatusChip(i.status),
                 ),
-                AppTableColumn(
-                  id: 'assignee',
-                  label: l10n.incidentDetailsAssignedTo,
-                  cell: (i) =>
-                      Text(i.assigneeName ?? l10n.incidentDetailsNotAssigned),
-                ),
+                if (role == Role.admin)
+                  AppTableColumn(
+                    id: 'assignee',
+                    label: l10n.incidentDetailsAssignedTo,
+                    cell: (i) => Text(switch (i.assigneeName) {
+                      null => l10n.incidentDetailsNotAssigned,
+                      final name when !i.assigneeActive =>
+                        '$name (${l10n.incidentDetailsInactiveAssignee})',
+                      final name => name,
+                    }),
+                  ),
                 AppTableColumn(
                   id: IncidentSortField.createdAt.name,
                   label: l10n.incidentDetailsCreatedAt,

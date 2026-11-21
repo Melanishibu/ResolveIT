@@ -760,7 +760,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentListEmpty => 'No incidents to show yet.';
 
   @override
-  String get incidentListNumber => 'Number';
+  String get incidentListNumber => 'Incident #';
 
   @override
   String get incidentListOpen => 'View';
