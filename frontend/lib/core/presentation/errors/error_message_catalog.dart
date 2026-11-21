@@ -122,6 +122,16 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorAuthTokenExpiredWhy,
       nextStep: (l, _) => l.errorAuthTokenExpiredNextStep,
     ),
+    'INCIDENT_NOT_FOUND': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentNotFoundTitle,
+      why: (l, _) => l.errorIncidentNotFoundWhy,
+      nextStep: (l, _) => l.errorIncidentNotFoundNextStep,
+    ),
+    'INCIDENT_ACCESS_DENIED': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentAccessDeniedTitle,
+      why: (l, _) => l.errorIncidentAccessDeniedWhy,
+      nextStep: (l, _) => l.errorIncidentAccessDeniedNextStep,
+    ),
     'USER_NOT_FOUND': ErrorCatalogEntry(
       title: (l, _) => l.errorUserNotFoundTitle,
       why: (l, p) => l.errorUserNotFoundWhy(p('id')),

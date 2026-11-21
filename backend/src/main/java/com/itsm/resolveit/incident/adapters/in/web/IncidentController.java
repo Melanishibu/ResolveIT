@@ -1,6 +1,13 @@
 package com.itsm.resolveit.incident.adapters.in.web;
 
 import com.itsm.resolveit.identity.Actor;
+import com.itsm.resolveit.incident.application.port.in.GetIncidentDetailsQuery;
+import com.itsm.resolveit.incident.application.port.in.GetIncidentDetailsUseCase;
+import com.itsm.resolveit.incident.domain.model.IncidentId;
+import com.itsm.resolveit.incident.domain.model.IncidentNotFoundException;
+import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import com.itsm.resolveit.incident.application.port.in.ReportIncidentCommand;
 import com.itsm.resolveit.incident.application.port.in.ReportIncidentUseCase;
 import com.itsm.resolveit.incident.domain.model.Category;
@@ -33,9 +40,31 @@ class IncidentController {
     private static final String SESSION_SCHEME = "RIT_SESSION";
 
     private final ReportIncidentUseCase reportIncident;
+    private final GetIncidentDetailsUseCase incidentDetails;
 
-    IncidentController(ReportIncidentUseCase reportIncident) {
+    IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails) {
         this.reportIncident = reportIncident;
+        this.incidentDetails = incidentDetails;
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Open an incident",
+            description = "Details plus allowedActions for the caller (RIT-US-10). A malformed id is answered as not found.",
+            security = @SecurityRequirement(name = SESSION_SCHEME))
+    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "403", description = "INCIDENT_ACCESS_DENIED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "404", description = "INCIDENT_NOT_FOUND",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    IncidentDetailsResponse details(Actor actor, @PathVariable("id") String id) {
+        UUID incidentId;
+        try {
+            incidentId = UUID.fromString(id);
+        } catch (IllegalArgumentException malformed) {
+            throw new IncidentNotFoundException();
+        }
+        return IncidentDetailsResponse.of(
+                incidentDetails.details(new GetIncidentDetailsQuery(actor, new IncidentId(incidentId))));
     }
 
     @PostMapping

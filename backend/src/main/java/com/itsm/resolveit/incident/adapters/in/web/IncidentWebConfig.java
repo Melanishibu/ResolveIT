@@ -1,6 +1,9 @@
 package com.itsm.resolveit.incident.adapters.in.web;
 
+import com.itsm.resolveit.incident.application.port.in.GetIncidentDetailsUseCase;
 import com.itsm.resolveit.incident.application.port.in.ReportIncidentUseCase;
+import com.itsm.resolveit.incident.application.port.out.UserDirectory;
+import com.itsm.resolveit.incident.application.service.GetIncidentDetailsService;
 import com.itsm.resolveit.incident.application.port.out.IncidentAuditLog;
 import com.itsm.resolveit.incident.application.port.out.IncidentRepository;
 import com.itsm.resolveit.incident.application.port.out.TicketNumberGenerator;
@@ -15,6 +18,11 @@ import org.springframework.context.annotation.Configuration;
 // (ArchitectureRules.ONION) has no config layer; open question A on AB#13 (Melani Shibu). Rule: clean-architecture §1.
 @Configuration(proxyBeanMethods = false)
 class IncidentWebConfig {
+
+    @Bean
+    GetIncidentDetailsUseCase getIncidentDetailsUseCase(IncidentRepository incidents, UserDirectory users) {
+        return new GetIncidentDetailsService(incidents, users);
+    }
 
     @Bean
     ReportIncidentUseCase reportIncidentUseCase(IncidentRepository incidents, TicketNumberGenerator ticketNumbers,

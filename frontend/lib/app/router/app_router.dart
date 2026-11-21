@@ -50,6 +50,8 @@ List<RouteBase> devComponentRoutes() => [
 ///   (bug AB#181);
 /// - still loading or backend unreachable → stay (the shell shows loading or the error panel).
 /// The backend enforces every rule; the router only keeps users on pages their role may use.
+final _incidentDetailsPath = RegExp(r'^/incidents/[^/]+$');
+
 String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   if (session.isLoading || !session.hasValue) return null;
   final user = session.value;
@@ -60,6 +62,10 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
     return null;
   }
   if (path == LoginView.path) return MenuDestination.dashboard.path;
+  // One incident: every signed-in role may try; the backend answers 403 or 404 (AB#38).
+  if (_incidentDetailsPath.hasMatch(path) && path != '/incidents/new') {
+    return null;
+  }
   final destination = MenuDestination.forLocation(path);
   if (destination != null && !mayOpen(user.role, destination)) {
     return NotAllowedView.path;

@@ -119,6 +119,17 @@ public final class ErrorCodeRegistry {
                 "You can't deactivate your own account",
                 "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
                 "Ask another Admin to deactivate your account if that is really needed."));
+        // Incident details (AB#38).
+        register(new RegisteredErrorCode(
+                "INCIDENT_NOT_FOUND", 404, Set.of(),
+                "This incident doesn't exist",
+                "ResolveIT has no incident at this address. The link may be outdated or mistyped.",
+                "Go back to your incident list and open the incident from there."));
+        register(new RegisteredErrorCode(
+                "INCIDENT_ACCESS_DENIED", 403, Set.of(),
+                "You can't open this incident",
+                "Your role only lets you see incidents you reported or that are assigned to you.",
+                "Open one of your own incidents, or ask your ResolveIT administrator if you need access."));
     }
 
     private ErrorCodeRegistry() {
