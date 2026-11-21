@@ -3,6 +3,7 @@ package com.itsm.resolveit.identity.adapters.in.web;
 import com.itsm.resolveit.identity.application.port.in.CreateUserUseCase;
 import com.itsm.resolveit.identity.application.port.in.GetCurrentUserUseCase;
 import com.itsm.resolveit.identity.application.port.out.DomainEventPublisher;
+import com.itsm.resolveit.identity.application.port.out.FailedLoginCounterRepository;
 import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.service.CreateUserService;
@@ -45,9 +46,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 class IdentityWebConfig {
 
     @Bean
-    LogInUseCase logInUseCase(UserRepository users, UserSessionRepository sessions, PasswordVerifier passwords,
-                              SessionTokenIssuer tokens, SessionProperties properties, ObjectProvider<Clock> clock) {
-        return new LogInService(users, sessions, passwords, tokens, LoginLockoutPolicy.STANDARD,
+    LogInUseCase logInUseCase(UserRepository users, FailedLoginCounterRepository failedLogins,
+                              UserSessionRepository sessions, PasswordVerifier passwords, SessionTokenIssuer tokens,
+                              SessionProperties properties, ObjectProvider<Clock> clock) {
+        return new LogInService(users, failedLogins, sessions, passwords, tokens, LoginLockoutPolicy.STANDARD,
                 properties.lifetime(), clock(clock));
     }
 

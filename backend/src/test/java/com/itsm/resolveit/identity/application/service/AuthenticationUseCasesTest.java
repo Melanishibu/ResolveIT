@@ -41,7 +41,8 @@ class AuthenticationUseCasesTest {
     private final User inactiveAgent = user("agent2@resolveit.local", false);
     private final InMemoryUsers users = new InMemoryUsers().with(employee).with(inactiveAgent);
 
-    private final LogInService logIn = new LogInService(users, sessions, passwords, tokens,
+    private final LogInService logIn = new LogInService(users,
+            new IdentityFakes.InMemoryFailedLoginCounters(), sessions, passwords, tokens,
             LoginLockoutPolicy.STANDARD, Duration.ofHours(8), clock);
     private final LogOutService logOut = new LogOutService(sessions, tokens);
     private final GetCurrentUserService currentUser = new GetCurrentUserService(tokens, sessions, users, clock);
