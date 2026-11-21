@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/features/users/data/datasource/users_remote_datasource.dart';
 import 'package:resolveit/features/users/data/repository/api_user_admin_repository.dart';
 import 'package:resolveit/features/users/domain/repository/user_admin_repository.dart';
+import 'package:resolveit/features/users/domain/repository/user_directory_repository.dart';
 import 'package:resolveit/features/users/domain/usecase/create_user.dart';
+import 'package:resolveit/features/users/domain/usecase/manage_users.dart';
 import 'package:resolveit/features/users/interactor/create_user_interactor.dart';
+import 'package:resolveit/features/users/interactor/user_list_interactor.dart';
 
 /// The HTTP client of the user-management API. The composition root (`lib/app/app.dart`) binds it
 /// to the shared API client; features never import the composition root.
@@ -26,3 +29,19 @@ final createUserInteractorProvider = Provider<CreateUserInteractor>(
   (ref) =>
       CreateUserInteractor(CreateUser(ref.watch(userAdminRepositoryProvider))),
 );
+
+/// The Admin's user list and activate/deactivate (RIT-US-08). Tests override it with a fake.
+final userDirectoryRepositoryProvider = Provider<UserDirectoryRepository>(
+  (ref) => ApiUserAdminRepository(
+    UsersRemoteDataSource(ref.watch(usersHttpClientProvider)),
+  ),
+);
+
+/// What the user-list presenter calls.
+final userListInteractorProvider = Provider<UserListInteractor>((ref) {
+  final repository = ref.watch(userDirectoryRepositoryProvider);
+  return UserListInteractor(
+    ListUsers(repository),
+    ChangeUserStatus(repository),
+  );
+});

@@ -784,6 +784,198 @@ abstract class AppLocalizations {
   /// **'Choose a password that meets these rules and try again.'**
   String get errorPasswordPolicyViolationNextStep;
 
+  /// No description provided for @errorUserNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This user doesn\'t exist'**
+  String get errorUserNotFoundTitle;
+
+  /// No description provided for @errorUserNotFoundWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'ResolveIT has no user with the id {id}. The list may be out of date.'**
+  String errorUserNotFoundWhy(String id);
+
+  /// No description provided for @errorUserNotFoundNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload User Management and pick the user again.'**
+  String get errorUserNotFoundNextStep;
+
+  /// No description provided for @errorUserCannotDeactivateSelfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t deactivate your own account'**
+  String get errorUserCannotDeactivateSelfTitle;
+
+  /// No description provided for @errorUserCannotDeactivateSelfWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.'**
+  String get errorUserCannotDeactivateSelfWhy;
+
+  /// No description provided for @errorUserCannotDeactivateSelfNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask another Admin to deactivate your account if that is really needed.'**
+  String get errorUserCannotDeactivateSelfNextStep;
+
+  /// No description provided for @userListSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone who can use ResolveIT, with their role and status.'**
+  String get userListSubtitle;
+
+  /// No description provided for @userListAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add user'**
+  String get userListAdd;
+
+  /// No description provided for @userListSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or email'**
+  String get userListSearchHint;
+
+  /// No description provided for @userListRoleFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get userListRoleFilter;
+
+  /// No description provided for @userListStatusFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get userListStatusFilter;
+
+  /// No description provided for @userListAllRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'All Roles'**
+  String get userListAllRoles;
+
+  /// No description provided for @userListAllStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All Statuses'**
+  String get userListAllStatuses;
+
+  /// No description provided for @userListName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get userListName;
+
+  /// No description provided for @userListEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get userListEmail;
+
+  /// No description provided for @userListRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get userListRole;
+
+  /// No description provided for @userListDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Department'**
+  String get userListDepartment;
+
+  /// No description provided for @userListStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get userListStatus;
+
+  /// No description provided for @userListInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation'**
+  String get userListInvitation;
+
+  /// No description provided for @userListActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get userListActions;
+
+  /// No description provided for @userListActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get userListActivate;
+
+  /// No description provided for @userListDeactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate'**
+  String get userListDeactivate;
+
+  /// No description provided for @userListDeactivateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deactivate {name}?'**
+  String userListDeactivateTitle(String name);
+
+  /// No description provided for @userListDeactivateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'They will no longer be able to log in, and any open session ends with their next request. Their incidents stay as they are. You can activate them again at any time.'**
+  String get userListDeactivateMessage;
+
+  /// No description provided for @userListActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is active again and can log in.'**
+  String userListActivated(String name);
+
+  /// No description provided for @userListDeactivated.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is deactivated.'**
+  String userListDeactivated(String name);
+
+  /// No description provided for @userListEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No users match these filters.'**
+  String get userListEmpty;
+
+  /// No description provided for @invitationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get invitationPending;
+
+  /// No description provided for @invitationAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get invitationAccepted;
+
+  /// No description provided for @invitationExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get invitationExpired;
+
+  /// No description provided for @invitationSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Email failed'**
+  String get invitationSendFailed;
+
+  /// No description provided for @invitationNone.
+  ///
+  /// In en, this message translates to:
+  /// **'–'**
+  String get invitationNone;
+
   /// No description provided for @setPasswordTitle.
   ///
   /// In en, this message translates to:

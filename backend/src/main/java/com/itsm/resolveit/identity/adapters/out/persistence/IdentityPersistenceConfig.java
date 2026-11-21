@@ -4,6 +4,7 @@ import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.port.out.UserRepository;
 import com.itsm.resolveit.identity.application.port.out.UserSessionRepository;
+import com.itsm.resolveit.identity.application.port.out.UserListReadModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -13,6 +14,11 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 // (ArchitectureRules.ONION) has no config layer; open question A on AB#13 (Melani Shibu). Rule: clean-architecture §1.
 @Configuration(proxyBeanMethods = false)
 class IdentityPersistenceConfig {
+
+    @Bean
+    UserListReadModel userListReadModel(JdbcClient jdbc) {
+        return new JdbcUserListQuery(jdbc);
+    }
 
     @Bean
     UserRepository userRepository(JdbcClient jdbc) {

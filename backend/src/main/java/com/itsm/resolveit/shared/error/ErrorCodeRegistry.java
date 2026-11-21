@@ -108,6 +108,17 @@ public final class ErrorCodeRegistry {
                 "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your"
                         + " email address.",
                 "Choose a password that meets these rules and try again."));
+        // User list, activate and deactivate (AB#50).
+        register(new RegisteredErrorCode(
+                "USER_NOT_FOUND", 404, Set.of("id"),
+                "This user doesn't exist",
+                "ResolveIT has no user with the id {id}. The list may be out of date.",
+                "Reload User Management and pick the user again."));
+        register(new RegisteredErrorCode(
+                "USER_CANNOT_DEACTIVATE_SELF", 409, Set.of(),
+                "You can't deactivate your own account",
+                "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
+                "Ask another Admin to deactivate your account if that is really needed."));
     }
 
     private ErrorCodeRegistry() {

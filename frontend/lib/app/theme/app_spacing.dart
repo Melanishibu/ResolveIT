@@ -34,6 +34,9 @@ final class AppSpacing extends ThemeExtension<AppSpacing> {
   double get illustrationIcon => 64;
   double get twoColumnMinWidth => 840;
 
+  // RIT-US-08 (AB#50) list filters.
+  double get filterWidth => 220;
+
   @override
   AppSpacing copyWith() => this;
 

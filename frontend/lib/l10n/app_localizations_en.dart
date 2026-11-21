@@ -417,6 +417,116 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choose a password that meets these rules and try again.';
 
   @override
+  String get errorUserNotFoundTitle => 'This user doesn\'t exist';
+
+  @override
+  String errorUserNotFoundWhy(String id) {
+    return 'ResolveIT has no user with the id $id. The list may be out of date.';
+  }
+
+  @override
+  String get errorUserNotFoundNextStep =>
+      'Reload User Management and pick the user again.';
+
+  @override
+  String get errorUserCannotDeactivateSelfTitle =>
+      'You can\'t deactivate your own account';
+
+  @override
+  String get errorUserCannotDeactivateSelfWhy =>
+      'An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.';
+
+  @override
+  String get errorUserCannotDeactivateSelfNextStep =>
+      'Ask another Admin to deactivate your account if that is really needed.';
+
+  @override
+  String get userListSubtitle =>
+      'Everyone who can use ResolveIT, with their role and status.';
+
+  @override
+  String get userListAdd => 'Add user';
+
+  @override
+  String get userListSearchHint => 'Search by name or email';
+
+  @override
+  String get userListRoleFilter => 'Role';
+
+  @override
+  String get userListStatusFilter => 'Status';
+
+  @override
+  String get userListAllRoles => 'All Roles';
+
+  @override
+  String get userListAllStatuses => 'All Statuses';
+
+  @override
+  String get userListName => 'Name';
+
+  @override
+  String get userListEmail => 'Email';
+
+  @override
+  String get userListRole => 'Role';
+
+  @override
+  String get userListDepartment => 'Department';
+
+  @override
+  String get userListStatus => 'Status';
+
+  @override
+  String get userListInvitation => 'Invitation';
+
+  @override
+  String get userListActions => 'Actions';
+
+  @override
+  String get userListActivate => 'Activate';
+
+  @override
+  String get userListDeactivate => 'Deactivate';
+
+  @override
+  String userListDeactivateTitle(String name) {
+    return 'Deactivate $name?';
+  }
+
+  @override
+  String get userListDeactivateMessage =>
+      'They will no longer be able to log in, and any open session ends with their next request. Their incidents stay as they are. You can activate them again at any time.';
+
+  @override
+  String userListActivated(String name) {
+    return '$name is active again and can log in.';
+  }
+
+  @override
+  String userListDeactivated(String name) {
+    return '$name is deactivated.';
+  }
+
+  @override
+  String get userListEmpty => 'No users match these filters.';
+
+  @override
+  String get invitationPending => 'Pending';
+
+  @override
+  String get invitationAccepted => 'Accepted';
+
+  @override
+  String get invitationExpired => 'Expired';
+
+  @override
+  String get invitationSendFailed => 'Email failed';
+
+  @override
+  String get invitationNone => '–';
+
+  @override
   String get setPasswordTitle => 'Set your password';
 
   @override

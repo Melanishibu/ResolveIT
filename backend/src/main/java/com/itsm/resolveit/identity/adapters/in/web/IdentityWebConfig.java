@@ -7,6 +7,8 @@ import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.service.CreateUserService;
 import com.itsm.resolveit.identity.application.service.SetPasswordService;
+import com.itsm.resolveit.identity.application.service.UserAdministrationService;
+import com.itsm.resolveit.identity.application.port.out.UserListReadModel;
 import com.itsm.resolveit.identity.application.port.in.SetPasswordUseCase;
 import com.itsm.resolveit.identity.application.port.out.PasswordHasher;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
@@ -64,6 +66,12 @@ class IdentityWebConfig {
     CreateUserUseCase createUserUseCase(UserRepository users, InvitationRepository invitations, UserAuditLog auditLog,
                                         DomainEventPublisher events, ObjectProvider<Clock> clock) {
         return new CreateUserService(users, invitations, auditLog, events, clock(clock));
+    }
+
+    @Bean
+    UserAdministrationService userAdministration(UserRepository users, UserListReadModel readModel,
+                                                 UserAuditLog auditLog, ObjectProvider<Clock> clock) {
+        return new UserAdministrationService(users, readModel, auditLog, clock(clock));
     }
 
     @Bean
