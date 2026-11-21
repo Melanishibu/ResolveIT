@@ -56,6 +56,50 @@ wins only where it lists an approved deviation below; otherwise the skill wins.
   (`lib/app/app.dart`) with `// ARCH-DEVIATION: D2 – no Apex UI access; Material widgets; approved by
   Melani Shibu 11/19/2026`, and mention D2 in PR descriptions that add screens.
 
+## Standing authorisations (approved by Melani Shibu)
+These authorisations were given in chat and recorded here (AB#183). Everything not listed here still follows the
+Workflow and Hard rules below.
+
+- **Unattended work (11/20/2026):** when Melani says she is away, collect finished stories on an integration
+  branch `integration/<name>`. For each story:
+  1. Plan it. The plan is pre-approved if every question in it has a clear recommendation.
+  2. Create the feature branch from the integration branch.
+  3. Get an independent sub-agent review.
+  4. Complete the story PR into the integration branch.
+
+  At the end, open **one** PR from the integration branch into `development` for Melani. Never merge into
+  `development` or `main` yourself.
+- **Code review and QA (11/21/2026):** Claude may perform and close the Code review tasks (independent sub-agent
+  review) and the QA tasks (API-level QA and automated UI tests), with the agreed honest wording. Visual browser
+  checks remain Melani's.
+- **Bugs found in testing (11/21/2026, life cycle amended 11/21/2026):**
+  - Log each finding immediately as a Bug or an Issue, following the `safe-agile` rules. Tag it `found-in-review`
+    or `found-in-qa`. A Bug is logged as a **child of its story**.
+  - Fix a Bug on `bugfix/<bug id>-<name>` from `development`:
+    1. Write a regression test and confirm it fails.
+    2. Write the fix.
+    3. Commit with `AB#<bug id>`.
+    4. Get an independent review.
+    5. Open a PR into `development`, or into the integration branch when Melani is away.
+  - Melani completes bugfix PRs. After she completes one, carry on with Resolved, verification and Closed without
+    waiting for another instruction.
+  - Bug life cycle, with an evidence comment on every state change:
+    - **New:** logged as a child of its story.
+    - **Active:** the fix has started on `bugfix/<bug id>-<name>`.
+    - **Resolved:** the fix PR is merged into `development`. The comment gives `!n` and the commit.
+    - **Closed:** only after verification on `development`:
+      - the "ResolveIT CI" run for the merge is green;
+      - the regression test passes;
+      - the Bug's repro steps, re-run against a local build of `development`, now behave as expected.
+
+      Comment: "Closed by Claude Code under Melani Shibu's authorisation of 11/21/2026; verified on development:
+      <CI run>, <test name>, <re-check result>".
+  - If verification fails, set the Bug back to Active, explain why in a comment, and fix it again.
+  - When all child Bugs of a story are Closed, set the story back to Resolved, with an evidence comment.
+  - Issues are only logged, not fixed, unless they are planned.
+- **Closing tasks:** Claude may close its own `claude` tasks once their work is merged, with evidence.
+- **Branch names:** `feature/<id>-<name>`, `bugfix/<bug id>-<name>`, `chore/<id>-<name>`, `integration/<name>`.
+
 ## Frontend feature layout
 Approved by Melani Shibu on 11/21/2026 (RIT-US-29, AB#175). It replaces the earlier folder layout, within the
 `references/flutter.md` rule that a project may use its own VIPER names if the dependency rule holds. Enforced by
