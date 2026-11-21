@@ -142,6 +142,12 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorAssigneeNotActiveAgentWhy,
       nextStep: (l, _) => l.errorAssigneeNotActiveAgentNextStep,
     ),
+    'INCIDENT_RESOLUTION_NOTES_REQUIRED': ErrorCatalogEntry(
+      title: (l, _) => l.errorIncidentResolutionNotesRequiredTitle,
+      why: (l, p) =>
+          l.errorIncidentResolutionNotesRequiredWhy(p('min'), p('max')),
+      nextStep: (l, _) => l.errorIncidentResolutionNotesRequiredNextStep,
+    ),
     'INCIDENT_CLOSED': ErrorCatalogEntry(
       title: (l, _) => l.errorIncidentClosedTitle,
       why: (l, _) => l.errorIncidentClosedWhy,

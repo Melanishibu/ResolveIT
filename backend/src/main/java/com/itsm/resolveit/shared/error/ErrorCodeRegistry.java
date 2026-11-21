@@ -147,6 +147,12 @@ public final class ErrorCodeRegistry {
                 "This incident is closed",
                 "A closed incident is final, so it takes no new comments.",
                 "If the problem is back, report a new incident and mention this one."));
+        // Resolve (AB#44).
+        register(new RegisteredErrorCode(
+                "INCIDENT_RESOLUTION_NOTES_REQUIRED", 400, Set.of("min", "max"),
+                "Add resolution notes",
+                "An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.",
+                "Describe what you did to fix it, then resolve again."));
     }
 
     private ErrorCodeRegistry() {

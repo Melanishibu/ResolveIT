@@ -1420,6 +1420,66 @@ abstract class AppLocalizations {
   /// **'Work started. The incident is now In Progress.'**
   String get statusStartedDone;
 
+  /// No description provided for @statusResolvedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident resolved. The reporter can now close or reopen it.'**
+  String get statusResolvedDone;
+
+  /// No description provided for @statusClosedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident closed.'**
+  String get statusClosedDone;
+
+  /// No description provided for @closeConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close {ticketNumber}?'**
+  String closeConfirmTitle(String ticketNumber);
+
+  /// No description provided for @closeConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A closed incident is final: it can\'t be reopened, commented on or changed. If the problem comes back, report a new incident.'**
+  String get closeConfirmMessage;
+
+  /// No description provided for @resolvePanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolve this incident'**
+  String get resolvePanelTitle;
+
+  /// No description provided for @resolvePanelNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution notes'**
+  String get resolvePanelNotes;
+
+  /// No description provided for @resolvePanelNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you do to fix it? (10 to 2000 characters)'**
+  String get resolvePanelNotesHint;
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add resolution notes'**
+  String get errorIncidentResolutionNotesRequiredTitle;
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'An incident can only be resolved with notes of {min} to {max} characters, so the reporter knows what was done.'**
+  String errorIncidentResolutionNotesRequiredWhy(String min, String max);
+
+  /// No description provided for @errorIncidentResolutionNotesRequiredNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what you did to fix it, then resolve again.'**
+  String get errorIncidentResolutionNotesRequiredNextStep;
+
   /// No description provided for @commentsEmpty.
   ///
   /// In en, this message translates to:

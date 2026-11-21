@@ -7,6 +7,7 @@ import com.itsm.resolveit.incident.domain.model.Incident;
 import com.itsm.resolveit.incident.domain.model.IncidentId;
 import com.itsm.resolveit.incident.domain.model.IncidentStatus;
 import com.itsm.resolveit.incident.domain.model.Priority;
+import com.itsm.resolveit.incident.domain.model.ResolutionNotes;
 import com.itsm.resolveit.incident.domain.model.TicketNumber;
 import com.itsm.resolveit.incident.domain.model.Title;
 import java.sql.ResultSet;
@@ -21,7 +22,8 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 public class JdbcIncidentRepository implements IncidentRepository {
 
     private static final String COLUMNS =
-            "id, ticket_number, title, description, category, priority, status, created_by, created_at, updated_at, assigned_to";
+            "id, ticket_number, title, description, category, priority, status, created_by, created_at, updated_at, assigned_to,"
+            + " resolution_notes";
 
     private final JdbcClient jdbc;
 
@@ -39,9 +41,9 @@ public class JdbcIncidentRepository implements IncidentRepository {
         jdbc.sql("""
                 INSERT INTO incident.incident
                     (id, ticket_number, title, description, category, priority, status, created_by, created_at, updated_at,
-                     assigned_to)
+                     assigned_to, resolution_notes)
                 VALUES (:id, :ticketNumber, :title, :description, :category, :priority, :status, :createdBy, :createdAt, :updatedAt,
-                        :assignedTo)
+                        :assignedTo, :resolutionNotes)
                 ON CONFLICT (id) DO UPDATE SET
                     title = EXCLUDED.title,
                     description = EXCLUDED.description,
@@ -49,7 +51,8 @@ public class JdbcIncidentRepository implements IncidentRepository {
                     priority = EXCLUDED.priority,
                     status = EXCLUDED.status,
                     updated_at = EXCLUDED.updated_at,
-                    assigned_to = EXCLUDED.assigned_to
+                    assigned_to = EXCLUDED.assigned_to,
+                    resolution_notes = EXCLUDED.resolution_notes
                 """)
                 .param("id", incident.id().value())
                 .param("ticketNumber", incident.ticketNumber().value())
@@ -62,6 +65,7 @@ public class JdbcIncidentRepository implements IncidentRepository {
                 .param("createdAt", incident.createdAt().atOffset(ZoneOffset.UTC))
                 .param("updatedAt", incident.updatedAt().atOffset(ZoneOffset.UTC))
                 .param("assignedTo", incident.assignedTo().orElse(null))
+                .param("resolutionNotes", incident.resolutionNotes().map(ResolutionNotes::value).orElse(null))
                 .update();
     }
 
@@ -85,6 +89,8 @@ public class JdbcIncidentRepository implements IncidentRepository {
                 row.getObject("created_by", UUID.class),
                 row.getObject("created_at", OffsetDateTime.class).toInstant(),
                 row.getObject("updated_at", OffsetDateTime.class).toInstant(),
-                row.getObject("assigned_to", UUID.class));
+                row.getObject("assigned_to", UUID.class),
+                row.getString("resolution_notes") == null ? null
+                        : new ResolutionNotes(row.getString("resolution_notes")));
     }
 }

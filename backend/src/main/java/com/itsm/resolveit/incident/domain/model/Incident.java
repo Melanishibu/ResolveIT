@@ -26,6 +26,8 @@ public final class Incident {
     private Instant updatedAt;
     /** The Support Agent working on it; null until assigned (RIT-US-12). */
     private UUID assignedTo;
+    /** Set when resolved (RIT-US-16); kept after a reopen, so the history stays readable. */
+    private ResolutionNotes resolutionNotes;
 
     private Incident(IncidentId id, TicketNumber ticketNumber, Title title, Description description, Category category,
                      Priority priority, IncidentStatus status, UUID createdBy, Instant createdAt, Instant updatedAt,
@@ -74,9 +76,39 @@ public final class Incident {
                 updatedAt, assignedTo);
     }
 
+    /** Rebuilds a stored incident with its assignee and resolution notes (each null if not set). */
+    public static Incident reconstitute(IncidentId id, TicketNumber ticketNumber, Title title, Description description,
+                                        Category category, Priority priority, IncidentStatus status, UUID createdBy,
+                                        Instant createdAt, Instant updatedAt, UUID assignedTo,
+                                        ResolutionNotes resolutionNotes) {
+        Incident incident = new Incident(id, ticketNumber, title, description, category, priority, status, createdBy,
+                createdAt, updatedAt, assignedTo);
+        incident.resolutionNotes = resolutionNotes;
+        return incident;
+    }
+
     /** The assigned Support Agent, if any. */
     public java.util.Optional<UUID> assignedTo() {
         return java.util.Optional.ofNullable(assignedTo);
+    }
+
+    /** The notes of the latest resolution, if it was ever resolved (RIT-US-16). */
+    public java.util.Optional<ResolutionNotes> resolutionNotes() {
+        return java.util.Optional.ofNullable(resolutionNotes);
+    }
+
+    /** Resolve (RIT-US-16): IN_PROGRESS → RESOLVED with notes. Returns the RESOLVED audit entry (notes as new value). */
+    public IncidentAuditEntry resolve(ResolutionNotes notes, UUID actorId, Instant now) {
+        Objects.requireNonNull(notes, "notes");
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.IN_PROGRESS) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.RESOLVED;
+        resolutionNotes = notes;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.RESOLVED, IncidentStatus.IN_PROGRESS.name(),
+                notes.value(), now);
     }
 
     /**
@@ -197,6 +229,18 @@ public final class Incident {
             throw new IncidentClosedException();
         }
         return new IncidentComment(commentId, id, author, text, now);
+    }
+
+    /** Close (RIT-US-18): RESOLVED → CLOSED, which is final. Returns the CLOSED audit entry. */
+    public IncidentAuditEntry close(UUID actorId, Instant now) {
+        Objects.requireNonNull(actorId, "actorId");
+        if (status != IncidentStatus.RESOLVED) {
+            throw new IncidentInvalidTransitionException(status);
+        }
+        status = IncidentStatus.CLOSED;
+        updatedAt = Objects.requireNonNull(now, "now");
+        return new IncidentAuditEntry(id, actorId, IncidentAuditAction.CLOSED, IncidentStatus.RESOLVED.name(),
+                IncidentStatus.CLOSED.name(), now);
     }
 
     public IncidentAuditEntry creationEntry() {
