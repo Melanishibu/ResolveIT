@@ -1,11 +1,13 @@
 package com.itsm.resolveit.identity.application.service;
 
+import com.itsm.resolveit.identity.application.port.out.FailedLoginCounterRepository;
 import com.itsm.resolveit.identity.application.port.out.PasswordVerifier;
 import com.itsm.resolveit.identity.application.port.out.SessionTokenIssuer;
 import com.itsm.resolveit.identity.application.port.out.SessionTokenVerifier;
 import com.itsm.resolveit.identity.application.port.out.UserRepository;
 import com.itsm.resolveit.identity.application.port.out.UserSessionRepository;
 import com.itsm.resolveit.identity.domain.model.EmailAddress;
+import com.itsm.resolveit.identity.domain.model.FailedLoginCounter;
 import com.itsm.resolveit.identity.domain.model.PasswordHash;
 import com.itsm.resolveit.identity.domain.model.SessionId;
 import com.itsm.resolveit.identity.domain.model.SessionToken;
@@ -65,6 +67,21 @@ final class IdentityFakes {
         @Override
         public UserId nextId() {
             return new UserId(UUID.randomUUID());
+        }
+    }
+
+    /** Failed-login counters of unknown emails (bug AB#180). */
+    static final class InMemoryFailedLoginCounters implements FailedLoginCounterRepository {
+        final Map<EmailAddress, FailedLoginCounter> byEmail = new HashMap<>();
+
+        @Override
+        public FailedLoginCounter lockOrStart(EmailAddress email) {
+            return byEmail.computeIfAbsent(email, FailedLoginCounter::start);
+        }
+
+        @Override
+        public void save(FailedLoginCounter counter) {
+            byEmail.put(counter.email(), counter);
         }
     }
 

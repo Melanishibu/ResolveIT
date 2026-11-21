@@ -1,5 +1,6 @@
 package com.itsm.resolveit.identity.adapters.out.persistence;
 
+import com.itsm.resolveit.identity.application.port.out.FailedLoginCounterRepository;
 import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.port.out.UserRepository;
@@ -23,6 +24,11 @@ class IdentityPersistenceConfig {
     @Bean
     UserRepository userRepository(JdbcClient jdbc) {
         return new JdbcUserRepository(jdbc);
+    }
+
+    @Bean
+    FailedLoginCounterRepository failedLoginCounterRepository(JdbcClient jdbc) {
+        return new JdbcFailedLoginCounterRepository(jdbc);
     }
 
     @Bean
