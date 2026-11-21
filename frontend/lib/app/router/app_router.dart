@@ -59,7 +59,7 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
   }
   if (path == LoginView.path) return MenuDestination.dashboard.path;
   final destination = MenuDestination.forLocation(path);
-  if (destination != null && !menuFor(user.role).contains(destination)) {
+  if (destination != null && !mayOpen(user.role, destination)) {
     return NotAllowedView.path;
   }
   return null;
