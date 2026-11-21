@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
+import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_category.dart';
 import 'package:resolveit/features/incident/domain/entity/new_incident.dart';
 import 'package:resolveit/features/incident/domain/entity/priority.dart';
@@ -12,9 +13,9 @@ import 'package:resolveit/features/incident/widgets/help_panel.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
-/// An Employee reports an IT incident (`/incidents/new`, RIT-US-09): the help panel beside a form
-/// with Title, Category, Priority and Description, plus Cancel and Submit Incident. No attachments
-/// (deferred). Built only from the shared UI components (US-28).
+/// An Employee or Admin reports an IT incident (`/incidents/new`, RIT-US-09, bug AB#181): the help
+/// panel beside a form with Title, Category, Priority and Description, plus Cancel and Submit
+/// Incident. No attachments (deferred). Built only from the shared UI components (US-28).
 class ReportIncidentView extends ConsumerStatefulWidget {
   const ReportIncidentView({super.key});
 
@@ -23,6 +24,14 @@ class ReportIncidentView extends ConsumerStatefulWidget {
   /// Where the Employee goes after reporting or cancelling. The incident details screen arrives
   /// with RIT-US-10, which then opens the new incident instead (Plan question 1).
   static const myIncidentsPath = '/my-incidents';
+
+  /// Where the Admin goes after reporting or cancelling: the Admin's incident list, because the Admin
+  /// may not open My Incidents (Update 01 menus, bug AB#181).
+  static const incidentsPath = '/incidents';
+
+  /// The incident list of [role] to return to after reporting or cancelling.
+  static String returnPathFor(Role? role) =>
+      role == Role.admin ? incidentsPath : myIncidentsPath;
 
   @override
   ConsumerState<ReportIncidentView> createState() => _ReportIncidentViewState();
@@ -40,6 +49,9 @@ class _ReportIncidentViewState extends ConsumerState<ReportIncidentView> {
     _description.dispose();
     super.dispose();
   }
+
+  String _returnPath() =>
+      ReportIncidentView.returnPathFor(ref.read(sessionProvider).value?.role);
 
   void _submit() => ref
       .read(reportIncidentPresenterProvider.notifier)
@@ -63,7 +75,7 @@ class _ReportIncidentViewState extends ConsumerState<ReportIncidentView> {
           context,
           l10n.createIncidentSuccess(reported.ticketNumber),
         );
-        context.go(ReportIncidentView.myIncidentsPath);
+        context.go(_returnPath());
       }
     });
     final state = ref.watch(reportIncidentPresenterProvider);
@@ -165,7 +177,7 @@ class _ReportIncidentViewState extends ConsumerState<ReportIncidentView> {
                 variant: AppButtonVariant.secondary,
                 onPressed: state.isSubmitting
                     ? null
-                    : () => context.go(ReportIncidentView.myIncidentsPath),
+                    : () => context.go(_returnPath()),
               ),
               SizedBox(width: spacing.m),
               AppButton(

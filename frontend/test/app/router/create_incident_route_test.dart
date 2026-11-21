@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:resolveit/app/app.dart';
 import 'package:resolveit/app/router/app_router.dart';
 import 'package:resolveit/app/shell/navigation_menu.dart';
+import 'package:resolveit/core/domain/incident_permissions.dart';
 import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/incident/incident.dart';
 
 import '../../support/auth_fakes.dart';
 
@@ -21,6 +23,31 @@ void main() {
     expect(_router(tester).state.uri.path, '/incidents/new');
     expect(find.byKey(const Key('create-incident-title')), findsOneWidget);
     expect(find.byKey(const Key('not-allowed-page')), findsNothing);
+  });
+
+  testWidgets('Admin cancel returns to Incidents, not to "not allowed"', (
+    tester,
+  ) async {
+    await _pumpApp(tester, FakeIdentityBackend.signedInAs(Role.admin));
+    _router(tester).go('/incidents/new');
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('create-incident-cancel')));
+    await tester.pumpAndSettle();
+
+    expect(_router(tester).state.uri.path, '/incidents');
+    expect(find.byKey(const Key('not-allowed-page')), findsNothing);
+  });
+
+  test('after reporting or cancelling, each role returns to its own list', () {
+    expect(ReportIncidentView.returnPathFor(Role.admin), '/incidents');
+    expect(ReportIncidentView.returnPathFor(Role.employee), '/my-incidents');
+  });
+
+  test('mayCreateIncident follows the permission table', () {
+    expect(mayCreateIncident(Role.admin), isTrue);
+    expect(mayCreateIncident(Role.employee), isTrue);
+    expect(mayCreateIncident(Role.supportAgent), isFalse);
   });
 
   testWidgets('Technician still gets "not allowed"', (tester) async {

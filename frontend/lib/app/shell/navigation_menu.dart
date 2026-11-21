@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resolveit/core/domain/incident_permissions.dart';
 import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
@@ -48,7 +49,7 @@ enum MenuDestination {
 /// incidents and reaches `/incidents/new` through the "+ Create Incident" button (AB#39), but the
 /// Admin menu has no Create Incident entry (Update 01). The backend still enforces every rule.
 bool mayOpen(Role role, MenuDestination destination) => switch (destination) {
-  MenuDestination.createIncident => role == Role.admin || role == Role.employee,
+  MenuDestination.createIncident => mayCreateIncident(role),
   _ => menuFor(role).contains(destination),
 };
 
