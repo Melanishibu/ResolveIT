@@ -23,9 +23,11 @@ public final class User {
     private boolean active;
     private int failedLoginAttempts;
     private Instant lockedUntil;
+    private final Instant createdAt;
 
     private User(UserId id, EmailAddress email, DisplayName displayName, Role role, Department department,
-                 PasswordHash passwordHash, boolean active, int failedLoginAttempts, Instant lockedUntil) {
+                 PasswordHash passwordHash, boolean active, int failedLoginAttempts, Instant lockedUntil,
+                 Instant createdAt) {
         this.id = Objects.requireNonNull(id, "id");
         this.email = Objects.requireNonNull(email, "email");
         this.displayName = Objects.requireNonNull(displayName, "displayName");
@@ -38,6 +40,7 @@ public final class User {
         this.active = active;
         this.failedLoginAttempts = failedLoginAttempts;
         this.lockedUntil = lockedUntil;
+        this.createdAt = createdAt != null ? createdAt : Instant.now();
     }
 
     /**
@@ -49,15 +52,23 @@ public final class User {
         if (role == Role.ADMIN) {
             throw new UserRoleNotAllowedException(role);
         }
-        return new User(id, email, displayName, role, department, null, true, 0, null);
+        return new User(id, email, displayName, role, department, null, true, 0, null, Instant.now());
     }
 
     /** Rebuilds a user from storage. {@code passwordHash} is null while an invited user has not set one. */
     public static User reconstitute(UserId id, EmailAddress email, DisplayName displayName, Role role,
                                     Department department, PasswordHash passwordHash, boolean active,
                                     int failedLoginAttempts, Instant lockedUntil) {
+        return reconstitute(id, email, displayName, role, department, passwordHash, active, failedLoginAttempts,
+                lockedUntil, Instant.now());
+    }
+
+    /** Rebuilds a user from storage including their creation timestamp (RIT-US-27). */
+    public static User reconstitute(UserId id, EmailAddress email, DisplayName displayName, Role role,
+                                    Department department, PasswordHash passwordHash, boolean active,
+                                    int failedLoginAttempts, Instant lockedUntil, Instant createdAt) {
         return new User(id, email, displayName, role, department, passwordHash, active, failedLoginAttempts,
-                lockedUntil);
+                lockedUntil, createdAt);
     }
 
     /**
@@ -182,5 +193,10 @@ public final class User {
     /** When the current or last lock ends; null if the account was never locked since the last reset. */
     public Instant lockedUntil() {
         return lockedUntil;
+    }
+
+    /** When the user was created (RIT-US-27, member since). */
+    public Instant createdAt() {
+        return createdAt;
     }
 }

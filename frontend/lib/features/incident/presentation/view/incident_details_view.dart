@@ -103,12 +103,16 @@ class _Details extends ConsumerWidget {
     });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
+    final assignState = ref.watch(assignIncidentPresenterProvider(incident.id));
     final commentCount = ref
         .watch(incidentCommentsPresenterProvider(incident.id))
         .count;
     void startWork() => ref
         .read(incidentStatusPresenterProvider(incident.id).notifier)
         .startWork();
+    void openAssign() => ref
+        .read(assignIncidentPresenterProvider(incident.id).notifier)
+        .open();
     Future<void> confirmClose() async {
       final confirmed = await showConfirmDialog(
         context,
@@ -142,6 +146,15 @@ class _Details extends ConsumerWidget {
       }
     }
 
+    final menuActions = incident.allowedActions
+        .where(
+          (a) =>
+              a != IncidentAction.start &&
+              a != IncidentAction.assign &&
+              a != IncidentAction.reassign,
+        )
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -151,6 +164,22 @@ class _Details extends ConsumerWidget {
           actions: [
             PriorityChip(incident.priority),
             StatusChip(incident.status),
+            if (incident.allowedActions.contains(IncidentAction.assign))
+              AppButton(
+                key: const Key('incident-assign'),
+                label: l10n.incidentActionAssign,
+                icon: Icons.person_add_alt_1,
+                isLoading: assignState.isSaving,
+                onPressed: assignState.isSaving ? null : openAssign,
+              ),
+            if (incident.allowedActions.contains(IncidentAction.reassign))
+              AppButton(
+                key: const Key('incident-reassign'),
+                label: l10n.incidentActionReassign,
+                icon: Icons.person_add_alt_1,
+                isLoading: assignState.isSaving,
+                onPressed: assignState.isSaving ? null : openAssign,
+              ),
             if (incident.allowedActions.contains(IncidentAction.start))
               AppButton(
                 key: const Key('incident-start-work'),
@@ -159,13 +188,13 @@ class _Details extends ConsumerWidget {
                 isLoading: statusState.isSaving,
                 onPressed: statusState.isSaving ? null : startWork,
               ),
-            if (incident.allowedActions.isNotEmpty)
+            if (menuActions.where(_isAvailable).isNotEmpty)
               PopupMenuButton<IncidentAction>(
                 key: const Key('incident-details-actions'),
                 tooltip: l10n.incidentDetailsActions,
                 onSelected: choose,
                 itemBuilder: (context) => [
-                  for (final action in incident.allowedActions)
+                  for (final action in menuActions)
                     if (_isAvailable(action))
                       PopupMenuItem<IncidentAction>(
                         key: Key('incident-action-${action.code}'),

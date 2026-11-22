@@ -417,6 +417,92 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choose a password that meets these rules and try again.';
 
   @override
+  String get errorAuthCurrentPasswordWrongTitle =>
+      'Current password is incorrect';
+
+  @override
+  String get errorAuthCurrentPasswordWrongWhy =>
+      'The current password you entered doesn\'t match the password on your account.';
+
+  @override
+  String get errorAuthCurrentPasswordWrongNextStep =>
+      'Enter your current password and try again.';
+
+  @override
+  String get errorPasswordSameAsCurrentTitle => 'New password must differ';
+
+  @override
+  String get errorPasswordSameAsCurrentWhy =>
+      'Your new password is the same as your current password.';
+
+  @override
+  String get errorPasswordSameAsCurrentNextStep =>
+      'Choose a different password that you haven\'t used recently.';
+
+  @override
+  String get profileTitle => 'My Profile';
+
+  @override
+  String get profileSubtitle =>
+      'Check your details and keep your account secure.';
+
+  @override
+  String get profileTabPersonalInfo => 'Personal Info';
+
+  @override
+  String get profileTabSecurity => 'Security';
+
+  @override
+  String get profileName => 'Name';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileRole => 'Role';
+
+  @override
+  String get profileDepartment => 'Department';
+
+  @override
+  String get profileMemberSince => 'Member since';
+
+  @override
+  String get profileChangePasswordTitle => 'Change Password';
+
+  @override
+  String get profileCurrentPassword => 'Current password';
+
+  @override
+  String get profileNewPassword => 'New password';
+
+  @override
+  String get profileConfirmPassword => 'Confirm new password';
+
+  @override
+  String get profileChangePasswordButton => 'Change password';
+
+  @override
+  String get profilePasswordChangedSuccess => 'Password changed successfully.';
+
+  @override
+  String get profilePasswordsDoNotMatch =>
+      'New password and confirmation do not match.';
+
+  @override
+  String get profilePasswordSameAsCurrent =>
+      'New password must differ from current password.';
+
+  @override
+  String get profileCurrentPasswordRequired => 'Enter your current password.';
+
+  @override
+  String get profileNewPasswordRequired => 'Enter a new password.';
+
+  @override
+  String get profileConfirmPasswordRequired => 'Confirm your new password.';
+
+  @override
   String get errorUserNotFoundTitle => 'This user doesn\'t exist';
 
   @override

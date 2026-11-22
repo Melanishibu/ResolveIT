@@ -4,8 +4,9 @@ import 'package:resolveit/app/theme/theme_context.dart';
 /// One tab of [AppTabs].
 @immutable
 final class AppTab {
-  const AppTab({required this.label, required this.child});
+  const AppTab({this.key, required this.label, required this.child});
 
+  final Key? key;
   final String label;
   final Widget child;
 }
@@ -39,7 +40,7 @@ class AppTabs extends StatelessWidget {
             ),
             tabs: [
               for (final tab in tabs)
-                Tab(height: spacing.tabHeight, text: tab.label),
+                Tab(key: tab.key, height: spacing.tabHeight, text: tab.label),
             ],
           ),
           SizedBox(height: spacing.l),

@@ -784,6 +784,162 @@ abstract class AppLocalizations {
   /// **'Choose a password that meets these rules and try again.'**
   String get errorPasswordPolicyViolationNextStep;
 
+  /// No description provided for @errorAuthCurrentPasswordWrongTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password is incorrect'**
+  String get errorAuthCurrentPasswordWrongTitle;
+
+  /// No description provided for @errorAuthCurrentPasswordWrongWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The current password you entered doesn\'t match the password on your account.'**
+  String get errorAuthCurrentPasswordWrongWhy;
+
+  /// No description provided for @errorAuthCurrentPasswordWrongNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password and try again.'**
+  String get errorAuthCurrentPasswordWrongNextStep;
+
+  /// No description provided for @errorPasswordSameAsCurrentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New password must differ'**
+  String get errorPasswordSameAsCurrentTitle;
+
+  /// No description provided for @errorPasswordSameAsCurrentWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your new password is the same as your current password.'**
+  String get errorPasswordSameAsCurrentWhy;
+
+  /// No description provided for @errorPasswordSameAsCurrentNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a different password that you haven\'t used recently.'**
+  String get errorPasswordSameAsCurrentNextStep;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your details and keep your account secure.'**
+  String get profileSubtitle;
+
+  /// No description provided for @profileTabPersonalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Info'**
+  String get profileTabPersonalInfo;
+
+  /// No description provided for @profileTabSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get profileTabSecurity;
+
+  /// No description provided for @profileName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get profileName;
+
+  /// No description provided for @profileEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileEmail;
+
+  /// No description provided for @profileRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get profileRole;
+
+  /// No description provided for @profileDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Department'**
+  String get profileDepartment;
+
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since'**
+  String get profileMemberSince;
+
+  /// No description provided for @profileChangePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get profileChangePasswordTitle;
+
+  /// No description provided for @profileCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get profileCurrentPassword;
+
+  /// No description provided for @profileNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get profileNewPassword;
+
+  /// No description provided for @profileConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get profileConfirmPassword;
+
+  /// No description provided for @profileChangePasswordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get profileChangePasswordButton;
+
+  /// No description provided for @profilePasswordChangedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully.'**
+  String get profilePasswordChangedSuccess;
+
+  /// No description provided for @profilePasswordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'New password and confirmation do not match.'**
+  String get profilePasswordsDoNotMatch;
+
+  /// No description provided for @profilePasswordSameAsCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'New password must differ from current password.'**
+  String get profilePasswordSameAsCurrent;
+
+  /// No description provided for @profileCurrentPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password.'**
+  String get profileCurrentPasswordRequired;
+
+  /// No description provided for @profileNewPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a new password.'**
+  String get profileNewPasswordRequired;
+
+  /// No description provided for @profileConfirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your new password.'**
+  String get profileConfirmPasswordRequired;
+
   /// No description provided for @errorUserNotFoundTitle.
   ///
   /// In en, this message translates to:

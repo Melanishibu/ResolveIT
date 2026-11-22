@@ -52,6 +52,16 @@ class AuthorizationHarnessIT {
                 .verify();
     }
 
+    @Test
+    void userProfileEndpointNeedsASession() throws Exception {
+        matrix().endpoint("GET", "/api/v1/users/me")
+                .expect(Role.ADMIN, 200)
+                .expect(Role.SUPPORT_AGENT, 200)
+                .expect(Role.EMPLOYEE, 200)
+                .expectAnonymous(401)
+                .verify();
+    }
+
     private AuthorizationMatrix matrix() {
         return new AuthorizationMatrix(environment.getRequiredProperty("local.server.port", Integer.class));
     }

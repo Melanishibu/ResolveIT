@@ -173,6 +173,16 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorPasswordPolicyViolationWhy,
       nextStep: (l, _) => l.errorPasswordPolicyViolationNextStep,
     ),
+    'AUTH_CURRENT_PASSWORD_WRONG': ErrorCatalogEntry(
+      title: (l, _) => l.errorAuthCurrentPasswordWrongTitle,
+      why: (l, _) => l.errorAuthCurrentPasswordWrongWhy,
+      nextStep: (l, _) => l.errorAuthCurrentPasswordWrongNextStep,
+    ),
+    'PASSWORD_SAME_AS_CURRENT': ErrorCatalogEntry(
+      title: (l, _) => l.errorPasswordSameAsCurrentTitle,
+      why: (l, _) => l.errorPasswordSameAsCurrentWhy,
+      nextStep: (l, _) => l.errorPasswordSameAsCurrentNextStep,
+    ),
     'VALIDATION_FAILED': ErrorCatalogEntry(
       title: (l, _) => l.errorValidationFailedTitle,
       why: (l, p) => l.errorValidationFailedWhy(p('fields')),

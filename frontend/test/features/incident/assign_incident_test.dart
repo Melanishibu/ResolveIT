@@ -30,6 +30,27 @@ void main() {
     expect(find.byKey(const Key('assign-panel')), findsNothing);
   });
 
+  testWidgets('Admin assigns an active agent via the Assign button', (tester) async {
+    final assignment = _FakeAssignment();
+    await _open(tester, Role.admin, [IncidentAction.assign], assignment);
+
+    expect(find.byKey(const Key('incident-assign')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('incident-assign')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('assign-panel')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('assign-agent')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Agent One (agent1@resolveit.local)').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('assign-submit')));
+    await tester.pumpAndSettle();
+
+    expect(assignment.assigned, [('i1', 'a1')]);
+    expect(find.text(l10nEn.assignPanelDone('Agent One')), findsOneWidget);
+    expect(find.byKey(const Key('assign-panel')), findsNothing);
+  });
+
   testWidgets('TC-006 Employee attempts assignment', (tester) async {
     await _open(tester, Role.employee, const [], _FakeAssignment());
 
@@ -64,9 +85,7 @@ void main() {
       IncidentAction.start,
     ], _FakeAssignment());
 
-    await tester.tap(find.byKey(const Key('incident-details-actions')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('incident-action-REASSIGN')));
+    await tester.tap(find.byKey(const Key('incident-reassign')));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('assign-panel')), findsOneWidget);
@@ -85,9 +104,7 @@ void main() {
 }
 
 Future<void> _openPanel(WidgetTester tester) async {
-  await tester.tap(find.byKey(const Key('incident-details-actions')));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const Key('incident-action-ASSIGN')));
+  await tester.tap(find.byKey(const Key('incident-assign')));
   await tester.pumpAndSettle();
 }
 

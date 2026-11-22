@@ -1,12 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/users/data/datasource/users_remote_datasource.dart';
 import 'package:resolveit/features/users/data/repository/api_user_admin_repository.dart';
+import 'package:resolveit/features/users/data/repository/api_user_profile_repository.dart';
 import 'package:resolveit/features/users/domain/repository/user_admin_repository.dart';
 import 'package:resolveit/features/users/domain/repository/user_directory_repository.dart';
+import 'package:resolveit/features/users/domain/repository/user_profile_repository.dart';
 import 'package:resolveit/features/users/domain/usecase/create_user.dart';
+import 'package:resolveit/features/users/domain/usecase/get_my_profile.dart';
 import 'package:resolveit/features/users/domain/usecase/manage_users.dart';
 import 'package:resolveit/features/users/interactor/create_user_interactor.dart';
+import 'package:resolveit/features/users/interactor/profile_interactor.dart';
 import 'package:resolveit/features/users/interactor/user_list_interactor.dart';
 
 /// The HTTP client of the user-management API. The composition root (`lib/app/app.dart`) binds it
@@ -43,5 +48,20 @@ final userListInteractorProvider = Provider<UserListInteractor>((ref) {
   return UserListInteractor(
     ListUsers(repository),
     ChangeUserStatus(repository),
+  );
+});
+
+/// My profile repository (RIT-US-27). Tests override it with a fake.
+final userProfileRepositoryProvider = Provider<UserProfileRepository>(
+  (ref) => ApiUserProfileRepository(
+    UsersRemoteDataSource(ref.watch(usersHttpClientProvider)),
+  ),
+);
+
+/// Profile interactor (RIT-US-27).
+final profileInteractorProvider = Provider<ProfileInteractor>((ref) {
+  return ProfileInteractor(
+    GetMyProfileUseCase(ref.watch(userProfileRepositoryProvider)),
+    ref.watch(changePasswordUseCaseProvider),
   );
 });

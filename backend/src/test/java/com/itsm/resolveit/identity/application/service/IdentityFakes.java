@@ -107,6 +107,11 @@ final class IdentityFakes {
         public void delete(SessionId id) {
             byId.remove(id);
         }
+
+        @Override
+        public void deleteAllExcept(UserId userId, SessionId currentSessionId) {
+            byId.entrySet().removeIf(e -> e.getValue().userId().equals(userId) && !e.getKey().equals(currentSessionId));
+        }
     }
 
     /** "Hashes" are the password itself prefixed with "hash:"; counts dummy checks for the timing rule. */

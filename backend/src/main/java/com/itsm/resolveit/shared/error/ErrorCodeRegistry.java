@@ -108,6 +108,17 @@ public final class ErrorCodeRegistry {
                 "A password needs 12 to 128 characters, at least one letter and one digit, and must not be your"
                         + " email address.",
                 "Choose a password that meets these rules and try again."));
+        // Profile and change password (RIT-US-27).
+        register(new RegisteredErrorCode(
+                "AUTH_CURRENT_PASSWORD_WRONG", 400, Set.of(),
+                "Current password is incorrect",
+                "The current password you entered doesn't match the password on your account.",
+                "Enter your current password and try again."));
+        register(new RegisteredErrorCode(
+                "PASSWORD_SAME_AS_CURRENT", 400, Set.of(),
+                "New password must differ",
+                "Your new password is the same as your current password.",
+                "Choose a different password that you haven't used recently."));
         // User list, activate and deactivate (AB#50).
         register(new RegisteredErrorCode(
                 "USER_NOT_FOUND", 404, Set.of("id"),

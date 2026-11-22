@@ -15,4 +15,7 @@ public interface UserSessionRepository {
 
     /** Ends the session for good (logout). Does nothing if it no longer exists. */
     void delete(SessionId id);
+
+    /** Ends all sessions of the user except the specified session (RIT-US-27, password change). */
+    void deleteAllExcept(com.itsm.resolveit.identity.domain.model.UserId userId, SessionId currentSessionId);
 }

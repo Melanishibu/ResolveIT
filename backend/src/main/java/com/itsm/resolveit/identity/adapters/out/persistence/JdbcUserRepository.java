@@ -23,7 +23,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 public class JdbcUserRepository implements UserRepository {
 
     private static final String COLUMNS =
-            "id, email, display_name, role, department, password_hash, active, failed_login_attempts, locked_until";
+            "id, email, display_name, role, department, password_hash, active, failed_login_attempts, locked_until, created_at";
 
     private final JdbcClient jdbc;
 
@@ -95,6 +95,7 @@ public class JdbcUserRepository implements UserRepository {
 
     private static User toUser(ResultSet row, int rowNumber) throws SQLException {
         OffsetDateTime lockedUntil = row.getObject("locked_until", OffsetDateTime.class);
+        OffsetDateTime createdAt = row.getObject("created_at", OffsetDateTime.class);
         return User.reconstitute(
                 new UserId(row.getObject("id", UUID.class)),
                 new EmailAddress(row.getString("email")),
@@ -104,7 +105,8 @@ public class JdbcUserRepository implements UserRepository {
                 passwordHash(row.getString("password_hash")),
                 row.getBoolean("active"),
                 row.getInt("failed_login_attempts"),
-                lockedUntil == null ? null : lockedUntil.toInstant());
+                lockedUntil == null ? null : lockedUntil.toInstant(),
+                createdAt == null ? null : createdAt.toInstant());
     }
 
     @Override

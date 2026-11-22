@@ -101,6 +101,29 @@ void main() {
 
     expect(find.byKey(const Key('not-allowed-page')), findsOneWidget);
   });
+
+  testWidgets('Cancel returns to user list without creating a user', (
+    tester,
+  ) async {
+    final users = FakeUserAdmin();
+    await _openForm(tester, users);
+
+    await tester.tap(find.byKey(const Key('create-user-cancel')));
+    await tester.pumpAndSettle();
+
+    expect(_router(tester).state.uri.path, '/admin/users');
+    expect(users.created, isEmpty);
+  });
+
+  testWidgets('Back button returns to user list', (tester) async {
+    final users = FakeUserAdmin();
+    await _openForm(tester, users);
+
+    await tester.tap(find.byKey(const Key('create-user-back')));
+    await tester.pumpAndSettle();
+
+    expect(_router(tester).state.uri.path, '/admin/users');
+  });
 }
 
 final class FakeUserAdmin implements UserAdminRepository {
