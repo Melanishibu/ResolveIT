@@ -13,16 +13,27 @@ public interface IncidentListReadModel {
 
     Rows page(Scope scope, Filter filter, int page, int size, SortField sort, boolean ascending);
 
-    /** Optional narrowing inside the scope (RIT-US-21 dashboard cards): empty sets mean "any". */
-    record Filter(java.util.Set<IncidentStatus> statuses, java.util.Set<Priority> priorities) {
+    /** Optional narrowing inside the scope (RIT-US-12 search/filters, RIT-US-21 dashboard cards). */
+    record Filter(
+            String q,
+            java.util.Set<IncidentStatus> statuses,
+            java.util.Set<Priority> priorities,
+            java.util.Set<Category> categories,
+            Instant createdFrom,
+            Instant createdTo) {
 
         public Filter {
             statuses = java.util.Set.copyOf(statuses);
             priorities = java.util.Set.copyOf(priorities);
+            categories = java.util.Set.copyOf(categories);
+        }
+
+        public Filter(java.util.Set<IncidentStatus> statuses, java.util.Set<Priority> priorities) {
+            this(null, statuses, priorities, java.util.Set.of(), null, null);
         }
 
         public static Filter none() {
-            return new Filter(java.util.Set.of(), java.util.Set.of());
+            return new Filter(null, java.util.Set.of(), java.util.Set.of(), java.util.Set.of(), null, null);
         }
     }
 

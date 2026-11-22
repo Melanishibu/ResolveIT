@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:resolveit/features/incident/domain/entity/incident_category.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_list.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_status.dart';
 import 'package:resolveit/features/incident/domain/entity/priority.dart';
@@ -29,11 +30,30 @@ List<RouteBase> incidentRoutes() => [
   ),
 ];
 
-/// The status and priority narrowing in the list URL (`?status=OPEN&priority=CRITICAL`, RIT-US-21); unknown
-/// values are ignored.
+/// The search and filter state in the list URL (RIT-US-12, RIT-US-21); unknown values are ignored.
 IncidentListFilter _filterFrom(Uri uri) {
   final query = uri.queryParametersAll;
+  final q = uri.queryParameters['q'];
+  final dateRangeParam = uri.queryParameters['dateRange'];
+  final dateRange = DateRangeOption.fromCode(dateRangeParam);
+  DateTime? from = uri.queryParameters['createdFrom'] != null
+      ? DateTime.tryParse(uri.queryParameters['createdFrom']!)
+      : null;
+  DateTime? to = uri.queryParameters['createdTo'] != null
+      ? DateTime.tryParse(uri.queryParameters['createdTo']!)
+      : null;
+
+  if (from == null &&
+      to == null &&
+      dateRange != DateRangeOption.allTime &&
+      dateRange != DateRangeOption.custom) {
+    final computed = datesForOption(dateRange);
+    from = computed.$1;
+    to = computed.$2;
+  }
+
   return IncidentListFilter(
+    q: q != null && q.isNotEmpty ? q : null,
     statuses: [
       for (final code in query['status'] ?? const <String>[])
         ...IncidentStatus.values.where((s) => s.code == code),
@@ -42,5 +62,12 @@ IncidentListFilter _filterFrom(Uri uri) {
       for (final code in query['priority'] ?? const <String>[])
         ...Priority.values.where((p) => p.code == code),
     ],
+    categories: [
+      for (final code in query['category'] ?? const <String>[])
+        ...IncidentCategory.values.where((c) => c.code == code),
+    ],
+    createdFrom: from,
+    createdTo: to,
+    dateRange: dateRange,
   );
 }

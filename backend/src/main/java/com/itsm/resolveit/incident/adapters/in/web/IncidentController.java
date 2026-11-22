@@ -8,6 +8,10 @@ import com.itsm.resolveit.incident.domain.model.IncidentNotFoundException;
 import com.itsm.resolveit.incident.application.port.in.ListIncidentsQuery;
 import com.itsm.resolveit.incident.application.port.in.ListIncidentsQuery.SortField;
 import com.itsm.resolveit.incident.application.port.in.ListIncidentsUseCase;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -70,19 +74,26 @@ class IncidentController {
     @GetMapping
     @Operation(summary = "List incidents",
             description = "The incidents the caller may see (Admin all, Agent assigned, Employee own), paged."
-                    + " sort = createdAt|updatedAt|priority|status|ticketNumber,asc|desc (default createdAt,desc).",
+                    + " sort = createdAt|updatedAt|priority|status|ticketNumber,asc|desc (default createdAt,desc)."
+                    + " Filters: q (ticketNumber exact case-insensitive or title substring), status, priority, category,"
+                    + " createdFrom, createdTo (inclusive, ISO dates).",
             security = @SecurityRequirement(name = SESSION_SCHEME))
     @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "400", description = "VALIDATION_FAILED for page, size or sort",
+    @ApiResponse(responseCode = "400", description = "VALIDATION_FAILED for page, size, sort or date range",
             content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
     IncidentListResponse list(Actor actor, @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "20") int size,
                               @RequestParam(defaultValue = "createdAt,desc") String sort,
+                              @RequestParam(name = "q", required = false) String q,
                               @RequestParam(name = "status", required = false) java.util.List<String> status,
-                              @RequestParam(name = "priority", required = false) java.util.List<String> priority) {
+                              @RequestParam(name = "priority", required = false) java.util.List<String> priority,
+                              @RequestParam(name = "category", required = false) java.util.List<String> category,
+                              @RequestParam(name = "createdFrom", required = false) String createdFrom,
+                              @RequestParam(name = "createdTo", required = false) String createdTo) {
         java.util.Set<com.itsm.resolveit.incident.domain.model.IncidentStatus> statuses = enumSet("status", status,
                 com.itsm.resolveit.incident.domain.model.IncidentStatus.class);
         java.util.Set<Priority> priorities = enumSet("priority", priority, Priority.class);
+        java.util.Set<Category> categories = enumSet("category", category, Category.class);
         if (page < 0) {
             throw new InvalidFieldException("page");
         }
@@ -95,8 +106,31 @@ class IncidentController {
             throw new InvalidFieldException("sort");
         }
         boolean ascending = parts.length == 2 && parts[1].equals("asc");
+        Instant from = parseDateParam("createdFrom", createdFrom, false);
+        Instant to = parseDateParam("createdTo", createdTo, true);
+        if (from != null && to != null && from.isAfter(to)) {
+            throw new InvalidFieldException("createdFrom");
+        }
         return IncidentListResponse.of(listIncidents.list(
-                new ListIncidentsQuery(actor, page, size, field, ascending, statuses, priorities)));
+                new ListIncidentsQuery(actor, page, size, field, ascending, q, statuses, priorities, categories, from, to)));
+    }
+
+    private static Instant parseDateParam(String name, String value, boolean endOfDay) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        try {
+            return Instant.parse(value.trim());
+        } catch (DateTimeParseException e1) {
+            try {
+                LocalDate date = LocalDate.parse(value.trim());
+                return endOfDay
+                        ? date.atTime(23, 59, 59, 999_999_999).toInstant(ZoneOffset.UTC)
+                        : date.atStartOfDay().toInstant(ZoneOffset.UTC);
+            } catch (DateTimeParseException e2) {
+                throw new InvalidFieldException(name);
+            }
+        }
     }
 
     @GetMapping("/{id}")

@@ -24,10 +24,18 @@ final class ApiIncidentListRepository implements IncidentListRepository {
           'page': filter.page,
           'size': IncidentListFilter.pageSize,
           'sort': '${filter.sortField.name},$direction',
+          if (filter.q != null && filter.q!.trim().isNotEmpty)
+            'q': filter.q!.trim(),
           if (filter.statuses.isNotEmpty)
             'status': [for (final s in filter.statuses) s.code],
           if (filter.priorities.isNotEmpty)
             'priority': [for (final p in filter.priorities) p.code],
+          if (filter.categories.isNotEmpty)
+            'category': [for (final c in filter.categories) c.code],
+          if (filter.createdFrom != null)
+            'createdFrom': filter.createdFrom!.toUtc().toIso8601String(),
+          if (filter.createdTo != null)
+            'createdTo': filter.createdTo!.toUtc().toIso8601String(),
         },
       );
       final page = incidentPageFromJson(response.data);

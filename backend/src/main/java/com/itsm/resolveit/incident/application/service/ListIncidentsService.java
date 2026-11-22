@@ -28,7 +28,8 @@ public class ListIncidentsService implements ListIncidentsUseCase {
         Viewer viewer = GetIncidentDetailsService.viewerOf(query.actor());
         Scope scope = scopeFor(viewer);
         IncidentListReadModel.Rows rows = readModel.page(scope,
-                new IncidentListReadModel.Filter(query.statuses(), query.priorities()), query.page(), query.size(),
+                new IncidentListReadModel.Filter(query.q(), query.statuses(), query.priorities(), query.categories(),
+                        query.createdFrom(), query.createdTo()), query.page(), query.size(),
                 query.sort(), query.ascending());
         return toPage(query, rows);
     }
