@@ -8,6 +8,8 @@ import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/comments/comments.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_details.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_status.dart';
+import 'package:resolveit/features/incident/domain/entity/priority.dart';
+import 'package:resolveit/features/incident/presentation/presenter/incident_priority_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
@@ -103,8 +105,24 @@ class _Details extends ConsumerWidget {
         AppToast.success(context, l10n.statusReopenedDone);
       }
     });
+    ref.listen(incidentPriorityPresenterProvider(incident.id), (
+      previous,
+      next,
+    ) {
+      final updated = next.updated;
+      if (updated != null && previous?.updated == null) {
+        AppToast.success(
+          context,
+          'Priority changed to ${PriorityChip.labelFor(l10n, updated.priority)}',
+        );
+      }
+    });
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
+    final priorityState = ref.watch(
+      incidentPriorityPresenterProvider(incident.id),
+    );
+    final priorityFailure = priorityState.failure;
     final assignState = ref.watch(assignIncidentPresenterProvider(incident.id));
     final commentCount = ref
         .watch(incidentCommentsPresenterProvider(incident.id))
@@ -224,6 +242,13 @@ class _Details extends ConsumerWidget {
           ErrorPanel(key: const Key('status-error'), failure: statusFailure),
           SizedBox(height: spacing.l),
         ],
+        if (priorityFailure != null) ...[
+          ErrorPanel(
+            key: const Key('priority-error'),
+            failure: priorityFailure,
+          ),
+          SizedBox(height: spacing.l),
+        ],
         AssignIncidentPanel(incidentId: incident.id),
         ResolveIncidentPanel(incidentId: incident.id),
         ReopenIncidentPanel(incidentId: incident.id),
@@ -251,13 +276,13 @@ class _Details extends ConsumerWidget {
   }
 }
 
-class _Overview extends StatelessWidget {
+class _Overview extends ConsumerWidget {
   const _Overview({required this.incident});
 
   final IncidentDetails incident;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final spacing = context.spacing;
     final local = MaterialLocalizations.of(context);
@@ -270,7 +295,34 @@ class _Overview extends StatelessWidget {
         l10n.incidentDetailsCategory,
         Text(categoryLabel(l10n, incident.category)),
       ),
-      (l10n.incidentDetailsPriority, PriorityChip(incident.priority)),
+      (
+        l10n.incidentDetailsPriority,
+        incident.allowedActions.contains(IncidentAction.changePriority)
+            ? SizedBox(
+                width: 160,
+                child: AppDropdown<Priority>(
+                  key: const Key('incident-change-priority'),
+                  label: l10n.incidentDetailsPriority,
+                  value: incident.priority,
+                  options: [
+                    for (final p in Priority.values)
+                      AppDropdownOption(p, PriorityChip.labelFor(l10n, p)),
+                  ],
+                  onChanged: (p) {
+                    if (p != null && p != incident.priority) {
+                      ref
+                          .read(
+                            incidentPriorityPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .changePriority(p);
+                    }
+                  },
+                ),
+              )
+            : PriorityChip(incident.priority),
+      ),
       (l10n.incidentDetailsStatus, StatusChip(incident.status)),
       (
         l10n.incidentDetailsCreatedBy,
@@ -377,4 +429,5 @@ bool _isAvailable(IncidentAction action) =>
     action == IncidentAction.start ||
     action == IncidentAction.resolve ||
     action == IncidentAction.close ||
-    action == IncidentAction.reopen;
+    action == IncidentAction.reopen ||
+    action == IncidentAction.changePriority;

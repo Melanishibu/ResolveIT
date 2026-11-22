@@ -68,6 +68,14 @@ class IncidentWebConfig {
     }
 
     @Bean
+    com.itsm.resolveit.incident.application.port.in.ChangeIncidentPriorityUseCase changeIncidentPriorityUseCase(
+            IncidentRepository incidents, IncidentAuditLog auditLog, GetIncidentDetailsUseCase details,
+            ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.incident.application.service.ChangeIncidentPriorityService(incidents, auditLog,
+                details, clock.getIfAvailable(Clock::systemUTC));
+    }
+
+    @Bean
     com.itsm.resolveit.incident.application.port.in.GetIncidentHistoryUseCase getIncidentHistoryUseCase(
             IncidentRepository incidents, IncidentAuditLog auditLog, UserDirectory users) {
         return new com.itsm.resolveit.incident.application.service.GetIncidentHistoryService(incidents, auditLog, users);
