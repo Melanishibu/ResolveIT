@@ -812,6 +812,44 @@ class AppLocalizationsEn extends AppLocalizations {
       'The history arrives in a later release.';
 
   @override
+  String get incidentHistoryEmpty => 'No history entries yet.';
+
+  @override
+  String get incidentHistoryActionCreated => 'Incident created';
+
+  @override
+  String get incidentHistoryActionAssigned => 'Status: Open → Assigned';
+
+  @override
+  String get incidentHistoryActionReassigned => 'Assignee changed';
+
+  @override
+  String get incidentHistoryActionStarted => 'Status: Assigned → In progress';
+
+  @override
+  String get incidentHistoryActionResolved => 'Status: In progress → Resolved';
+
+  @override
+  String get incidentHistoryActionReopened => 'Status: Resolved → In progress';
+
+  @override
+  String get incidentHistoryActionClosed => 'Status: Resolved → Closed';
+
+  @override
+  String get incidentHistoryActionPriorityChanged => 'Priority changed';
+
+  @override
+  String get incidentTimelineTitle => 'Activity Timeline';
+
+  @override
+  String get incidentTimelineViewAll => 'View all';
+
+  @override
+  String incidentHistoryBy(String actor) {
+    return 'by $actor';
+  }
+
+  @override
   String get incidentActionAssign => 'Assign';
 
   @override

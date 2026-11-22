@@ -113,7 +113,8 @@ class AppDataTable<T> extends StatelessWidget {
                   for (final row in rows)
                     DataRow(
                       cells: [
-                        for (final column in columns) DataCell(column.cell(row)),
+                        for (final column in columns)
+                          DataCell(column.cell(row)),
                         if (action != null)
                           DataCell(
                             AppButton(

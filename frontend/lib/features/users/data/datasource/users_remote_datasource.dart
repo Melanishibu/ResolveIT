@@ -47,7 +47,8 @@ final class UsersRemoteDataSource {
       )).data;
 
   /// `GET /users/me` (RIT-US-27): profile of the logged-in user.
-  Future<Object?> getMyProfile() async => (await _dio.get<Object?>('/users/me')).data;
+  Future<Object?> getMyProfile() async =>
+      (await _dio.get<Object?>('/users/me')).data;
 }
 
 /// Data model: maps the API's created user; null when the body is not usable.

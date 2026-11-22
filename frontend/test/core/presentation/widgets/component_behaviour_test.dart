@@ -56,24 +56,29 @@ void main() {
     expect(chosen, 'NETWORK');
   });
 
-  testWidgets('AppDropdown with a null value option keeps the field non-empty so label floats', (tester) async {
-    await tester.pumpWidget(
-      componentTestApp(
-        AppDropdown<String?>(
-          label: 'Role',
-          value: null,
-          options: const [
-            AppDropdownOption(null, 'All Roles'),
-            AppDropdownOption('ADMIN', 'Admin'),
-          ],
-          onChanged: (_) {},
+  testWidgets(
+    'AppDropdown with a null value option keeps the field non-empty so label floats',
+    (tester) async {
+      await tester.pumpWidget(
+        componentTestApp(
+          AppDropdown<String?>(
+            label: 'Role',
+            value: null,
+            options: const [
+              AppDropdownOption(null, 'All Roles'),
+              AppDropdownOption('ADMIN', 'Admin'),
+            ],
+            onChanged: (_) {},
+          ),
         ),
-      ),
-    );
-    final decorator = tester.widget<InputDecorator>(find.byType(InputDecorator));
-    expect(decorator.isEmpty, isFalse);
-    expect(find.text('All Roles'), findsOneWidget);
-  });
+      );
+      final decorator = tester.widget<InputDecorator>(
+        find.byType(InputDecorator),
+      );
+      expect(decorator.isEmpty, isFalse);
+      expect(find.text('All Roles'), findsOneWidget);
+    },
+  );
 
   testWidgets('showConfirmDialog returns true on confirm and false on cancel', (
     tester,

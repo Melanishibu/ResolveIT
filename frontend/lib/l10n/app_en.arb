@@ -329,6 +329,25 @@
   "incidentDetailsNone": "—",
   "incidentDetailsCommentsLater": "Comments arrive in a later release.",
   "incidentDetailsHistoryLater": "The history arrives in a later release.",
+  "incidentHistoryEmpty": "No history entries yet.",
+  "incidentHistoryActionCreated": "Incident created",
+  "incidentHistoryActionAssigned": "Status: Open → Assigned",
+  "incidentHistoryActionReassigned": "Assignee changed",
+  "incidentHistoryActionStarted": "Status: Assigned → In progress",
+  "incidentHistoryActionResolved": "Status: In progress → Resolved",
+  "incidentHistoryActionReopened": "Status: Resolved → In progress",
+  "incidentHistoryActionClosed": "Status: Resolved → Closed",
+  "incidentHistoryActionPriorityChanged": "Priority changed",
+  "incidentTimelineTitle": "Activity Timeline",
+  "incidentTimelineViewAll": "View all",
+  "incidentHistoryBy": "by {actor}",
+  "@incidentHistoryBy": {
+    "placeholders": {
+      "actor": {
+        "type": "String"
+      }
+    }
+  },
   "incidentActionAssign": "Assign",
   "incidentActionReassign": "Reassign",
   "incidentActionStart": "Start work",

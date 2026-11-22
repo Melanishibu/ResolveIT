@@ -1,1 +1,1 @@
-[{"name":"com.itsm.resolveit.identity.adapters.in.web.ProfileAndChangePasswordIT","comment":"RIT-US-27 backend Gherkin scenarios for My Profile and Change Password."}]
+[{"name":"com.itsm.resolveit.incident.adapters.in.web.IncidentHistoryIT","comment":"RIT-US-13 (AB#41) backend Gherkin scenarios for incident history."}]

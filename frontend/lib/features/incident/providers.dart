@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_history_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_history_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/get_incident_history.dart';
+import 'package:resolveit/features/incident/interactor/incident_history_interactor.dart';
 import 'package:resolveit/features/incident/domain/repository/incident_transition_repository.dart';
 import 'package:resolveit/features/incident/domain/usecase/resolve_incident.dart';
 import 'package:resolveit/features/incident/data/repository/api_incident_status_repository.dart';
@@ -42,6 +46,18 @@ final incidentRepositoryProvider = Provider<IncidentRepository>(
 /// One incident from the backend (RIT-US-10). Tests override it with a fake.
 final incidentDetailsRepositoryProvider = Provider<IncidentDetailsRepository>(
   (ref) => ApiIncidentDetailsRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// Incident history from the backend (RIT-US-13). Tests override it with a fake.
+final incidentHistoryRepositoryProvider = Provider<IncidentHistoryRepository>(
+  (ref) => ApiIncidentHistoryRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// What the incident history presenter calls.
+final incidentHistoryInteractorProvider = Provider<IncidentHistoryInteractor>(
+  (ref) => IncidentHistoryInteractor(
+    GetIncidentHistory(ref.watch(incidentHistoryRepositoryProvider)),
+  ),
 );
 
 /// What the incident details presenter calls.
