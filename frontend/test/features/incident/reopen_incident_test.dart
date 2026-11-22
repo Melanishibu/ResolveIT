@@ -58,14 +58,31 @@ void main() {
   testWidgets('Other employees cannot reopen', (tester) async {
     await _open(tester, Role.employee, const [], _FakeTransitions());
 
+    expect(find.byKey(const Key('incident-reopen')), findsNothing);
     expect(find.byKey(const Key('incident-details-actions')), findsNothing);
   });
+
+  testWidgets(
+    'Technician sees Reopen button in header instead of actions menu',
+    (tester) async {
+      await _open(tester, Role.supportAgent, [
+        IncidentAction.reopen,
+      ], _FakeTransitions());
+
+      expect(find.byKey(const Key('incident-reopen')), findsOneWidget);
+      expect(find.byKey(const Key('incident-details-actions')), findsNothing);
+    },
+  );
 }
 
 Future<void> _reopen(WidgetTester tester, String reason) async {
-  await tester.tap(find.byKey(const Key('incident-details-actions')));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const Key('incident-action-REOPEN')));
+  if (find.byKey(const Key('incident-reopen')).evaluate().isNotEmpty) {
+    await tester.tap(find.byKey(const Key('incident-reopen')));
+  } else {
+    await tester.tap(find.byKey(const Key('incident-details-actions')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('incident-action-REOPEN')));
+  }
   await tester.pumpAndSettle();
   await tester.enterText(
     find.descendant(

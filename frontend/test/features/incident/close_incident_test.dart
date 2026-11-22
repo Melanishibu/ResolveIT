@@ -35,6 +35,18 @@ void main() {
   testWidgets('Agent cannot close', (tester) async {
     await _open(tester, Role.supportAgent, const [], _FakeTransitions());
 
+    expect(find.byKey(const Key('incident-close')), findsNothing);
+    expect(find.byKey(const Key('incident-details-actions')), findsNothing);
+  });
+
+  testWidgets('Employee sees Close button in header instead of actions menu', (
+    tester,
+  ) async {
+    await _open(tester, Role.employee, [
+      IncidentAction.close,
+    ], _FakeTransitions());
+
+    expect(find.byKey(const Key('incident-close')), findsOneWidget);
     expect(find.byKey(const Key('incident-details-actions')), findsNothing);
   });
 
@@ -58,9 +70,13 @@ void main() {
 }
 
 Future<void> _close(WidgetTester tester) async {
-  await tester.tap(find.byKey(const Key('incident-details-actions')));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const Key('incident-action-CLOSE')));
+  if (find.byKey(const Key('incident-close')).evaluate().isNotEmpty) {
+    await tester.tap(find.byKey(const Key('incident-close')));
+  } else {
+    await tester.tap(find.byKey(const Key('incident-details-actions')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('incident-action-CLOSE')));
+  }
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('confirm-dialog-confirm')));
   await tester.pumpAndSettle();

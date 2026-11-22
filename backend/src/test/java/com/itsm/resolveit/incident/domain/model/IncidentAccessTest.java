@@ -21,6 +21,8 @@ class IncidentAccessTest {
         assertThat(incident(IncidentStatus.OPEN).allowedActionsFor(reporter)).isEmpty();
         assertThat(incident(IncidentStatus.OPEN).allowedActionsFor(admin))
                 .containsExactlyInAnyOrder(IncidentAction.ASSIGN, IncidentAction.CHANGE_PRIORITY);
+        assertThat(incident(IncidentStatus.ASSIGNED).allowedActionsFor(admin))
+                .containsExactlyInAnyOrder(IncidentAction.REASSIGN, IncidentAction.CHANGE_PRIORITY);
         assertThat(incident(IncidentStatus.CLOSED).allowedActionsFor(admin)).isEmpty();
     }
 

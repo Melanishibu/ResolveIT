@@ -8,12 +8,12 @@ import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/comments/comments.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_details.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_status.dart';
-import 'package:resolveit/features/incident/domain/entity/priority.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_priority_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_details_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/assign_incident_presenter.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_status_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
+import 'package:resolveit/features/incident/presentation/view/change_priority_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/resolve_incident_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/reopen_incident_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/incident_history_tab.dart';
@@ -117,6 +117,10 @@ class _Details extends ConsumerWidget {
         );
       }
     });
+    final role = ref.watch(sessionProvider).value?.role;
+    final canStartWork =
+        incident.allowedActions.contains(IncidentAction.start) &&
+        role != Role.admin;
     final statusState = ref.watch(incidentStatusPresenterProvider(incident.id));
     final statusFailure = statusState.failure;
     final priorityState = ref.watch(
@@ -150,6 +154,10 @@ class _Details extends ConsumerWidget {
       if (action == IncidentAction.assign ||
           action == IncidentAction.reassign) {
         ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
+      } else if (action == IncidentAction.changePriority) {
+        ref
+            .read(incidentPriorityPresenterProvider(incident.id).notifier)
+            .open(incident.priority);
       } else if (action == IncidentAction.reopen) {
         ref
             .read(incidentStatusPresenterProvider(incident.id).notifier)
@@ -170,7 +178,11 @@ class _Details extends ConsumerWidget {
           (a) =>
               a != IncidentAction.start &&
               a != IncidentAction.assign &&
-              a != IncidentAction.reassign,
+              a != IncidentAction.reassign &&
+              a != IncidentAction.changePriority &&
+              a != IncidentAction.resolve &&
+              a != IncidentAction.reopen &&
+              a != IncidentAction.close,
         )
         .toList();
 
@@ -199,13 +211,69 @@ class _Details extends ConsumerWidget {
                 isLoading: assignState.isSaving,
                 onPressed: assignState.isSaving ? null : openAssign,
               ),
-            if (incident.allowedActions.contains(IncidentAction.start))
+            if (incident.allowedActions.contains(IncidentAction.changePriority))
+              AppButton(
+                key: const Key('incident-change-priority-btn'),
+                label: l10n.incidentActionChangePriority,
+                icon: Icons.flag_outlined,
+                isLoading: priorityState.isSaving,
+                onPressed: priorityState.isSaving
+                    ? null
+                    : () => ref
+                          .read(
+                            incidentPriorityPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .open(incident.priority),
+              ),
+            if (canStartWork)
               AppButton(
                 key: const Key('incident-start-work'),
                 label: l10n.incidentActionStart,
                 icon: Icons.play_arrow,
                 isLoading: statusState.isSaving,
                 onPressed: statusState.isSaving ? null : startWork,
+              ),
+            if (incident.allowedActions.contains(IncidentAction.resolve))
+              AppButton(
+                key: const Key('incident-resolve'),
+                label: l10n.incidentActionResolve,
+                icon: Icons.check_circle_outline,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving
+                    ? null
+                    : () => ref
+                          .read(
+                            incidentStatusPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .openResolve(),
+              ),
+            if (incident.allowedActions.contains(IncidentAction.reopen))
+              AppButton(
+                key: const Key('incident-reopen'),
+                label: l10n.incidentActionReopen,
+                icon: Icons.replay,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving
+                    ? null
+                    : () => ref
+                          .read(
+                            incidentStatusPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .openReopen(),
+              ),
+            if (incident.allowedActions.contains(IncidentAction.close))
+              AppButton(
+                key: const Key('incident-close'),
+                label: l10n.incidentActionClose,
+                icon: Icons.check,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving ? null : confirmClose,
               ),
             if (menuActions.where(_isAvailable).isNotEmpty)
               PopupMenuButton<IncidentAction>(
@@ -242,13 +310,14 @@ class _Details extends ConsumerWidget {
           ErrorPanel(key: const Key('status-error'), failure: statusFailure),
           SizedBox(height: spacing.l),
         ],
-        if (priorityFailure != null) ...[
+        if (priorityFailure != null && !priorityState.isOpen) ...[
           ErrorPanel(
             key: const Key('priority-error'),
             failure: priorityFailure,
           ),
           SizedBox(height: spacing.l),
         ],
+        ChangePriorityPanel(incident: incident),
         AssignIncidentPanel(incidentId: incident.id),
         ResolveIncidentPanel(incidentId: incident.id),
         ReopenIncidentPanel(incidentId: incident.id),
@@ -276,13 +345,13 @@ class _Details extends ConsumerWidget {
   }
 }
 
-class _Overview extends ConsumerWidget {
+class _Overview extends StatelessWidget {
   const _Overview({required this.incident});
 
   final IncidentDetails incident;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final spacing = context.spacing;
     final local = MaterialLocalizations.of(context);
@@ -295,34 +364,7 @@ class _Overview extends ConsumerWidget {
         l10n.incidentDetailsCategory,
         Text(categoryLabel(l10n, incident.category)),
       ),
-      (
-        l10n.incidentDetailsPriority,
-        incident.allowedActions.contains(IncidentAction.changePriority)
-            ? SizedBox(
-                width: 160,
-                child: AppDropdown<Priority>(
-                  key: const Key('incident-change-priority'),
-                  label: l10n.incidentDetailsPriority,
-                  value: incident.priority,
-                  options: [
-                    for (final p in Priority.values)
-                      AppDropdownOption(p, PriorityChip.labelFor(l10n, p)),
-                  ],
-                  onChanged: (p) {
-                    if (p != null && p != incident.priority) {
-                      ref
-                          .read(
-                            incidentPriorityPresenterProvider(
-                              incident.id,
-                            ).notifier,
-                          )
-                          .changePriority(p);
-                    }
-                  },
-                ),
-              )
-            : PriorityChip(incident.priority),
-      ),
+      (l10n.incidentDetailsPriority, PriorityChip(incident.priority)),
       (l10n.incidentDetailsStatus, StatusChip(incident.status)),
       (
         l10n.incidentDetailsCreatedBy,

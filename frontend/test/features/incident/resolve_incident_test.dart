@@ -52,14 +52,31 @@ void main() {
   testWidgets('Employee cannot resolve', (tester) async {
     await _open(tester, Role.employee, const [], _FakeTransitions());
 
+    expect(find.byKey(const Key('incident-resolve')), findsNothing);
     expect(find.byKey(const Key('incident-details-actions')), findsNothing);
   });
+
+  testWidgets(
+    'Technician sees Resolve button in header instead of actions menu',
+    (tester) async {
+      await _open(tester, Role.supportAgent, [
+        IncidentAction.resolve,
+      ], _FakeTransitions());
+
+      expect(find.byKey(const Key('incident-resolve')), findsOneWidget);
+      expect(find.byKey(const Key('incident-details-actions')), findsNothing);
+    },
+  );
 }
 
 Future<void> _resolve(WidgetTester tester, String notes) async {
-  await tester.tap(find.byKey(const Key('incident-details-actions')));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const Key('incident-action-RESOLVE')));
+  if (find.byKey(const Key('incident-resolve')).evaluate().isNotEmpty) {
+    await tester.tap(find.byKey(const Key('incident-resolve')));
+  } else {
+    await tester.tap(find.byKey(const Key('incident-details-actions')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('incident-action-RESOLVE')));
+  }
   await tester.pumpAndSettle();
   await tester.enterText(
     find.descendant(
