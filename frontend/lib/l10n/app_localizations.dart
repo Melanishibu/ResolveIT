@@ -1438,6 +1438,102 @@ abstract class AppLocalizations {
   /// **'Incident reopened. It is In Progress again.'**
   String get statusReopenedDone;
 
+  /// No description provided for @dashboardAdminTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator Dashboard'**
+  String get dashboardAdminTitle;
+
+  /// No description provided for @dashboardTechnicianTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Technician Dashboard'**
+  String get dashboardTechnicianTitle;
+
+  /// No description provided for @dashboardEmployeeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your incidents at a glance'**
+  String get dashboardEmployeeTitle;
+
+  /// No description provided for @dashboardTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get dashboardTotal;
+
+  /// No description provided for @dashboardRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get dashboardRecentActivity;
+
+  /// No description provided for @dashboardRecentAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Assigned Incidents'**
+  String get dashboardRecentAssigned;
+
+  /// No description provided for @dashboardNoActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent activity yet.'**
+  String get dashboardNoActivity;
+
+  /// No description provided for @dashboardNoAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'No incidents are assigned to you yet.'**
+  String get dashboardNoAssigned;
+
+  /// No description provided for @activityCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get activityCreated;
+
+  /// No description provided for @activityAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned'**
+  String get activityAssigned;
+
+  /// No description provided for @activityReassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Reassigned'**
+  String get activityReassigned;
+
+  /// No description provided for @activityStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Work started'**
+  String get activityStarted;
+
+  /// No description provided for @activityResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get activityResolved;
+
+  /// No description provided for @activityReopened.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopened'**
+  String get activityReopened;
+
+  /// No description provided for @activityClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get activityClosed;
+
+  /// No description provided for @activityPriorityChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority changed'**
+  String get activityPriorityChanged;
+
   /// No description provided for @reopenPanelTitle.
   ///
   /// In en, this message translates to:

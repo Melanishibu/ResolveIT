@@ -10,6 +10,7 @@ import 'package:resolveit/app/router/app_router.dart';
 import 'package:resolveit/app/theme/app_theme.dart';
 import 'package:resolveit/features/auth/auth.dart';
 import 'package:resolveit/features/comments/comments.dart';
+import 'package:resolveit/features/dashboard/dashboard.dart';
 import 'package:resolveit/features/incident/incident.dart';
 import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
@@ -28,6 +29,9 @@ class ResolveItApp extends StatelessWidget {
         (ref) => ref.watch(apiClientProvider),
       ),
       usersHttpClientProvider.overrideWith(
+        (ref) => ref.watch(apiClientProvider),
+      ),
+      dashboardHttpClientProvider.overrideWith(
         (ref) => ref.watch(apiClientProvider),
       ),
       commentsHttpClientProvider.overrideWith(

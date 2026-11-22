@@ -20,6 +20,12 @@ import org.springframework.context.annotation.Configuration;
 class IncidentWebConfig {
 
     @Bean
+    com.itsm.resolveit.incident.application.port.in.DashboardUseCase dashboardUseCase(
+            com.itsm.resolveit.incident.application.port.out.DashboardReadModel readModel, UserDirectory users) {
+        return new com.itsm.resolveit.incident.application.service.DashboardService(readModel, users);
+    }
+
+    @Bean
     GetIncidentDetailsUseCase getIncidentDetailsUseCase(IncidentRepository incidents, UserDirectory users) {
         return new GetIncidentDetailsService(incidents, users);
     }

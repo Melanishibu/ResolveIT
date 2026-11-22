@@ -26,13 +26,23 @@ public class ListIncidentsService implements ListIncidentsUseCase {
     @Override
     public IncidentListPage list(ListIncidentsQuery query) {
         Viewer viewer = GetIncidentDetailsService.viewerOf(query.actor());
-        Scope scope = switch (viewer.role()) {
+        Scope scope = scopeFor(viewer);
+        IncidentListReadModel.Rows rows = readModel.page(scope,
+                new IncidentListReadModel.Filter(query.statuses(), query.priorities()), query.page(), query.size(),
+                query.sort(), query.ascending());
+        return toPage(query, rows);
+    }
+
+    /** The "See incidents" row of the permission table as a read-model scope (also used by the dashboard). */
+    static Scope scopeFor(Viewer viewer) {
+        return switch (viewer.role()) {
             case ADMIN -> Scope.all();
             case EMPLOYEE -> Scope.createdBy(viewer.userId());
             case SUPPORT_AGENT -> Scope.assignedTo(viewer.userId());
         };
-        IncidentListReadModel.Rows rows = readModel.page(scope, query.page(), query.size(), query.sort(),
-                query.ascending());
+    }
+
+    private IncidentListPage toPage(ListIncidentsQuery query, IncidentListReadModel.Rows rows) {
         return new IncidentListPage(rows.rows().stream()
                 .map(row -> new IncidentListPage.Item(row.id(), row.ticketNumber(), row.title(), row.category(),
                         row.priority(), row.status(),

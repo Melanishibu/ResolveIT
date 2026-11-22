@@ -77,7 +77,12 @@ class IncidentController {
             content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
     IncidentListResponse list(Actor actor, @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "20") int size,
-                              @RequestParam(defaultValue = "createdAt,desc") String sort) {
+                              @RequestParam(defaultValue = "createdAt,desc") String sort,
+                              @RequestParam(name = "status", required = false) java.util.List<String> status,
+                              @RequestParam(name = "priority", required = false) java.util.List<String> priority) {
+        java.util.Set<com.itsm.resolveit.incident.domain.model.IncidentStatus> statuses = enumSet("status", status,
+                com.itsm.resolveit.incident.domain.model.IncidentStatus.class);
+        java.util.Set<Priority> priorities = enumSet("priority", priority, Priority.class);
         if (page < 0) {
             throw new InvalidFieldException("page");
         }
@@ -90,7 +95,8 @@ class IncidentController {
             throw new InvalidFieldException("sort");
         }
         boolean ascending = parts.length == 2 && parts[1].equals("asc");
-        return IncidentListResponse.of(listIncidents.list(new ListIncidentsQuery(actor, page, size, field, ascending)));
+        return IncidentListResponse.of(listIncidents.list(
+                new ListIncidentsQuery(actor, page, size, field, ascending, statuses, priorities)));
     }
 
     @GetMapping("/{id}")
@@ -158,6 +164,17 @@ class IncidentController {
         return IncidentDetailsResponse.of(changeStatus.changeStatus(
                 new com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusCommand(actor,
                         new IncidentId(incidentId(id)), target, request.resolutionNotes(), request.reason())));
+    }
+
+    /** Repeatable enum query parameter (for example {@code status=OPEN&status=ASSIGNED}); unknown values are 400. */
+    private static <E extends Enum<E>> java.util.Set<E> enumSet(String name, java.util.List<String> values,
+                                                                Class<E> type) {
+        if (values == null) {
+            return java.util.Set.of();
+        }
+        return values.stream()
+                .map(value -> field(name, () -> Enum.valueOf(type, value)))
+                .collect(java.util.stream.Collectors.toUnmodifiableSet());
     }
 
     /** A malformed id is answered as not found, like an unknown one. */

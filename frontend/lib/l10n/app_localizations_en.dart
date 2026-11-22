@@ -781,6 +781,54 @@ class AppLocalizationsEn extends AppLocalizations {
       'Incident reopened. It is In Progress again.';
 
   @override
+  String get dashboardAdminTitle => 'Administrator Dashboard';
+
+  @override
+  String get dashboardTechnicianTitle => 'Technician Dashboard';
+
+  @override
+  String get dashboardEmployeeTitle => 'Your incidents at a glance';
+
+  @override
+  String get dashboardTotal => 'Total';
+
+  @override
+  String get dashboardRecentActivity => 'Recent Activity';
+
+  @override
+  String get dashboardRecentAssigned => 'Recent Assigned Incidents';
+
+  @override
+  String get dashboardNoActivity => 'No recent activity yet.';
+
+  @override
+  String get dashboardNoAssigned => 'No incidents are assigned to you yet.';
+
+  @override
+  String get activityCreated => 'Created';
+
+  @override
+  String get activityAssigned => 'Assigned';
+
+  @override
+  String get activityReassigned => 'Reassigned';
+
+  @override
+  String get activityStarted => 'Work started';
+
+  @override
+  String get activityResolved => 'Resolved';
+
+  @override
+  String get activityReopened => 'Reopened';
+
+  @override
+  String get activityClosed => 'Closed';
+
+  @override
+  String get activityPriorityChanged => 'Priority changed';
+
+  @override
   String get reopenPanelTitle => 'Reopen this incident';
 
   @override

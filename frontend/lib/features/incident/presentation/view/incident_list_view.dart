@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/dashboard/dashboard.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_list.dart';
 import 'package:resolveit/features/incident/presentation/presenter/incident_list_presenter.dart';
 import 'package:resolveit/features/incident/presentation/view/incident_details_view.dart';
@@ -17,7 +18,13 @@ import 'package:resolveit/l10n/app_localizations.dart';
 /// Technicians (assigned to them) and Employees (their own). The backend scopes the rows; newest first,
 /// 20 per page, sortable columns; a row opens the incident's details.
 class IncidentListView extends ConsumerWidget {
-  const IncidentListView({super.key});
+  const IncidentListView({
+    super.key,
+    this.initialFilter = const IncidentListFilter(),
+  });
+
+  /// The status and priority narrowing from the URL (dashboard cards, RIT-US-21).
+  final IncidentListFilter initialFilter;
 
   static const adminPath = '/incidents';
   static const ownPath = '/my-incidents';
@@ -28,8 +35,10 @@ class IncidentListView extends ConsumerWidget {
     final spacing = context.spacing;
     final local = MaterialLocalizations.of(context);
     final role = ref.watch(sessionProvider).value?.role;
-    final state = ref.watch(incidentListPresenterProvider);
-    final presenter = ref.read(incidentListPresenterProvider.notifier);
+    final state = ref.watch(incidentListPresenterProvider(initialFilter));
+    final presenter = ref.read(
+      incidentListPresenterProvider(initialFilter).notifier,
+    );
     final page = state.page;
     final failure = state.failure;
 
@@ -57,6 +66,7 @@ class IncidentListView extends ConsumerWidget {
           ],
         ),
         SizedBox(height: spacing.l),
+        if (role != null) IncidentCountCards(role: role),
         if (failure != null) ...[
           ErrorPanel(key: const Key('incident-list-error'), failure: failure),
           SizedBox(height: spacing.l),

@@ -5,12 +5,15 @@ import 'package:resolveit/features/incident/domain/entity/priority.dart';
 /// The list's sortable columns; [name] is the API's `sort` field (RIT-US-11).
 enum IncidentSortField { ticketNumber, priority, status, createdAt, updatedAt }
 
-/// Page and sort of the incident list (RIT-US-11). Default: newest first, 20 per page.
+/// Page, sort and optional status/priority narrowing of the incident list (RIT-US-11; the narrowing comes from the
+/// dashboard cards, RIT-US-21). Default: newest first, 20 per page, every status and priority.
 final class IncidentListFilter {
   const IncidentListFilter({
     this.page = 0,
     this.sortField = IncidentSortField.createdAt,
     this.ascending = false,
+    this.statuses = const [],
+    this.priorities = const [],
   });
 
   static const pageSize = 20;
@@ -18,6 +21,12 @@ final class IncidentListFilter {
   final int page;
   final IncidentSortField sortField;
   final bool ascending;
+
+  /// Empty = every status.
+  final List<IncidentStatus> statuses;
+
+  /// Empty = every priority.
+  final List<Priority> priorities;
 
   IncidentListFilter copyWith({
     int? page,
@@ -27,6 +36,8 @@ final class IncidentListFilter {
     page: page ?? this.page,
     sortField: sortField ?? this.sortField,
     ascending: ascending ?? this.ascending,
+    statuses: statuses,
+    priorities: priorities,
   );
 
   @override
@@ -34,10 +45,21 @@ final class IncidentListFilter {
       other is IncidentListFilter &&
       other.page == page &&
       other.sortField == sortField &&
-      other.ascending == ascending;
+      other.ascending == ascending &&
+      _sameItems(other.statuses, statuses) &&
+      _sameItems(other.priorities, priorities);
 
   @override
-  int get hashCode => Object.hash(page, sortField, ascending);
+  int get hashCode => Object.hash(
+    page,
+    sortField,
+    ascending,
+    Object.hashAllUnordered(statuses),
+    Object.hashAllUnordered(priorities),
+  );
+
+  static bool _sameItems<T>(List<T> a, List<T> b) =>
+      a.length == b.length && a.toSet().containsAll(b);
 }
 
 /// One row of the incident list.
