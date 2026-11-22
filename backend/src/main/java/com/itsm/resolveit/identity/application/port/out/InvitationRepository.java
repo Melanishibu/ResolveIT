@@ -2,6 +2,8 @@ package com.itsm.resolveit.identity.application.port.out;
 
 import com.itsm.resolveit.identity.domain.model.Invitation;
 import com.itsm.resolveit.identity.domain.model.InvitationId;
+import com.itsm.resolveit.identity.domain.model.UserId;
+import java.time.Instant;
 import java.util.Optional;
 
 /** Repository of the {@link Invitation} aggregate. */
@@ -18,4 +20,7 @@ public interface InvitationRepository {
      * same hash waits until the first one commits (single use, RIT-US-07).
      */
     Optional<Invitation> findByTokenHash(String tokenHash);
+
+    /** Invalidates all pending invitations for this user (RIT-US-22, RIT-US-23). */
+    void invalidatePending(UserId userId, Instant now);
 }

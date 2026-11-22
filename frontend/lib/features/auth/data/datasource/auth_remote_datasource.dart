@@ -47,6 +47,10 @@ final class AuthRemoteDataSource {
     '/auth/password/change',
     data: {'currentPassword': currentPassword, 'newPassword': newPassword},
   );
+
+  /// `POST /auth/password/forgot` (RIT-US-23).
+  Future<void> requestPasswordReset(String email) =>
+      _dio.post<Object?>('/auth/password/forgot', data: {'email': email});
 }
 
 /// Data model: maps the API's `{id, name, email, role}` to a [CurrentUser]; null when the body is

@@ -273,6 +273,13 @@ final class FakePasswords implements PasswordRepository {
     changeCalls.add((currentPassword, newPassword));
     return const Success(null);
   }
+
+  @override
+  Future<Result<void>> requestPasswordReset(String email) async {
+    final refused = failure;
+    if (refused != null) return Failure(refused);
+    return const Success(null);
+  }
 }
 
 Future<void> _openProfile(

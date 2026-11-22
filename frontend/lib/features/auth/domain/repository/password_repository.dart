@@ -12,4 +12,7 @@ abstract interface class PasswordRepository {
     required String currentPassword,
     required String newPassword,
   });
+
+  /// Contract: request a password reset link by email (`POST /auth/password/forgot`, RIT-US-23).
+  Future<Result<void>> requestPasswordReset(String email);
 }

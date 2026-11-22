@@ -377,10 +377,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginButton => 'Log in';
 
   @override
+  String get loginForgotPassword => 'Forgot password?';
+
+  @override
   String get loginEmailRequired => 'Enter your email address.';
 
   @override
   String get loginPasswordRequired => 'Enter your password.';
+
+  @override
+  String get forgotPasswordTitle => 'Reset your password';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your work email address to receive a password reset link.';
+
+  @override
+  String get forgotPasswordEmailLabel => 'Email';
+
+  @override
+  String get forgotPasswordButton => 'Send reset link';
+
+  @override
+  String get forgotPasswordSuccessTitle => 'Check your email';
+
+  @override
+  String get forgotPasswordSuccessMessage =>
+      'If an active account exists for that email, a password reset link has been sent. The link expires in 1 hour.';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Back to login';
+
+  @override
+  String get forgotPasswordEmailRequired => 'Enter your email address.';
 
   @override
   String get errorAuthTokenInvalidTitle => 'This link can\'t be used';

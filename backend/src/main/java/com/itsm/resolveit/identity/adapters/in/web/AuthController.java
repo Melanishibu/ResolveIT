@@ -5,6 +5,8 @@ import com.itsm.resolveit.identity.PublicEndpoint;
 import com.itsm.resolveit.identity.application.port.in.ChangePasswordCommand;
 import com.itsm.resolveit.identity.application.port.in.ChangePasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.CurrentUserView;
+import com.itsm.resolveit.identity.application.port.in.ForgotPasswordCommand;
+import com.itsm.resolveit.identity.application.port.in.ForgotPasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.LogInCommand;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
 import com.itsm.resolveit.identity.application.port.in.LogOutUseCase;
@@ -13,6 +15,7 @@ import com.itsm.resolveit.identity.application.port.in.SetPasswordCommand;
 import com.itsm.resolveit.identity.application.port.in.SetPasswordUseCase;
 import com.itsm.resolveit.identity.application.port.out.SessionTokenVerifier;
 import com.itsm.resolveit.identity.application.port.out.SessionTokenVerifier.SessionClaims;
+import com.itsm.resolveit.identity.domain.model.EmailAddress;
 import com.itsm.resolveit.identity.domain.model.InvitationToken;
 import com.itsm.resolveit.identity.domain.model.NotAuthenticatedException;
 import com.itsm.resolveit.identity.domain.model.SessionToken;
@@ -43,13 +46,16 @@ class AuthController {
     private final LogInUseCase logIn;
     private final LogOutUseCase logOut;
     private final SetPasswordUseCase setPassword;
+    private final ForgotPasswordUseCase forgotPassword;
     private final ChangePasswordUseCase changePassword;
     private final SessionTokenVerifier sessionVerifier;
     private final SessionCookies cookies;
 
     AuthController(LogInUseCase logIn, LogOutUseCase logOut, SetPasswordUseCase setPassword,
-                   ChangePasswordUseCase changePassword, SessionTokenVerifier sessionVerifier, SessionCookies cookies) {
+                   ForgotPasswordUseCase forgotPassword, ChangePasswordUseCase changePassword,
+                   SessionTokenVerifier sessionVerifier, SessionCookies cookies) {
         this.setPassword = setPassword;
+        this.forgotPassword = forgotPassword;
         this.changePassword = changePassword;
         this.sessionVerifier = sessionVerifier;
         this.logIn = logIn;
@@ -118,6 +124,22 @@ class AuthController {
     ResponseEntity<Void> setPassword(@Valid @RequestBody SetPasswordRequest request) {
         setPassword.setPassword(new SetPasswordCommand(InvitationToken.of(request.token()), request.newPassword()));
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/password/forgot")
+    @PublicEndpoint
+    @Operation(summary = "Request a password reset link by email",
+            description = "Sends a 1-hour password reset link to the email if an active account exists. Always returns"
+                    + " 202 Accepted. Rate-limited to 3 reset emails per user per hour (extra requests silently ignored)."
+                    + " CSRF-protected: call GET /auth/csrf first without a session.")
+    @ApiResponse(responseCode = "202", description = "Password reset request accepted")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_FAILED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "403", description = "AUTH_CSRF_INVALID (X-XSRF-TOKEN header missing or not matching)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    ResponseEntity<ForgotPasswordResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        forgotPassword.forgotPassword(new ForgotPasswordCommand(new EmailAddress(request.email())));
+        return ResponseEntity.accepted().body(ForgotPasswordResponse.defaultMessage());
     }
 
     @PostMapping("/password/change")

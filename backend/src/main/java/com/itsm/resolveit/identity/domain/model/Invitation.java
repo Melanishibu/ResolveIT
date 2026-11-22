@@ -14,6 +14,9 @@ public final class Invitation {
     /** Common rules: the invitation link is valid for 24 hours. */
     public static final Duration VALIDITY = Duration.ofHours(24);
 
+    /** Password reset link is valid for 1 hour (RIT-US-23). */
+    public static final Duration RESET_VALIDITY = Duration.ofHours(1);
+
     private final InvitationId id;
     private final UserId userId;
     private final String tokenHash;
@@ -37,6 +40,11 @@ public final class Invitation {
     /** Issues a new invitation for {@code token}; only the token's hash is kept. */
     public static Invitation issue(InvitationId id, UserId userId, InvitationToken token, Instant now) {
         return new Invitation(id, userId, token.hash(), now, now.plus(VALIDITY), InvitationStatus.PENDING);
+    }
+
+    /** Issues a new password reset for {@code token}; valid for 1 hour (RIT-US-23). */
+    public static Invitation issueReset(InvitationId id, UserId userId, InvitationToken token, Instant now) {
+        return new Invitation(id, userId, token.hash(), now, now.plus(RESET_VALIDITY), InvitationStatus.PENDING);
     }
 
     public static Invitation reconstitute(InvitationId id, UserId userId, String tokenHash, Instant createdAt,
