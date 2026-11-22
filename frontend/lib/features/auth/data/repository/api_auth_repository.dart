@@ -68,6 +68,17 @@ final class ApiAuthRepository
     }
   }
 
+  @override
+  Future<Result<void>> requestPasswordReset(String email) async {
+    try {
+      await _remote.fetchCsrfToken();
+      await _remote.requestPasswordReset(email.trim());
+      return const Success<void>(null);
+    } on DioException catch (exception) {
+      return Failure(mapDioException(exception));
+    }
+  }
+
   Future<Result<CurrentUser>> _user(Future<Object?> Function() call) async {
     try {
       final user = currentUserFromJson(await call());

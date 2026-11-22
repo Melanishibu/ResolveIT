@@ -1,8 +1,9 @@
 import 'package:go_router/go_router.dart';
+import 'package:resolveit/features/auth/presentation/view/forgot_password_view.dart';
 import 'package:resolveit/features/auth/presentation/view/login_view.dart';
 import 'package:resolveit/features/auth/presentation/view/set_password_view.dart';
 
-/// The auth routes outside the app shell: the login page and the set-password page (RIT-US-07).
+/// The auth routes outside the app shell: login, set-password, and forgot-password.
 List<RouteBase> authRoutes() => [
   GoRoute(
     path: LoginView.path,
@@ -14,7 +15,16 @@ List<RouteBase> authRoutes() => [
       child: SetPasswordView(token: state.uri.queryParameters['token'] ?? ''),
     ),
   ),
+  GoRoute(
+    path: ForgotPasswordView.path,
+    pageBuilder: (context, state) =>
+        const NoTransitionPage(child: ForgotPasswordView()),
+  ),
 ];
 
 /// Pages anyone may open without a session.
-const publicAuthPaths = {LoginView.path, SetPasswordView.path};
+const publicAuthPaths = {
+  LoginView.path,
+  SetPasswordView.path,
+  ForgotPasswordView.path,
+};

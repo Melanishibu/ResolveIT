@@ -24,6 +24,7 @@ import com.itsm.resolveit.identity.domain.model.Role;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry.UserAuditAction;
 import com.itsm.resolveit.identity.domain.model.UserEmailTakenException;
+import com.itsm.resolveit.identity.domain.model.UserId;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -140,6 +141,15 @@ class UserInvitationUseCasesTest {
         @Override
         public Optional<Invitation> findByTokenHash(String tokenHash) {
             return byId.values().stream().filter(i -> i.tokenHash().equals(tokenHash)).findFirst();
+        }
+
+        @Override
+        public void invalidatePending(UserId userId, Instant now) {
+            byId.values().stream()
+                    .filter(i -> i.userId().equals(userId) && (i.status() == InvitationStatus.PENDING
+                            || i.status() == InvitationStatus.SENT
+                            || i.status() == InvitationStatus.SEND_FAILED))
+                    .forEach(i -> i.use(now));
         }
     }
 }
