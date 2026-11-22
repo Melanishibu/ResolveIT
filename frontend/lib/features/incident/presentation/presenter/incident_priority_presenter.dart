@@ -9,11 +9,15 @@ import 'package:resolveit/features/incident/providers.dart';
 /// State of priority changes on the details screen (RIT-US-19).
 final class IncidentPriorityState {
   const IncidentPriorityState({
+    this.isOpen = false,
+    this.selectedPriority,
     this.isSaving = false,
     this.failure,
     this.updated,
   });
 
+  final bool isOpen;
+  final Priority? selectedPriority;
   final bool isSaving;
   final ApiFailure? failure;
   final IncidentDetails? updated;
@@ -32,19 +36,53 @@ class IncidentPriorityPresenter extends Notifier<IncidentPriorityState> {
   @override
   IncidentPriorityState build() => const IncidentPriorityState();
 
+  void open(Priority currentPriority) {
+    state = IncidentPriorityState(
+      isOpen: true,
+      selectedPriority: currentPriority,
+    );
+  }
+
+  void cancel() {
+    state = const IncidentPriorityState(isOpen: false);
+  }
+
+  void select(Priority? priority) {
+    if (priority == null) return;
+    state = IncidentPriorityState(
+      isOpen: true,
+      selectedPriority: priority,
+      failure: state.failure,
+    );
+  }
+
+  Future<void> submit() async {
+    final priority = state.selectedPriority;
+    if (priority == null || state.isSaving) return;
+    await changePriority(priority);
+  }
+
   Future<void> changePriority(Priority priority) async {
     if (state.isSaving) return;
-    state = const IncidentPriorityState(isSaving: true);
+    state = IncidentPriorityState(
+      isOpen: state.isOpen,
+      selectedPriority: priority,
+      isSaving: true,
+    );
     final result = await ref
         .read(incidentPriorityInteractorProvider)
         .changePriority(incidentId, priority);
     if (!ref.mounted) return;
     switch (result) {
       case Success(:final value):
-        state = IncidentPriorityState(updated: value);
+        state = IncidentPriorityState(isOpen: false, updated: value);
         ref.invalidate(incidentDetailsPresenterProvider(incidentId));
       case Failure(:final failure):
-        state = IncidentPriorityState(failure: failure);
+        state = IncidentPriorityState(
+          isOpen: true,
+          selectedPriority: priority,
+          failure: failure,
+        );
     }
   }
 }

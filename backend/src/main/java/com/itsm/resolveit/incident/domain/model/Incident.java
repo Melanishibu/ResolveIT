@@ -139,7 +139,7 @@ public final class Incident {
                 actions.add(IncidentAction.CHANGE_PRIORITY);
                 switch (status) {
                     case OPEN -> actions.add(IncidentAction.ASSIGN);
-                    case ASSIGNED -> actions.addAll(List.of(IncidentAction.REASSIGN, IncidentAction.START));
+                    case ASSIGNED -> actions.add(IncidentAction.REASSIGN);
                     case IN_PROGRESS -> actions.add(IncidentAction.RESOLVE);
                     case RESOLVED -> actions.addAll(List.of(IncidentAction.REOPEN, IncidentAction.CLOSE));
                     default -> { }

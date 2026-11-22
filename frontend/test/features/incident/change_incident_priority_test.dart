@@ -12,29 +12,48 @@ import '../../support/test_app.dart';
 
 /// RIT-US-19 (AB#47) change priority on the incident details screen.
 void main() {
-  testWidgets('Admin changes incident priority via dropdown', (tester) async {
-    final priorityRepo = _FakePriorityRepo();
-    await _open(tester, Role.admin, [
-      IncidentAction.changePriority,
-    ], priorityRepo);
+  testWidgets(
+    'Admin changes incident priority via Change Priority button and panel',
+    (tester) async {
+      final priorityRepo = _FakePriorityRepo();
+      await _open(tester, Role.admin, [
+        IncidentAction.changePriority,
+      ], priorityRepo);
 
-    expect(find.byKey(const Key('incident-change-priority')), findsOneWidget);
+      expect(
+        find.byKey(const Key('incident-change-priority-btn')),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('incident-change-priority-btn')));
+      await tester.pumpAndSettle();
 
-    // Tap dropdown and select Critical
-    await tester.tap(find.byKey(const Key('incident-change-priority')));
-    await tester.pumpAndSettle();
+      expect(find.byKey(const Key('change-priority-panel')), findsOneWidget);
+      expect(find.byKey(const Key('incident-change-priority')), findsOneWidget);
 
-    await tester.tap(find.text(l10nEn.priorityCritical).last);
-    await tester.pumpAndSettle();
+      // Tap dropdown and select Critical
+      await tester.tap(find.byKey(const Key('incident-change-priority')));
+      await tester.pumpAndSettle();
 
-    expect(priorityRepo.requests, [('i1', Priority.critical)]);
-    expect(find.text('Priority changed to Critical'), findsOneWidget);
-  });
+      await tester.tap(find.text(l10nEn.priorityCritical).last);
+      await tester.pumpAndSettle();
 
-  testWidgets('Non-admin does not see priority dropdown', (tester) async {
+      await tester.tap(find.byKey(const Key('change-priority-submit')));
+      await tester.pumpAndSettle();
+
+      expect(priorityRepo.requests, [('i1', Priority.critical)]);
+      expect(find.text('Priority changed to Critical'), findsOneWidget);
+      expect(find.byKey(const Key('change-priority-panel')), findsNothing);
+    },
+  );
+
+  testWidgets('Non-admin does not see priority button or panel', (
+    tester,
+  ) async {
     final priorityRepo = _FakePriorityRepo();
     await _open(tester, Role.employee, const [], priorityRepo);
 
+    expect(find.byKey(const Key('incident-change-priority-btn')), findsNothing);
+    expect(find.byKey(const Key('change-priority-panel')), findsNothing);
     expect(find.byKey(const Key('incident-change-priority')), findsNothing);
     expect(find.byType(PriorityChip), findsWidgets);
   });
@@ -47,14 +66,40 @@ void main() {
       IncidentAction.changePriority,
     ], priorityRepo);
 
+    await tester.tap(find.byKey(const Key('incident-change-priority-btn')));
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byKey(const Key('incident-change-priority')));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text(l10nEn.priorityCritical).last);
     await tester.pumpAndSettle();
 
+    await tester.tap(find.byKey(const Key('change-priority-submit')));
+    await tester.pumpAndSettle();
+
     expect(find.byKey(const Key('priority-error')), findsOneWidget);
   });
+
+  testWidgets(
+    'Admin does not see Start work button or standalone actions menu',
+    (tester) async {
+      final priorityRepo = _FakePriorityRepo();
+      await _open(tester, Role.admin, [
+        IncidentAction.reassign,
+        IncidentAction.changePriority,
+        IncidentAction.start,
+      ], priorityRepo);
+
+      expect(find.byKey(const Key('incident-reassign')), findsOneWidget);
+      expect(
+        find.byKey(const Key('incident-change-priority-btn')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('incident-start-work')), findsNothing);
+      expect(find.byKey(const Key('incident-details-actions')), findsNothing);
+    },
+  );
 }
 
 Future<void> _open(
