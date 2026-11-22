@@ -1492,6 +1492,78 @@ abstract class AppLocalizations {
   /// **'The history arrives in a later release.'**
   String get incidentDetailsHistoryLater;
 
+  /// No description provided for @incidentHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No history entries yet.'**
+  String get incidentHistoryEmpty;
+
+  /// No description provided for @incidentHistoryActionCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Incident created'**
+  String get incidentHistoryActionCreated;
+
+  /// No description provided for @incidentHistoryActionAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Open → Assigned'**
+  String get incidentHistoryActionAssigned;
+
+  /// No description provided for @incidentHistoryActionReassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignee changed'**
+  String get incidentHistoryActionReassigned;
+
+  /// No description provided for @incidentHistoryActionStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Assigned → In progress'**
+  String get incidentHistoryActionStarted;
+
+  /// No description provided for @incidentHistoryActionResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: In progress → Resolved'**
+  String get incidentHistoryActionResolved;
+
+  /// No description provided for @incidentHistoryActionReopened.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Resolved → In progress'**
+  String get incidentHistoryActionReopened;
+
+  /// No description provided for @incidentHistoryActionClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Resolved → Closed'**
+  String get incidentHistoryActionClosed;
+
+  /// No description provided for @incidentHistoryActionPriorityChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority changed'**
+  String get incidentHistoryActionPriorityChanged;
+
+  /// No description provided for @incidentTimelineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity Timeline'**
+  String get incidentTimelineTitle;
+
+  /// No description provided for @incidentTimelineViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get incidentTimelineViewAll;
+
+  /// No description provided for @incidentHistoryBy.
+  ///
+  /// In en, this message translates to:
+  /// **'by {actor}'**
+  String incidentHistoryBy(String actor);
+
   /// No description provided for @incidentActionAssign.
   ///
   /// In en, this message translates to:

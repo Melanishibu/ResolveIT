@@ -35,8 +35,9 @@ final class ProfileState {
     isLoading: isLoading ?? this.isLoading,
     failure: clearFailure ? null : (failure ?? this.failure),
     isSubmittingPassword: isSubmittingPassword ?? this.isSubmittingPassword,
-    passwordFailure:
-        clearPasswordFailure ? null : (passwordFailure ?? this.passwordFailure),
+    passwordFailure: clearPasswordFailure
+        ? null
+        : (passwordFailure ?? this.passwordFailure),
     passwordSuccess: passwordSuccess ?? this.passwordSuccess,
   );
 }

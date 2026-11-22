@@ -73,10 +73,7 @@ class _CreateUserViewState extends ConsumerState<CreateUserView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (failure != null) ...[
-            ErrorPanel(
-              key: const Key('create-user-error'),
-              failure: failure,
-            ),
+            ErrorPanel(key: const Key('create-user-error'), failure: failure),
             SizedBox(height: spacing.l),
           ],
           AppTextField(
@@ -85,10 +82,7 @@ class _CreateUserViewState extends ConsumerState<CreateUserView> {
             isRequired: true,
             maxLength: 100,
             controller: _name,
-            errorText: required(
-              NewUserField.name,
-              l10n.createUserNameRequired,
-            ),
+            errorText: required(NewUserField.name, l10n.createUserNameRequired),
             onChanged: (_) => presenter.fieldChanged(NewUserField.name),
           ),
           SizedBox(height: spacing.m),
@@ -115,10 +109,7 @@ class _CreateUserViewState extends ConsumerState<CreateUserView> {
               for (final role in invitableRoles)
                 AppDropdownOption(role, roleLabel(l10n, role)),
             ],
-            errorText: required(
-              NewUserField.role,
-              l10n.createUserRoleRequired,
-            ),
+            errorText: required(NewUserField.role, l10n.createUserRoleRequired),
             onChanged: (role) {
               setState(() => _role = role);
               presenter.fieldChanged(NewUserField.role);

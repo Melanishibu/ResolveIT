@@ -183,9 +183,7 @@ void main() {
           reason: 'inactive item',
         );
 
-        final context = tester.element(
-          find.byKey(const Key('app-sidebar')),
-        );
+        final context = tester.element(find.byKey(const Key('app-sidebar')));
         final theme = Theme.of(context);
         expect(theme.scaffoldBackgroundColor, colors.pageBackground);
         expect(theme.cardTheme.color, colors.cardBackground);

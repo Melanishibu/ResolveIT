@@ -43,7 +43,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     final confirm = _confirmPassword.text;
 
     setState(() {
-      _currentError = current.isEmpty ? l10n.profileCurrentPasswordRequired : null;
+      _currentError = current.isEmpty
+          ? l10n.profileCurrentPasswordRequired
+          : null;
       _newError = next.isEmpty ? l10n.profileNewPasswordRequired : null;
       _confirmError = confirm.isEmpty
           ? l10n.profileConfirmPasswordRequired
@@ -54,10 +56,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       return;
     }
 
-    final success = await ref.read(profilePresenterProvider.notifier).changePassword(
-          currentPassword: current,
-          newPassword: next,
-        );
+    final success = await ref
+        .read(profilePresenterProvider.notifier)
+        .changePassword(currentPassword: current, newPassword: next);
 
     if (success && mounted) {
       _currentPassword.clear();
@@ -78,15 +79,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          PageHeader(
-            title: l10n.profileTitle,
-            subtitle: l10n.profileSubtitle,
-          ),
+          PageHeader(title: l10n.profileTitle, subtitle: l10n.profileSubtitle),
           SizedBox(height: spacing.l),
           if (state.isLoading && profile == null)
             const LoadingState()
           else if (state.failure != null && profile == null)
-            ErrorPanel(key: const Key('profile-load-error'), failure: state.failure!)
+            ErrorPanel(
+              key: const Key('profile-load-error'),
+              failure: state.failure!,
+            )
           else if (profile != null) ...[
             _ProfileHeaderCard(profile: profile),
             SizedBox(height: spacing.l),
@@ -111,7 +112,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                     failure: state.passwordFailure,
                     onSubmit: _submitPassword,
                     onChanged: () {
-                      if (_currentError != null || _newError != null || _confirmError != null) {
+                      if (_currentError != null ||
+                          _newError != null ||
+                          _confirmError != null) {
                         setState(() {
                           _currentError = null;
                           _newError = null;
@@ -155,7 +158,9 @@ class _ProfileHeaderCard extends StatelessWidget {
                 Text(
                   profile.name,
                   key: const Key('profile-summary-name'),
-                  style: context.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 SizedBox(height: spacing.xs),
                 Wrap(
@@ -315,7 +320,9 @@ class _SecurityTab extends StatelessWidget {
           children: [
             Text(
               l10n.profileChangePasswordTitle,
-              style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: context.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             SizedBox(height: spacing.l),
             if (failure != null) ...[

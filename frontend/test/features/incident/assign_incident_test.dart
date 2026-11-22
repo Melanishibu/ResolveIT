@@ -30,7 +30,9 @@ void main() {
     expect(find.byKey(const Key('assign-panel')), findsNothing);
   });
 
-  testWidgets('Admin assigns an active agent via the Assign button', (tester) async {
+  testWidgets('Admin assigns an active agent via the Assign button', (
+    tester,
+  ) async {
     final assignment = _FakeAssignment();
     await _open(tester, Role.admin, [IncidentAction.assign], assignment);
 

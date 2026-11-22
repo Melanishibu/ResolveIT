@@ -14,6 +14,8 @@ import 'package:resolveit/features/incident/presentation/presenter/incident_stat
 import 'package:resolveit/features/incident/presentation/view/assign_incident_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/resolve_incident_panel.dart';
 import 'package:resolveit/features/incident/presentation/view/reopen_incident_panel.dart';
+import 'package:resolveit/features/incident/presentation/view/incident_history_tab.dart';
+import 'package:resolveit/features/incident/presentation/view/activity_timeline_panel.dart';
 import 'package:resolveit/features/incident/widgets/category_label.dart';
 import 'package:resolveit/features/incident/widgets/priority_chip.dart';
 import 'package:resolveit/features/incident/widgets/status_chip.dart';
@@ -110,9 +112,8 @@ class _Details extends ConsumerWidget {
     void startWork() => ref
         .read(incidentStatusPresenterProvider(incident.id).notifier)
         .startWork();
-    void openAssign() => ref
-        .read(assignIncidentPresenterProvider(incident.id).notifier)
-        .open();
+    void openAssign() =>
+        ref.read(assignIncidentPresenterProvider(incident.id).notifier).open();
     Future<void> confirmClose() async {
       final confirmed = await showConfirmDialog(
         context,
@@ -241,10 +242,7 @@ class _Details extends ConsumerWidget {
             ),
             AppTab(
               label: l10n.incidentDetailsHistory,
-              child: EmptyState(
-                icon: Icons.history,
-                message: l10n.incidentDetailsHistoryLater,
-              ),
+              child: IncidentHistoryTab(incidentId: incident.id),
             ),
           ],
         ),
@@ -305,7 +303,7 @@ class _Overview extends StatelessWidget {
         Text(incident.resolutionNotes ?? l10n.incidentDetailsNone),
       ),
     ];
-    return AppCard(
+    final infoCard = AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -332,6 +330,14 @@ class _Overview extends StatelessWidget {
             ),
         ],
       ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        infoCard,
+        SizedBox(height: spacing.l),
+        ActivityTimelinePanel(incidentId: incident.id),
+      ],
     );
   }
 }

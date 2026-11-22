@@ -42,10 +42,12 @@ class ProfilePresenter extends Notifier<ProfileState> {
       clearPasswordFailure: true,
       passwordSuccess: false,
     );
-    final result = await ref.read(profileInteractorProvider).changePassword(
-      currentPassword: currentPassword,
-      newPassword: newPassword,
-    );
+    final result = await ref
+        .read(profileInteractorProvider)
+        .changePassword(
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        );
     if (!ref.mounted) return false;
     return switch (result) {
       Success() => () {

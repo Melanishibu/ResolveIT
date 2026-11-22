@@ -44,9 +44,15 @@ void main() {
         expect(find.byKey(const Key('profile-email-value')), findsOneWidget);
         expect(find.byKey(const Key('profile-role-value')), findsOneWidget);
         expect(find.text(l10nEn.roleEmployee), findsWidgets);
-        expect(find.byKey(const Key('profile-department-value')), findsOneWidget);
+        expect(
+          find.byKey(const Key('profile-department-value')),
+          findsOneWidget,
+        );
         expect(find.text('Finance'), findsOneWidget);
-        expect(find.byKey(const Key('profile-member-since-value')), findsOneWidget);
+        expect(
+          find.byKey(const Key('profile-member-since-value')),
+          findsOneWidget,
+        );
       },
     );
   });
@@ -66,11 +72,16 @@ void main() {
         await _enter(tester, 'profile-new-password', 'NewPass123456');
         await _enter(tester, 'profile-confirm-password', 'NewPass123456');
 
-        await tester.tap(find.byKey(const Key('profile-change-password-submit')));
+        await tester.tap(
+          find.byKey(const Key('profile-change-password-submit')),
+        );
         await tester.pumpAndSettle();
 
         expect(passwords.changeCalls.length, 1);
-        expect(passwords.changeCalls.single, ('OldPass123456', 'NewPass123456'));
+        expect(passwords.changeCalls.single, (
+          'OldPass123456',
+          'NewPass123456',
+        ));
         expect(find.text(l10nEn.profilePasswordChangedSuccess), findsOneWidget);
       },
     );
@@ -95,7 +106,9 @@ void main() {
         await _enter(tester, 'profile-new-password', 'NewPass123456');
         await _enter(tester, 'profile-confirm-password', 'NewPass123456');
 
-        await tester.tap(find.byKey(const Key('profile-change-password-submit')));
+        await tester.tap(
+          find.byKey(const Key('profile-change-password-submit')),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byKey(const Key('profile-password-error')), findsOneWidget);
@@ -126,7 +139,9 @@ void main() {
         await _enter(tester, 'profile-new-password', 'abc');
         await _enter(tester, 'profile-confirm-password', 'abc');
 
-        await tester.tap(find.byKey(const Key('profile-change-password-submit')));
+        await tester.tap(
+          find.byKey(const Key('profile-change-password-submit')),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byKey(const Key('profile-password-error')), findsOneWidget);
@@ -157,7 +172,9 @@ void main() {
         await _enter(tester, 'profile-new-password', 'CurrentPass123');
         await _enter(tester, 'profile-confirm-password', 'CurrentPass123');
 
-        await tester.tap(find.byKey(const Key('profile-change-password-submit')));
+        await tester.tap(
+          find.byKey(const Key('profile-change-password-submit')),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byKey(const Key('profile-password-error')), findsOneWidget);
@@ -183,7 +200,9 @@ void main() {
         await _enter(tester, 'profile-new-password', 'NewPassword123');
         await _enter(tester, 'profile-confirm-password', 'DifferentPass123');
 
-        await tester.tap(find.byKey(const Key('profile-change-password-submit')));
+        await tester.tap(
+          find.byKey(const Key('profile-change-password-submit')),
+        );
         await tester.pumpAndSettle();
 
         expect(find.text(l10nEn.profilePasswordsDoNotMatch), findsOneWidget);
@@ -193,7 +212,9 @@ void main() {
   });
 
   group('Profile loading failure', () {
-    testWidgets('Displays error panel when profile cannot be loaded', (tester) async {
+    testWidgets('Displays error panel when profile cannot be loaded', (
+      tester,
+    ) async {
       await _openProfile(
         tester,
         profiles: FakeUserProfileRepository(
@@ -287,9 +308,7 @@ Future<void> _openProfile(
         passwordRepositoryProvider.overrideWithValue(
           passwords ?? FakePasswords(),
         ),
-        dashboardRepositoryProvider.overrideWithValue(
-          const _FakeDashboard(),
-        ),
+        dashboardRepositoryProvider.overrideWithValue(const _FakeDashboard()),
       ],
     ),
   );
@@ -303,15 +322,15 @@ final class _FakeDashboard implements DashboardRepository {
 
   @override
   Future<Result<DashboardCounts>> counts() async => const Success(
-        DashboardCounts(
-          total: 8,
-          open: 3,
-          assigned: 2,
-          inProgress: 1,
-          resolved: 1,
-          critical: 2,
-        ),
-      );
+    DashboardCounts(
+      total: 8,
+      open: 3,
+      assigned: 2,
+      inProgress: 1,
+      resolved: 1,
+      critical: 2,
+    ),
+  );
 
   @override
   Future<Result<List<ActivityEntry>>> activity({int limit = 10}) async =>

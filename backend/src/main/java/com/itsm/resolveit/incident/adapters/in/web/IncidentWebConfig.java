@@ -66,4 +66,10 @@ class IncidentWebConfig {
                                                 IncidentAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new ReportIncidentService(incidents, ticketNumbers, auditLog, clock.getIfAvailable(Clock::systemUTC));
     }
+
+    @Bean
+    com.itsm.resolveit.incident.application.port.in.GetIncidentHistoryUseCase getIncidentHistoryUseCase(
+            IncidentRepository incidents, IncidentAuditLog auditLog, UserDirectory users) {
+        return new com.itsm.resolveit.incident.application.service.GetIncidentHistoryService(incidents, auditLog, users);
+    }
 }
