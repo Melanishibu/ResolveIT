@@ -331,13 +331,30 @@ class _Overview extends StatelessWidget {
         ],
       ),
     );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        infoCard,
-        SizedBox(height: spacing.l),
-        ActivityTimelinePanel(incidentId: incident.id),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= 900) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 3, child: infoCard),
+              SizedBox(width: spacing.l),
+              Expanded(
+                flex: 2,
+                child: ActivityTimelinePanel(incidentId: incident.id),
+              ),
+            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            infoCard,
+            SizedBox(height: spacing.l),
+            ActivityTimelinePanel(incidentId: incident.id),
+          ],
+        );
+      },
     );
   }
 }

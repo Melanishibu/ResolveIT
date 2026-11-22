@@ -40,6 +40,7 @@ class AppDropdown<T> extends StatelessWidget {
     return InputDecorator(
       isEmpty: !hasValue && hint == null,
       decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         label: fieldLabel(context, label, isRequired: isRequired),
         hintText: hint,
         errorText: errorText,

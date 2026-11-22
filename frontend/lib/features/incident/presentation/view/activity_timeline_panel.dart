@@ -25,11 +25,12 @@ class ActivityTimelinePanel extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Text(
-                l10n.incidentTimelineTitle,
-                style: context.textTheme.titleMedium,
+              Expanded(
+                child: Text(
+                  l10n.incidentTimelineTitle,
+                  style: context.textTheme.titleMedium,
+                ),
               ),
-              const Spacer(),
               AppButton(
                 key: const Key('activity-timeline-view-all'),
                 label: l10n.incidentTimelineViewAll,

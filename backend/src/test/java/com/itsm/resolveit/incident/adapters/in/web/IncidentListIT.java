@@ -8,6 +8,9 @@ import com.itsm.resolveit.testsupport.AuthApiClient;
 import com.itsm.resolveit.testsupport.AuthorizationMatrix;
 import com.itsm.resolveit.testsupport.AuthorizationMatrix.Role;
 import java.net.http.HttpResponse;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
@@ -128,6 +131,108 @@ class IncidentListIT {
 
         assertThat(response.statusCode()).isEqualTo(200);
         assertThat(millis).as("first page with 10,000 incidents, in ms").isLessThan(1000);
+    }
+
+    // Scenario: Search by ticket number
+    @Test
+    void searchByTicketNumber() throws Exception {
+        insertOne("INC-2090-00042", "Problem with printer", "HARDWARE", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+        insertOne("INC-2090-00043", "Network issue", "NETWORK", "MEDIUM", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+
+        JsonNode page = list(Role.ADMIN, "?q=inc-2090-00042");
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(1);
+        assertThat(page.get("items").get(0).get("ticketNumber").asString()).isEqualTo("INC-2090-00042");
+    }
+
+    // Scenario: Search by title text
+    @Test
+    void searchByTitleText() throws Exception {
+        insertOne("INC-2090-00010", "The PRINTER is broken", "HARDWARE", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+        insertOne("INC-2090-00011", "Network is down", "NETWORK", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+
+        JsonNode page = list(Role.ADMIN, "?q=printer");
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(1);
+        assertThat(page.get("items").get(0).get("title").asString()).isEqualTo("The PRINTER is broken");
+    }
+
+    // Scenario: Combine filters
+    @Test
+    void combineFilters() throws Exception {
+        insertOne("INC-2090-00021", "Critical open", "HARDWARE", "CRITICAL", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+        insertOne("INC-2090-00022", "Low open", "HARDWARE", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.now());
+        insertOne("INC-2090-00023", "Critical resolved", "HARDWARE", "CRITICAL", "RESOLVED", EMPLOYEE_ONE, null, Instant.now());
+
+        JsonNode page = list(Role.ADMIN, "?status=OPEN&priority=CRITICAL");
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(1);
+        assertThat(page.get("items").get(0).get("ticketNumber").asString()).isEqualTo("INC-2090-00021");
+    }
+
+    // Scenario: Filters never widen the role scope
+    @Test
+    void filtersNeverWidenTheRoleScope() throws Exception {
+        insertOne("INC-2090-00030", "Employee 2 incident", "OTHER", "LOW", "OPEN", EMPLOYEE_TWO, null, Instant.now());
+
+        JsonNode page = list(Role.EMPLOYEE, "?q=INC-2090-00030");
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(0);
+    }
+
+    // Scenario: Filter by last 30 days
+    @Test
+    void filterByLast30Days() throws Exception {
+        Instant now = Instant.now();
+        insertOne("INC-2090-00051", "10 days ago", "OTHER", "LOW", "OPEN", EMPLOYEE_ONE, null, now.minus(java.time.Duration.ofDays(10)));
+        insertOne("INC-2090-00052", "45 days ago", "OTHER", "LOW", "OPEN", EMPLOYEE_ONE, null, now.minus(java.time.Duration.ofDays(45)));
+
+        String from = now.minus(java.time.Duration.ofDays(30)).toString();
+        JsonNode page = list(Role.ADMIN, "?createdFrom=" + from);
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(1);
+        assertThat(page.get("items").get(0).get("ticketNumber").asString()).isEqualTo("INC-2090-00051");
+    }
+
+    // Scenario: Custom date range
+    @Test
+    void customDateRange() throws Exception {
+        insertOne("INC-2090-00061", "1 Dec", "OTHER", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.parse("2026-12-01T12:00:00Z"));
+        insertOne("INC-2090-00062", "15 Dec", "OTHER", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.parse("2026-12-15T18:00:00Z"));
+        insertOne("INC-2090-00063", "20 Dec", "OTHER", "LOW", "OPEN", EMPLOYEE_ONE, null, Instant.parse("2026-12-20T12:00:00Z"));
+
+        JsonNode page = list(Role.ADMIN, "?createdFrom=2026-12-01&createdTo=2026-12-15");
+
+        assertThat(page.get("totalItems").asInt()).isEqualTo(2);
+        assertThat(ticketNumbers(page)).containsExactlyInAnyOrder("INC-2090-00061", "INC-2090-00062");
+    }
+
+    // Scenario: Invalid range is rejected
+    @Test
+    void invalidRangeIsRejected() throws Exception {
+        HttpResponse<String> response = get(Role.ADMIN, "?createdFrom=2026-12-15&createdTo=2026-12-01");
+
+        assertThat(response.statusCode()).isEqualTo(400);
+        assertThat(json(response).get("code").asString()).isEqualTo("VALIDATION_FAILED");
+    }
+
+    private void insertOne(String ticketNumber, String title, String category, String priority, String status,
+                           String createdBy, String assignedTo, Instant createdAt) {
+        jdbc.sql("""
+                INSERT INTO incident.incident (id, ticket_number, title, description, category, priority, status,
+                                               created_by, created_at, updated_at, assigned_to)
+                VALUES (gen_random_uuid(), :ticketNumber, :title, 'desc', :category, :priority, :status,
+                        CAST(:createdBy AS uuid), :createdAt, :createdAt, CAST(:assignedTo AS uuid))
+                """)
+                .param("ticketNumber", ticketNumber)
+                .param("title", title)
+                .param("category", category)
+                .param("priority", priority)
+                .param("status", status)
+                .param("createdBy", createdBy)
+                .param("assignedTo", assignedTo)
+                .param("createdAt", OffsetDateTime.ofInstant(createdAt, ZoneOffset.UTC))
+                .update();
     }
 
     /** {@code count} incidents INC-{year}-00001.. created one second apart, so later numbers are newer. */

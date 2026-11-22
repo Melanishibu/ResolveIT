@@ -6,6 +6,7 @@ import com.itsm.resolveit.incident.domain.model.Category;
 import com.itsm.resolveit.incident.domain.model.IncidentStatus;
 import com.itsm.resolveit.incident.domain.model.Priority;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,27 +32,69 @@ public class JdbcIncidentListQuery implements IncidentListReadModel {
 
     @Override
     public Rows page(Scope scope, Filter filter, int page, int size, SortField sort, boolean ascending) {
-        String where = " WHERE (CAST(:createdBy AS uuid) IS NULL OR created_by = :createdBy)"
-                + " AND (CAST(:assignedTo AS uuid) IS NULL OR assigned_to = :assignedTo)"
-                + (filter.statuses().isEmpty() ? "" : " AND status IN (:statuses)")
-                + (filter.priorities().isEmpty() ? "" : " AND priority IN (:priorities)");
+        StringBuilder where = new StringBuilder(" WHERE (CAST(:createdBy AS uuid) IS NULL OR created_by = :createdBy)"
+                + " AND (CAST(:assignedTo AS uuid) IS NULL OR assigned_to = :assignedTo)");
+
         List<String> statuses = filter.statuses().stream().map(Enum::name).toList();
         List<String> priorities = filter.priorities().stream().map(Enum::name).toList();
-        long total = jdbc.sql("SELECT count(*) FROM incident.incident" + where)
-                .param("createdBy", scope.createdBy()).param("assignedTo", scope.assignedTo())
-                .param("statuses", statuses.isEmpty() ? List.of("") : statuses)
-                .param("priorities", priorities.isEmpty() ? List.of("") : priorities)
-                .query(Long.class).single();
+        List<String> categories = filter.categories().stream().map(Enum::name).toList();
+        boolean hasQ = filter.q() != null && !filter.q().isBlank();
+        boolean hasFrom = filter.createdFrom() != null;
+        boolean hasTo = filter.createdTo() != null;
+
+        if (!statuses.isEmpty()) {
+            where.append(" AND status IN (:statuses)");
+        }
+        if (!priorities.isEmpty()) {
+            where.append(" AND priority IN (:priorities)");
+        }
+        if (!categories.isEmpty()) {
+            where.append(" AND category IN (:categories)");
+        }
+        if (hasQ) {
+            where.append(" AND (LOWER(ticket_number) = :qExact OR LOWER(title) LIKE :titlePattern)");
+        }
+        if (hasFrom) {
+            where.append(" AND created_at >= :createdFrom");
+        }
+        if (hasTo) {
+            where.append(" AND created_at <= :createdTo");
+        }
+
+        var countSpec = jdbc.sql("SELECT count(*) FROM incident.incident" + where)
+                .param("createdBy", scope.createdBy())
+                .param("assignedTo", scope.assignedTo());
+        if (!statuses.isEmpty()) countSpec.param("statuses", statuses);
+        if (!priorities.isEmpty()) countSpec.param("priorities", priorities);
+        if (!categories.isEmpty()) countSpec.param("categories", categories);
+        if (hasQ) {
+            String qTrim = filter.q().trim().toLowerCase();
+            countSpec.param("qExact", qTrim).param("titlePattern", "%" + qTrim + "%");
+        }
+        if (hasFrom) countSpec.param("createdFrom", OffsetDateTime.ofInstant(filter.createdFrom(), ZoneOffset.UTC));
+        if (hasTo) countSpec.param("createdTo", OffsetDateTime.ofInstant(filter.createdTo(), ZoneOffset.UTC));
+
+        long total = countSpec.query(Long.class).single();
+
         String direction = ascending ? " ASC" : " DESC";
-        var rows = jdbc.sql("SELECT id, ticket_number, title, category, priority, status, assigned_to, created_at,"
+        var rowsSpec = jdbc.sql("SELECT id, ticket_number, title, category, priority, status, assigned_to, created_at,"
                         + " updated_at FROM incident.incident" + where
                         + " ORDER BY " + ORDER.get(sort) + direction + ", created_at DESC, id"
                         + " LIMIT :limit OFFSET :offset")
-                .param("createdBy", scope.createdBy()).param("assignedTo", scope.assignedTo())
-                .param("statuses", statuses.isEmpty() ? List.of("") : statuses)
-                .param("priorities", priorities.isEmpty() ? List.of("") : priorities)
-                .param("limit", size).param("offset", (long) page * size)
-                .query((row, n) -> new Row(row.getObject("id", UUID.class), row.getString("ticket_number"),
+                .param("createdBy", scope.createdBy())
+                .param("assignedTo", scope.assignedTo());
+        if (!statuses.isEmpty()) rowsSpec.param("statuses", statuses);
+        if (!priorities.isEmpty()) rowsSpec.param("priorities", priorities);
+        if (!categories.isEmpty()) rowsSpec.param("categories", categories);
+        if (hasQ) {
+            String qTrim = filter.q().trim().toLowerCase();
+            rowsSpec.param("qExact", qTrim).param("titlePattern", "%" + qTrim + "%");
+        }
+        if (hasFrom) rowsSpec.param("createdFrom", OffsetDateTime.ofInstant(filter.createdFrom(), ZoneOffset.UTC));
+        if (hasTo) rowsSpec.param("createdTo", OffsetDateTime.ofInstant(filter.createdTo(), ZoneOffset.UTC));
+        rowsSpec.param("limit", size).param("offset", (long) page * size);
+
+        var rows = rowsSpec.query((row, n) -> new Row(row.getObject("id", UUID.class), row.getString("ticket_number"),
                         row.getString("title"), Category.valueOf(row.getString("category")),
                         Priority.valueOf(row.getString("priority")), IncidentStatus.valueOf(row.getString("status")),
                         row.getObject("assigned_to", UUID.class),

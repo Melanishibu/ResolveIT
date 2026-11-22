@@ -1630,6 +1630,90 @@ abstract class AppLocalizations {
   /// **'No incidents to show yet.'**
   String get incidentListEmpty;
 
+  /// No description provided for @incidentListNoMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'No incidents match your filters'**
+  String get incidentListNoMatches;
+
+  /// No description provided for @incidentListClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get incidentListClearFilters;
+
+  /// No description provided for @incidentListSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by ticket # or title'**
+  String get incidentListSearchHint;
+
+  /// No description provided for @incidentListFilterStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get incidentListFilterStatus;
+
+  /// No description provided for @incidentListFilterPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get incidentListFilterPriority;
+
+  /// No description provided for @incidentListFilterCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get incidentListFilterCategory;
+
+  /// No description provided for @incidentListFilterDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get incidentListFilterDate;
+
+  /// No description provided for @incidentListAllStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get incidentListAllStatuses;
+
+  /// No description provided for @incidentListAllPriorities.
+  ///
+  /// In en, this message translates to:
+  /// **'All priorities'**
+  String get incidentListAllPriorities;
+
+  /// No description provided for @incidentListAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get incidentListAllCategories;
+
+  /// No description provided for @incidentListDateAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All time'**
+  String get incidentListDateAll;
+
+  /// No description provided for @incidentListDate7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days'**
+  String get incidentListDate7Days;
+
+  /// No description provided for @incidentListDate30Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 30 days'**
+  String get incidentListDate30Days;
+
+  /// No description provided for @incidentListDateCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom range'**
+  String get incidentListDateCustom;
+
   /// No description provided for @incidentListNumber.
   ///
   /// In en, this message translates to:

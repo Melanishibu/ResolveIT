@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/domain/result.dart';
+import 'package:resolveit/features/incident/domain/entity/incident_category.dart';
 import 'package:resolveit/features/incident/domain/entity/incident_list.dart';
+import 'package:resolveit/features/incident/domain/entity/incident_status.dart';
+import 'package:resolveit/features/incident/domain/entity/priority.dart';
 import 'package:resolveit/features/incident/providers.dart';
 
 /// State of the incident list screen (RIT-US-11).
@@ -50,6 +53,66 @@ class IncidentListPresenter extends Notifier<IncidentListState> {
         state.filter.sortField == field && !state.filter.ascending;
     _load(
       state.filter.copyWith(sortField: field, ascending: ascending, page: 0),
+    );
+  }
+
+  void search(String text) {
+    final trimmed = text.trim();
+    _load(
+      state.filter.copyWith(q: () => trimmed.isEmpty ? null : trimmed, page: 0),
+    );
+  }
+
+  void filterStatus(IncidentStatus? status) {
+    final statuses = status == null ? const <IncidentStatus>[] : [status];
+    _load(state.filter.copyWith(statuses: statuses, page: 0));
+  }
+
+  void filterPriority(Priority? priority) {
+    final priorities = priority == null ? const <Priority>[] : [priority];
+    _load(state.filter.copyWith(priorities: priorities, page: 0));
+  }
+
+  void filterCategory(IncidentCategory? category) {
+    final categories = category == null
+        ? const <IncidentCategory>[]
+        : [category];
+    _load(state.filter.copyWith(categories: categories, page: 0));
+  }
+
+  void filterDateRange(
+    DateRangeOption option, {
+    DateTime? customFrom,
+    DateTime? customTo,
+  }) {
+    if (option == DateRangeOption.custom) {
+      _load(
+        state.filter.copyWith(
+          dateRange: option,
+          createdFrom: () => customFrom,
+          createdTo: () => customTo,
+          page: 0,
+        ),
+      );
+    } else {
+      final bounds = datesForOption(option);
+      _load(
+        state.filter.copyWith(
+          dateRange: option,
+          createdFrom: () => bounds.$1,
+          createdTo: () => bounds.$2,
+          page: 0,
+        ),
+      );
+    }
+  }
+
+  void clearFilters() {
+    _load(
+      IncidentListFilter(
+        sortField: state.filter.sortField,
+        ascending: state.filter.ascending,
+      ),
     );
   }
 

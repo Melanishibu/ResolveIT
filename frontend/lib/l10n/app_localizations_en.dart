@@ -884,6 +884,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incidentListEmpty => 'No incidents to show yet.';
 
   @override
+  String get incidentListNoMatches => 'No incidents match your filters';
+
+  @override
+  String get incidentListClearFilters => 'Clear filters';
+
+  @override
+  String get incidentListSearchHint => 'Search by ticket # or title';
+
+  @override
+  String get incidentListFilterStatus => 'Status';
+
+  @override
+  String get incidentListFilterPriority => 'Priority';
+
+  @override
+  String get incidentListFilterCategory => 'Category';
+
+  @override
+  String get incidentListFilterDate => 'Date';
+
+  @override
+  String get incidentListAllStatuses => 'All statuses';
+
+  @override
+  String get incidentListAllPriorities => 'All priorities';
+
+  @override
+  String get incidentListAllCategories => 'All categories';
+
+  @override
+  String get incidentListDateAll => 'All time';
+
+  @override
+  String get incidentListDate7Days => 'Last 7 days';
+
+  @override
+  String get incidentListDate30Days => 'Last 30 days';
+
+  @override
+  String get incidentListDateCustom => 'Custom range';
+
+  @override
   String get incidentListNumber => 'Incident #';
 
   @override

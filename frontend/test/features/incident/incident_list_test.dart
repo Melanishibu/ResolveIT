@@ -61,7 +61,12 @@ void main() {
     final incidents = _FakeList(_page(2));
     await _open(tester, Role.admin, '/incidents', incidents);
 
-    await tester.tap(find.text(l10nEn.incidentDetailsPriority));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('incident-list-table')),
+        matching: find.text(l10nEn.incidentDetailsPriority),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(incidents.requests.last.sortField, IncidentSortField.priority);
@@ -108,6 +113,89 @@ void main() {
     expect(page.totalItems, 1);
     expect(page.items.single.priority, Priority.critical);
     expect(page.items.single.assigneeName, 'Agent One');
+  });
+
+  group('RIT-US-12 (AB#40) Search and filter incidents', () {
+    testWidgets('Search box updates q in list filter after 300 ms debounce', (
+      tester,
+    ) async {
+      final incidents = _FakeList(_page(1));
+      await _open(tester, Role.admin, '/incidents', incidents);
+
+      await tester.enterText(
+        find.byKey(const Key('incident-list-search')),
+        'printer',
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(incidents.requests.last.q, isNull);
+
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pumpAndSettle();
+      expect(incidents.requests.last.q, 'printer');
+    });
+
+    testWidgets(
+      'Empty state shows no matches message and clear filters button when filtered',
+      (tester) async {
+        final incidents = _FakeList(_page(0));
+        await _open(tester, Role.admin, '/incidents?q=nonexistent', incidents);
+
+        expect(
+          find.byKey(const Key('incident-list-no-matches')),
+          findsOneWidget,
+        );
+        expect(find.text(l10nEn.incidentListNoMatches), findsOneWidget);
+
+        await tester.tap(
+          find.widgetWithText(FilledButton, l10nEn.incidentListClearFilters),
+        );
+        await tester.pumpAndSettle();
+
+        expect(incidents.requests.last.q, isNull);
+      },
+    );
+
+    testWidgets('Clear filters button clears all filters and chips', (
+      tester,
+    ) async {
+      final incidents = _FakeList(_page(2));
+      await _open(
+        tester,
+        Role.admin,
+        '/incidents?status=OPEN&q=test',
+        incidents,
+      );
+
+      expect(
+        find.byKey(const Key('incident-active-filter-chips')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('incident-clear-filters')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('incident-clear-filters')));
+      await tester.pumpAndSettle();
+
+      expect(incidents.requests.last.hasFilters, isFalse);
+    });
+
+    testWidgets('URL parameters populate initial filter on page load', (
+      tester,
+    ) async {
+      final incidents = _FakeList(_page(1));
+      await _open(
+        tester,
+        Role.admin,
+        '/incidents?q=INC-2026-00042&status=OPEN&priority=CRITICAL&dateRange=last30Days',
+        incidents,
+      );
+
+      final filter = incidents.requests.first;
+      expect(filter.q, 'INC-2026-00042');
+      expect(filter.statuses, [IncidentStatus.open]);
+      expect(filter.priorities, [Priority.critical]);
+      expect(filter.dateRange, DateRangeOption.last30Days);
+      expect(filter.createdFrom, isNotNull);
+    });
   });
 }
 
