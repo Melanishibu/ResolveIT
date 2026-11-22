@@ -42,11 +42,14 @@ class UserAdminController {
     private final CreateUserUseCase createUser;
     private final ListUsersQuery listUsers;
     private final ChangeUserStatusUseCase changeStatus;
+    private final com.itsm.resolveit.identity.application.port.in.ResendInvitationUseCase resendInvitation;
 
-    UserAdminController(CreateUserUseCase createUser, ListUsersQuery listUsers, ChangeUserStatusUseCase changeStatus) {
+    UserAdminController(CreateUserUseCase createUser, ListUsersQuery listUsers, ChangeUserStatusUseCase changeStatus,
+                        com.itsm.resolveit.identity.application.port.in.ResendInvitationUseCase resendInvitation) {
         this.createUser = createUser;
         this.listUsers = listUsers;
         this.changeStatus = changeStatus;
+        this.resendInvitation = resendInvitation;
     }
 
     @GetMapping
@@ -98,6 +101,23 @@ class UserAdminController {
                                        @Valid @RequestBody ChangeUserStatusRequest request) {
         return UserListResponse.Item.of(changeStatus.changeStatus(
                 new ChangeUserStatusUseCase.Command(actor, new UserId(id), request.active())));
+    }
+
+    @PostMapping("/{id}/invitation")
+    @Operation(summary = "Resend invitation email (Admin)",
+            description = "Invalidates all earlier tokens of that user and sends a new 24 h link (RIT-US-22).",
+            security = @SecurityRequirement(name = SessionCookies.SESSION_COOKIE))
+    @ApiResponse(responseCode = "200", description = "The user's row with updated invitation status")
+    @ApiResponse(responseCode = "403", description = "AUTH_FORBIDDEN (not an Admin) or AUTH_CSRF_INVALID",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "409", description = "USER_ALREADY_ACTIVATED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    UserListResponse.Item resendInvitation(Actor actor, @PathVariable UUID id) {
+        return UserListResponse.Item.of(resendInvitation.resend(
+                new com.itsm.resolveit.identity.application.port.in.ResendInvitationCommand(actor,
+                        new UserId(id))));
     }
 
     @PostMapping

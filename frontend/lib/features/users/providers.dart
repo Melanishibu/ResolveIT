@@ -48,6 +48,7 @@ final userListInteractorProvider = Provider<UserListInteractor>((ref) {
   return UserListInteractor(
     ListUsers(repository),
     ChangeUserStatus(repository),
+    ResendInvitation(repository),
   );
 });
 

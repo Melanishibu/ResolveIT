@@ -45,8 +45,10 @@ public class SendInvitationService implements SendInvitationUseCase {
         try {
             emailSender.send(email.compose(event));
             invitation.markSent();
-            auditLog.append(new UserAuditEntry(event.userId(), event.actorId(), UserAuditAction.INVITATION_SENT, null,
-                    event.email().value(), clock.instant()));
+            if (!event.resend()) {
+                auditLog.append(new UserAuditEntry(event.userId(), event.actorId(), UserAuditAction.INVITATION_SENT, null,
+                        event.email().value(), clock.instant()));
+            }
         } catch (EmailNotSentException failed) {
             // The user stays created; the Admin sees SEND_FAILED and can resend (RIT-US-22). No link in the log.
             log.warn("Invitation email for user {} could not be sent: {}", event.userId(), failed.getMessage());

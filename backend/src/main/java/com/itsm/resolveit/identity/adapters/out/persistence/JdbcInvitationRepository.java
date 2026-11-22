@@ -67,10 +67,11 @@ public class JdbcInvitationRepository implements InvitationRepository {
     public void invalidatePending(UserId userId, Instant now) {
         jdbc.sql("""
                 UPDATE identity.invitation
-                SET status = 'USED'
+                SET status = 'USED', expires_at = :now
                 WHERE user_id = :userId AND status IN ('PENDING', 'SENT', 'SEND_FAILED')
                 """)
                 .param("userId", userId.value())
+                .param("now", now.atOffset(ZoneOffset.UTC))
                 .update();
     }
 

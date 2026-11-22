@@ -21,6 +21,8 @@ public interface InvitationRepository {
      */
     Optional<Invitation> findByTokenHash(String tokenHash);
 
-    /** Invalidates all pending invitations for this user (RIT-US-22, RIT-US-23). */
+    /**
+     * Invalidates all earlier unexpired invitations of this user (RIT-US-22, RIT-US-23).
+     */
     void invalidatePending(UserId userId, Instant now);
 }

@@ -148,6 +148,13 @@
     "why" : "Nothing is available at {path}. The link may be outdated or mistyped.",
     "nextStep" : "Check the address, or go back to the dashboard and open the item from there."
   }, {
+    "code" : "USER_ALREADY_ACTIVATED",
+    "httpStatus" : 409,
+    "requiredParams" : [ "id" ],
+    "title" : "User has already set a password",
+    "why" : "The user with id {id} has already set their password and cannot be re-invited.",
+    "nextStep" : "If the user forgot their password, they can reset it using the forgot password option."
+  }, {
     "code" : "USER_CANNOT_DEACTIVATE_SELF",
     "httpStatus" : 409,
     "requiredParams" : [ ],

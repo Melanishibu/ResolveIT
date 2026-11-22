@@ -21,3 +21,13 @@ final class ChangeUserStatus {
   Future<Result<UserSummary>> call(String userId, {required bool active}) =>
       _repository.setActive(userId, active: active);
 }
+
+/// Use case: resend invitation email (RIT-US-22).
+final class ResendInvitation {
+  const ResendInvitation(this._repository);
+
+  final UserDirectoryRepository _repository;
+
+  Future<Result<UserSummary>> call(String userId) =>
+      _repository.resendInvitation(userId);
+}

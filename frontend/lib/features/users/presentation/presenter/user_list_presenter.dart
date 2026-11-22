@@ -14,6 +14,7 @@ final class UserListState {
     this.failure,
     this.busyUserId,
     this.statusChanged,
+    this.invitationResent,
   });
 
   final UserListFilter filter;
@@ -31,6 +32,9 @@ final class UserListState {
   /// Set after a status change, for the success toast.
   final UserSummary? statusChanged;
 
+  /// Set after an invitation was resent, for the success toast.
+  final UserSummary? invitationResent;
+
   UserListState copyWith({
     UserListFilter? filter,
     UserPage? page,
@@ -38,6 +42,7 @@ final class UserListState {
     ApiFailure? Function()? failure,
     String? Function()? busyUserId,
     UserSummary? Function()? statusChanged,
+    UserSummary? Function()? invitationResent,
   }) => UserListState(
     filter: filter ?? this.filter,
     page: page ?? this.page,
@@ -45,6 +50,9 @@ final class UserListState {
     failure: failure == null ? this.failure : failure(),
     busyUserId: busyUserId == null ? this.busyUserId : busyUserId(),
     statusChanged: statusChanged == null ? this.statusChanged : statusChanged(),
+    invitationResent: invitationResent == null
+        ? this.invitationResent
+        : invitationResent(),
   );
 }
 
@@ -97,6 +105,33 @@ class UserListPresenter extends Notifier<UserListState> {
         state = state.copyWith(
           busyUserId: () => null,
           statusChanged: () => value,
+          page: page == null
+              ? null
+              : UserPage(
+                  items: [
+                    for (final row in page.items)
+                      row.id == value.id ? value : row,
+                  ],
+                  totalItems: page.totalItems,
+                ),
+        );
+      case Failure(:final failure):
+        state = state.copyWith(busyUserId: () => null, failure: () => failure);
+    }
+  }
+
+  Future<void> resendInvitation(UserSummary user) async {
+    state = state.copyWith(busyUserId: () => user.id, failure: () => null);
+    final result = await ref
+        .read(userListInteractorProvider)
+        .resendInvitation(user.id);
+    if (!ref.mounted) return;
+    switch (result) {
+      case Success(:final value):
+        final page = state.page;
+        state = state.copyWith(
+          busyUserId: () => null,
+          invitationResent: () => value,
           page: page == null
               ? null
               : UserPage(

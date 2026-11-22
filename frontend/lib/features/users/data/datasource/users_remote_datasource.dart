@@ -46,6 +46,12 @@ final class UsersRemoteDataSource {
         data: {'active': active},
       )).data;
 
+  /// `POST /users/{id}/invitation` (RIT-US-22): the response body (the updated row).
+  Future<Object?> resendInvitation(String userId) async =>
+      (await _dio.post<Object?>(
+        '/users/${Uri.encodeComponent(userId)}/invitation',
+      )).data;
+
   /// `GET /users/me` (RIT-US-27): profile of the logged-in user.
   Future<Object?> getMyProfile() async =>
       (await _dio.get<Object?>('/users/me')).data;

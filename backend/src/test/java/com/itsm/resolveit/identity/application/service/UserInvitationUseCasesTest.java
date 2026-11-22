@@ -21,6 +21,7 @@ import com.itsm.resolveit.identity.domain.model.Invitation;
 import com.itsm.resolveit.identity.domain.model.InvitationId;
 import com.itsm.resolveit.identity.domain.model.InvitationStatus;
 import com.itsm.resolveit.identity.domain.model.Role;
+import com.itsm.resolveit.identity.domain.model.UserId;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry.UserAuditAction;
 import com.itsm.resolveit.identity.domain.model.UserEmailTakenException;

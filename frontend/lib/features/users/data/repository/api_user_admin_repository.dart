@@ -32,6 +32,10 @@ final class ApiUserAdminRepository
     userSummaryFromJson,
   );
 
+  @override
+  Future<Result<UserSummary>> resendInvitation(String userId) =>
+      _call(() => _remote.resendInvitation(userId), userSummaryFromJson);
+
   Future<Result<T>> _call<T>(
     Future<Object?> Function() request,
     T? Function(Object? body) map,

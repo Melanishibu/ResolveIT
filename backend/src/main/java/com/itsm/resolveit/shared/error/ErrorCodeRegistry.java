@@ -130,6 +130,12 @@ public final class ErrorCodeRegistry {
                 "You can't deactivate your own account",
                 "An Admin cannot deactivate themselves, so ResolveIT always keeps an Admin who can manage users.",
                 "Ask another Admin to deactivate your account if that is really needed."));
+        // Resend invitation (RIT-US-22).
+        register(new RegisteredErrorCode(
+                "USER_ALREADY_ACTIVATED", 409, Set.of("id"),
+                "User has already set a password",
+                "The user with id {id} has already set their password and cannot be re-invited.",
+                "If the user forgot their password, they can reset it using the forgot password option."));
         // Incident details (AB#38).
         register(new RegisteredErrorCode(
                 "INCIDENT_NOT_FOUND", 404, Set.of(),
