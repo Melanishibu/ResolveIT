@@ -145,14 +145,12 @@ class UserInvitationUseCasesTest {
         }
 
         @Override
-        @Override
         public void invalidatePending(UserId userId, Instant now) {
             byId.values().stream()
                     .filter(i -> i.userId().equals(userId) && (i.status() == InvitationStatus.PENDING
                             || i.status() == InvitationStatus.SENT
                             || i.status() == InvitationStatus.SEND_FAILED))
                     .forEach(i -> i.use(now));
-        }
         }
     }
 }
