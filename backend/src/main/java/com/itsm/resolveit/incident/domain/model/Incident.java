@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -257,6 +258,28 @@ public final class Incident {
         updatedAt = Objects.requireNonNull(now, "now");
         return new IncidentAuditEntry(id, actorId, IncidentAuditAction.CLOSED, IncidentStatus.RESOLVED.name(),
                 IncidentStatus.CLOSED.name(), now);
+    }
+
+    /**
+     * Change priority (RIT-US-19): Admin only, not allowed on CLOSED (INCIDENT_CLOSED, 409).
+     * Same priority again -> no change, returns Optional.empty() (no audit entry).
+     * Different priority -> updates priority and updatedAt, returns Optional with PRIORITY_CHANGED audit entry.
+     */
+    public Optional<IncidentAuditEntry> changePriority(Priority newPriority, UUID actorId, Instant now) {
+        Objects.requireNonNull(newPriority, "newPriority");
+        Objects.requireNonNull(actorId, "actorId");
+        Objects.requireNonNull(now, "now");
+        if (status == IncidentStatus.CLOSED) {
+            throw new IncidentClosedException();
+        }
+        if (this.priority == newPriority) {
+            return Optional.empty();
+        }
+        Priority oldPriority = this.priority;
+        this.priority = newPriority;
+        this.updatedAt = now;
+        return Optional.of(new IncidentAuditEntry(id, actorId, IncidentAuditAction.PRIORITY_CHANGED,
+                oldPriority.name(), newPriority.name(), now));
     }
 
     public IncidentAuditEntry creationEntry() {

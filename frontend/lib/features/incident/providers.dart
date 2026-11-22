@@ -27,6 +27,10 @@ import 'package:resolveit/features/incident/domain/usecase/get_incident_details.
 import 'package:resolveit/features/incident/interactor/incident_details_interactor.dart';
 import 'package:resolveit/features/incident/domain/usecase/report_incident.dart';
 import 'package:resolveit/features/incident/interactor/report_incident_interactor.dart';
+import 'package:resolveit/features/incident/data/repository/api_incident_priority_repository.dart';
+import 'package:resolveit/features/incident/domain/repository/incident_priority_repository.dart';
+import 'package:resolveit/features/incident/domain/usecase/change_incident_priority.dart';
+import 'package:resolveit/features/incident/interactor/incident_priority_interactor.dart';
 
 /// The HTTP client of the incident API. The composition root (`lib/app/app.dart`) binds it to the
 /// shared API client; features never import the composition root.
@@ -51,6 +55,18 @@ final incidentDetailsRepositoryProvider = Provider<IncidentDetailsRepository>(
 /// Incident history from the backend (RIT-US-13). Tests override it with a fake.
 final incidentHistoryRepositoryProvider = Provider<IncidentHistoryRepository>(
   (ref) => ApiIncidentHistoryRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// Change incident priority in the backend (RIT-US-19). Tests override it with a fake.
+final incidentPriorityRepositoryProvider = Provider<IncidentPriorityRepository>(
+  (ref) => ApiIncidentPriorityRepository(ref.watch(incidentHttpClientProvider)),
+);
+
+/// What the incident priority presenter calls.
+final incidentPriorityInteractorProvider = Provider<IncidentPriorityInteractor>(
+  (ref) => IncidentPriorityInteractor(
+    ChangeIncidentPriority(ref.watch(incidentPriorityRepositoryProvider)),
+  ),
 );
 
 /// What the incident history presenter calls.

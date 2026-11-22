@@ -11,6 +11,7 @@ export 'package:resolveit/features/auth/domain/repository/session_repository.dar
 export 'package:resolveit/features/auth/domain/usecase/change_password.dart';
 export 'package:resolveit/features/auth/presentation/presenter/session_presenter.dart';
 export 'package:resolveit/features/auth/presentation/router/auth_routes.dart';
+export 'package:resolveit/features/auth/presentation/view/forgot_password_view.dart';
 export 'package:resolveit/features/auth/presentation/view/login_view.dart';
 export 'package:resolveit/features/auth/presentation/view/set_password_view.dart';
 export 'package:resolveit/features/auth/providers.dart'

@@ -2,6 +2,7 @@ package com.itsm.resolveit.identity.adapters.in.web;
 
 import com.itsm.resolveit.identity.application.port.in.ChangePasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.CreateUserUseCase;
+import com.itsm.resolveit.identity.application.port.in.ForgotPasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.GetCurrentUserUseCase;
 import com.itsm.resolveit.identity.application.port.in.GetMyProfileUseCase;
 import com.itsm.resolveit.identity.application.service.ChangePasswordService;
@@ -11,6 +12,7 @@ import com.itsm.resolveit.identity.application.port.out.FailedLoginCounterReposi
 import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.application.service.CreateUserService;
+import com.itsm.resolveit.identity.application.service.ForgotPasswordService;
 import com.itsm.resolveit.identity.application.service.SetPasswordService;
 import com.itsm.resolveit.identity.application.service.UserAdministrationService;
 import com.itsm.resolveit.identity.application.port.out.UserListReadModel;
@@ -93,6 +95,13 @@ class IdentityWebConfig {
     SetPasswordUseCase setPasswordUseCase(InvitationRepository invitations, UserRepository users,
                                           PasswordHasher hasher, UserAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new SetPasswordService(invitations, users, hasher, auditLog, clock(clock));
+    }
+
+    @Bean
+    ForgotPasswordUseCase forgotPasswordUseCase(UserRepository users, InvitationRepository invitations,
+                                               UserAuditLog auditLog, DomainEventPublisher events,
+                                               ObjectProvider<Clock> clock) {
+        return new ForgotPasswordService(users, invitations, auditLog, events, clock(clock));
     }
 
     @Bean

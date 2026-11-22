@@ -186,6 +186,13 @@ final class FakePasswords implements PasswordRepository {
     if (refused != null) return Failure(refused);
     return const Success<void>(null);
   }
+
+  @override
+  Future<Result<void>> requestPasswordReset(String email) async {
+    final refused = failure;
+    if (refused != null) return Failure(refused);
+    return const Success<void>(null);
+  }
 }
 
 Future<void> _openLink(

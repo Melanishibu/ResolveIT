@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:resolveit/app/theme/theme_context.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/domain/entity/login_credentials.dart';
 import 'package:resolveit/features/auth/presentation/presenter/login_presenter.dart';
+import 'package:resolveit/features/auth/presentation/view/forgot_password_view.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
 
 /// The login screen (`/login`, RIT-US-04): email, password with show/hide, Log in.
@@ -93,7 +95,17 @@ class _LoginViewState extends ConsumerState<LoginView> {
                     onChanged: (_) =>
                         presenter.fieldChanged(LoginField.password),
                   ),
-                  SizedBox(height: spacing.xl),
+                  SizedBox(height: spacing.xs),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AppButton(
+                      key: const Key('login-forgot-password'),
+                      label: l10n.loginForgotPassword,
+                      variant: AppButtonVariant.text,
+                      onPressed: () => context.go(ForgotPasswordView.path),
+                    ),
+                  ),
+                  SizedBox(height: spacing.l),
                   AppButton(
                     key: const Key('login-submit'),
                     label: l10n.loginButton,

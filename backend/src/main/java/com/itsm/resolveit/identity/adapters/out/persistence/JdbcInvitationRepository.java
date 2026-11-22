@@ -7,6 +7,7 @@ import com.itsm.resolveit.identity.domain.model.InvitationStatus;
 import com.itsm.resolveit.identity.domain.model.UserId;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -63,14 +64,16 @@ public class JdbcInvitationRepository implements InvitationRepository {
     }
 
     @Override
-    public void invalidatePending(UserId userId, java.time.Instant now) {
+    @Override
+    public void invalidatePending(UserId userId, Instant now) {
         jdbc.sql("""
                 UPDATE identity.invitation
-                SET expires_at = :now
-                WHERE user_id = :userId AND status <> 'USED' AND expires_at > :now
+                SET status = 'USED'
+                WHERE user_id = :userId AND status IN ('PENDING', 'SENT', 'SEND_FAILED')
                 """)
                 .param("userId", userId.value())
-                .param("now", now.atOffset(ZoneOffset.UTC))
+                .update();
+    }
                 .update();
     }
 

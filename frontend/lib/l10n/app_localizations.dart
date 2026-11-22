@@ -718,6 +718,12 @@ abstract class AppLocalizations {
   /// **'Log in'**
   String get loginButton;
 
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get loginForgotPassword;
+
   /// No description provided for @loginEmailRequired.
   ///
   /// In en, this message translates to:
@@ -729,6 +735,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your password.'**
   String get loginPasswordRequired;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset your password'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your work email address to receive a password reset link.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @forgotPasswordEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get forgotPasswordEmailLabel;
+
+  /// No description provided for @forgotPasswordButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
+  String get forgotPasswordButton;
+
+  /// No description provided for @forgotPasswordSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get forgotPasswordSuccessTitle;
+
+  /// No description provided for @forgotPasswordSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'If an active account exists for that email, a password reset link has been sent. The link expires in 1 hour.'**
+  String get forgotPasswordSuccessMessage;
+
+  /// No description provided for @forgotPasswordBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get forgotPasswordBackToLogin;
+
+  /// No description provided for @forgotPasswordEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address.'**
+  String get forgotPasswordEmailRequired;
 
   /// No description provided for @errorAuthTokenInvalidTitle.
   ///

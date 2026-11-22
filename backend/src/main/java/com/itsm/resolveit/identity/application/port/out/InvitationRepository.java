@@ -2,6 +2,8 @@ package com.itsm.resolveit.identity.application.port.out;
 
 import com.itsm.resolveit.identity.domain.model.Invitation;
 import com.itsm.resolveit.identity.domain.model.InvitationId;
+import com.itsm.resolveit.identity.domain.model.UserId;
+import java.time.Instant;
 import java.util.Optional;
 
 /** Repository of the {@link Invitation} aggregate. */
@@ -20,7 +22,7 @@ public interface InvitationRepository {
     Optional<Invitation> findByTokenHash(String tokenHash);
 
     /**
-     * Invalidates all earlier unexpired invitations of this user (RIT-US-22: resend invitation).
+     * Invalidates all earlier unexpired invitations of this user (RIT-US-22, RIT-US-23).
      */
-    void invalidatePending(com.itsm.resolveit.identity.domain.model.UserId userId, java.time.Instant now);
+    void invalidatePending(UserId userId, Instant now);
 }

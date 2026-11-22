@@ -25,6 +25,7 @@ import com.itsm.resolveit.identity.domain.model.UserId;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry.UserAuditAction;
 import com.itsm.resolveit.identity.domain.model.UserEmailTakenException;
+import com.itsm.resolveit.identity.domain.model.UserId;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -144,8 +145,14 @@ class UserInvitationUseCasesTest {
         }
 
         @Override
-        public void invalidatePending(UserId userId, java.time.Instant now) {
-            byId.values().removeIf(i -> i.userId().equals(userId) && i.status() != InvitationStatus.USED);
+        @Override
+        public void invalidatePending(UserId userId, Instant now) {
+            byId.values().stream()
+                    .filter(i -> i.userId().equals(userId) && (i.status() == InvitationStatus.PENDING
+                            || i.status() == InvitationStatus.SENT
+                            || i.status() == InvitationStatus.SEND_FAILED))
+                    .forEach(i -> i.use(now));
+        }
         }
     }
 }

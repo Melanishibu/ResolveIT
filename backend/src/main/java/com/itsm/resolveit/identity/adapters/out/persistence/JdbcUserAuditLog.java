@@ -2,6 +2,8 @@ package com.itsm.resolveit.identity.adapters.out.persistence;
 
 import com.itsm.resolveit.identity.application.port.out.UserAuditLog;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry;
+import com.itsm.resolveit.identity.domain.model.UserId;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -32,5 +34,19 @@ public class JdbcUserAuditLog implements UserAuditLog {
                 .param("newValue", entry.newValue())
                 .param("occurredAt", entry.occurredAt().atOffset(ZoneOffset.UTC))
                 .update();
+    }
+
+    @Override
+    public int countByUserIdAndActionSince(UserId userId, UserAuditEntry.UserAuditAction action, Instant since) {
+        Integer count = jdbc.sql("""
+                SELECT COUNT(*) FROM identity.user_audit_log
+                WHERE user_id = :userId AND action = :action AND occurred_at >= :since
+                """)
+                .param("userId", userId.value())
+                .param("action", action.name())
+                .param("since", since.atOffset(ZoneOffset.UTC))
+                .query(Integer.class)
+                .single();
+        return count != null ? count : 0;
     }
 }
