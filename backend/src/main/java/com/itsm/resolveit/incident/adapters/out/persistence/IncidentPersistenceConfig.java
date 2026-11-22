@@ -14,6 +14,11 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 class IncidentPersistenceConfig {
 
     @Bean
+    com.itsm.resolveit.incident.application.port.out.DashboardReadModel dashboardReadModel(JdbcClient jdbc) {
+        return new JdbcDashboardQuery(jdbc);
+    }
+
+    @Bean
     IncidentRepository incidentRepository(JdbcClient jdbc) {
         return new JdbcIncidentRepository(jdbc);
     }

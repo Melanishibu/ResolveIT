@@ -21,16 +21,21 @@ final class IncidentListState {
   final ApiFailure? failure;
 }
 
-final incidentListPresenterProvider =
-    NotifierProvider.autoDispose<IncidentListPresenter, IncidentListState>(
+final incidentListPresenterProvider = NotifierProvider.autoDispose
+    .family<IncidentListPresenter, IncidentListState, IncidentListFilter>(
       IncidentListPresenter.new,
     );
 
 class IncidentListPresenter extends Notifier<IncidentListState> {
+  IncidentListPresenter(this.initialFilter);
+
+  /// The filter the screen opened with (from the URL, for example a dashboard card).
+  final IncidentListFilter initialFilter;
+
   @override
   IncidentListState build() {
-    Future.microtask(() => _load(const IncidentListFilter()));
-    return const IncidentListState();
+    Future.microtask(() => _load(initialFilter));
+    return IncidentListState(filter: initialFilter);
   }
 
   void goToPage(int page) => _load(state.filter.copyWith(page: page));

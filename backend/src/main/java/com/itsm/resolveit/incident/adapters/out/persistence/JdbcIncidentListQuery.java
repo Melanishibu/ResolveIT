@@ -6,6 +6,7 @@ import com.itsm.resolveit.incident.domain.model.Category;
 import com.itsm.resolveit.incident.domain.model.IncidentStatus;
 import com.itsm.resolveit.incident.domain.model.Priority;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -29,11 +30,17 @@ public class JdbcIncidentListQuery implements IncidentListReadModel {
     }
 
     @Override
-    public Rows page(Scope scope, int page, int size, SortField sort, boolean ascending) {
+    public Rows page(Scope scope, Filter filter, int page, int size, SortField sort, boolean ascending) {
         String where = " WHERE (CAST(:createdBy AS uuid) IS NULL OR created_by = :createdBy)"
-                + " AND (CAST(:assignedTo AS uuid) IS NULL OR assigned_to = :assignedTo)";
+                + " AND (CAST(:assignedTo AS uuid) IS NULL OR assigned_to = :assignedTo)"
+                + (filter.statuses().isEmpty() ? "" : " AND status IN (:statuses)")
+                + (filter.priorities().isEmpty() ? "" : " AND priority IN (:priorities)");
+        List<String> statuses = filter.statuses().stream().map(Enum::name).toList();
+        List<String> priorities = filter.priorities().stream().map(Enum::name).toList();
         long total = jdbc.sql("SELECT count(*) FROM incident.incident" + where)
                 .param("createdBy", scope.createdBy()).param("assignedTo", scope.assignedTo())
+                .param("statuses", statuses.isEmpty() ? List.of("") : statuses)
+                .param("priorities", priorities.isEmpty() ? List.of("") : priorities)
                 .query(Long.class).single();
         String direction = ascending ? " ASC" : " DESC";
         var rows = jdbc.sql("SELECT id, ticket_number, title, category, priority, status, assigned_to, created_at,"
@@ -41,6 +48,8 @@ public class JdbcIncidentListQuery implements IncidentListReadModel {
                         + " ORDER BY " + ORDER.get(sort) + direction + ", created_at DESC, id"
                         + " LIMIT :limit OFFSET :offset")
                 .param("createdBy", scope.createdBy()).param("assignedTo", scope.assignedTo())
+                .param("statuses", statuses.isEmpty() ? List.of("") : statuses)
+                .param("priorities", priorities.isEmpty() ? List.of("") : priorities)
                 .param("limit", size).param("offset", (long) page * size)
                 .query((row, n) -> new Row(row.getObject("id", UUID.class), row.getString("ticket_number"),
                         row.getString("title"), Category.valueOf(row.getString("category")),

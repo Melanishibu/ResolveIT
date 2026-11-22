@@ -1,10 +1,17 @@
 package com.itsm.resolveit.incident.application.port.in;
 
 import com.itsm.resolveit.identity.Actor;
+import com.itsm.resolveit.incident.domain.model.IncidentStatus;
+import com.itsm.resolveit.incident.domain.model.Priority;
 import java.util.Objects;
+import java.util.Set;
 
-/** One page of the incidents {@code actor} may see (RIT-US-11). Bounds are checked by the web adapter. */
-public record ListIncidentsQuery(Actor actor, int page, int size, SortField sort, boolean ascending) {
+/**
+ * One page of the incidents {@code actor} may see (RIT-US-11), optionally narrowed to some statuses and priorities
+ * (empty = any; used by the dashboard cards, RIT-US-21). Bounds are checked by the web adapter.
+ */
+public record ListIncidentsQuery(Actor actor, int page, int size, SortField sort, boolean ascending,
+                                 Set<IncidentStatus> statuses, Set<Priority> priorities) {
 
     /** The sortable columns. */
     public enum SortField {
@@ -17,5 +24,12 @@ public record ListIncidentsQuery(Actor actor, int page, int size, SortField sort
         if (page < 0 || size < 1 || size > 100) {
             throw new IllegalArgumentException("page must be >= 0 and size 1..100");
         }
+        statuses = Set.copyOf(statuses);
+        priorities = Set.copyOf(priorities);
+    }
+
+    /** No status or priority filter. */
+    public ListIncidentsQuery(Actor actor, int page, int size, SortField sort, boolean ascending) {
+        this(actor, page, size, sort, ascending, Set.of(), Set.of());
     }
 }

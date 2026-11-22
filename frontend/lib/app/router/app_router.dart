@@ -9,6 +9,7 @@ import 'package:resolveit/app/shell/not_allowed_view.dart';
 import 'package:resolveit/core/domain/api_failure.dart';
 import 'package:resolveit/core/presentation/widgets/widgets.dart';
 import 'package:resolveit/features/auth/auth.dart';
+import 'package:resolveit/features/dashboard/dashboard.dart';
 import 'package:resolveit/features/incident/incident.dart';
 import 'package:resolveit/features/users/users.dart';
 import 'package:resolveit/l10n/app_localizations.dart';
@@ -77,6 +78,7 @@ String? sessionRedirect(AsyncValue<CurrentUser?> session, String path) {
 List<RouteBase> get _shellFeatureRoutes => [
   ...usersRoutes(),
   ...incidentRoutes(),
+  ...dashboardRoutes(),
 ];
 
 /// Paths served by a feature screen; their menu destinations get no placeholder page.
