@@ -179,7 +179,8 @@ class _Details extends ConsumerWidget {
               a != IncidentAction.start &&
               a != IncidentAction.assign &&
               a != IncidentAction.reassign &&
-              a != IncidentAction.changePriority,
+              a != IncidentAction.changePriority &&
+              a != IncidentAction.resolve,
         )
         .toList();
 
@@ -231,6 +232,22 @@ class _Details extends ConsumerWidget {
                 icon: Icons.play_arrow,
                 isLoading: statusState.isSaving,
                 onPressed: statusState.isSaving ? null : startWork,
+              ),
+            if (incident.allowedActions.contains(IncidentAction.resolve))
+              AppButton(
+                key: const Key('incident-resolve'),
+                label: l10n.incidentActionResolve,
+                icon: Icons.check_circle_outline,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving
+                    ? null
+                    : () => ref
+                          .read(
+                            incidentStatusPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .openResolve(),
               ),
             if (menuActions.where(_isAvailable).isNotEmpty)
               PopupMenuButton<IncidentAction>(
