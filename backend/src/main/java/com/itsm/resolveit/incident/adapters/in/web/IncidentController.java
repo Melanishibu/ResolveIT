@@ -55,16 +55,19 @@ class IncidentController {
 
     private final com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident;
     private final com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeStatus;
+    private final com.itsm.resolveit.incident.application.port.in.ChangeIncidentPriorityUseCase changePriority;
 
     IncidentController(ReportIncidentUseCase reportIncident, GetIncidentDetailsUseCase incidentDetails,
                        ListIncidentsUseCase listIncidents,
                        com.itsm.resolveit.incident.application.port.in.AssignIncidentUseCase assignIncident,
-                       com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeStatus) {
+                       com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusUseCase changeStatus,
+                       com.itsm.resolveit.incident.application.port.in.ChangeIncidentPriorityUseCase changePriority) {
         this.changeStatus = changeStatus;
         this.reportIncident = reportIncident;
         this.incidentDetails = incidentDetails;
         this.listIncidents = listIncidents;
         this.assignIncident = assignIncident;
+        this.changePriority = changePriority;
     }
 
     private static final Map<String, SortField> SORT_FIELDS = Map.of(
@@ -198,6 +201,30 @@ class IncidentController {
         return IncidentDetailsResponse.of(changeStatus.changeStatus(
                 new com.itsm.resolveit.incident.application.port.in.ChangeIncidentStatusCommand(actor,
                         new IncidentId(incidentId(id)), target, request.resolutionNotes(), request.reason())));
+    }
+
+    /** Body of {@code PATCH /tickets/{id}/priority}. */
+    record ChangePriorityRequest(@jakarta.validation.constraints.NotBlank String priority) {}
+
+    @org.springframework.web.bind.annotation.PatchMapping("/{id}/priority")
+    @Operation(summary = "Change an incident's priority (Admin)",
+            description = "Change an incident's priority (RIT-US-19). Not allowed on CLOSED. Audited as PRIORITY_CHANGED.",
+            security = @SecurityRequirement(name = SESSION_SCHEME))
+    @ApiResponse(responseCode = "200", description = "OK: the incident as the Admin now sees it")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_FAILED (missing or unknown priority)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "403", description = "AUTH_FORBIDDEN (not an Admin) or AUTH_CSRF_INVALID",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "404", description = "INCIDENT_NOT_FOUND",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "409", description = "INCIDENT_CLOSED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    IncidentDetailsResponse changePriority(Actor actor, @PathVariable("id") String id,
+                                          @Valid @RequestBody ChangePriorityRequest request) {
+        Priority priority = field("priority", () -> Priority.valueOf(request.priority().trim()));
+        return IncidentDetailsResponse.of(changePriority.changePriority(
+                new com.itsm.resolveit.incident.application.port.in.ChangeIncidentPriorityCommand(actor,
+                        new IncidentId(incidentId(id)), priority)));
     }
 
     /** Repeatable enum query parameter (for example {@code status=OPEN&status=ASSIGNED}); unknown values are 400. */
