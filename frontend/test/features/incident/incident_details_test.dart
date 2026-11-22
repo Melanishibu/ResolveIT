@@ -60,12 +60,9 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(const Key('incident-details-actions')));
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const Key('incident-action-REOPEN')), findsOneWidget);
-    expect(find.byKey(const Key('incident-action-CLOSE')), findsOneWidget);
-    expect(find.byKey(const Key('incident-action-ASSIGN')), findsNothing);
+    expect(find.byKey(const Key('incident-reopen')), findsOneWidget);
+    expect(find.byKey(const Key('incident-close')), findsOneWidget);
+    expect(find.byKey(const Key('incident-assign')), findsNothing);
   });
 
   testWidgets("Reporter's department is shown", (tester) async {

@@ -180,7 +180,9 @@ class _Details extends ConsumerWidget {
               a != IncidentAction.assign &&
               a != IncidentAction.reassign &&
               a != IncidentAction.changePriority &&
-              a != IncidentAction.resolve,
+              a != IncidentAction.resolve &&
+              a != IncidentAction.reopen &&
+              a != IncidentAction.close,
         )
         .toList();
 
@@ -248,6 +250,30 @@ class _Details extends ConsumerWidget {
                             ).notifier,
                           )
                           .openResolve(),
+              ),
+            if (incident.allowedActions.contains(IncidentAction.reopen))
+              AppButton(
+                key: const Key('incident-reopen'),
+                label: l10n.incidentActionReopen,
+                icon: Icons.replay,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving
+                    ? null
+                    : () => ref
+                          .read(
+                            incidentStatusPresenterProvider(
+                              incident.id,
+                            ).notifier,
+                          )
+                          .openReopen(),
+              ),
+            if (incident.allowedActions.contains(IncidentAction.close))
+              AppButton(
+                key: const Key('incident-close'),
+                label: l10n.incidentActionClose,
+                icon: Icons.check,
+                isLoading: statusState.isSaving,
+                onPressed: statusState.isSaving ? null : confirmClose,
               ),
             if (menuActions.where(_isAvailable).isNotEmpty)
               PopupMenuButton<IncidentAction>(
