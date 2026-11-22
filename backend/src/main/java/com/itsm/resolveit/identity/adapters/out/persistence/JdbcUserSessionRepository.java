@@ -53,6 +53,14 @@ public class JdbcUserSessionRepository implements UserSessionRepository {
         jdbc.sql("DELETE FROM identity.user_session WHERE id = :id").param("id", id.value()).update();
     }
 
+    @Override
+    public void deleteAllExcept(UserId userId, SessionId currentSessionId) {
+        jdbc.sql("DELETE FROM identity.user_session WHERE user_id = :userId AND id <> :sessionId")
+                .param("userId", userId.value())
+                .param("sessionId", currentSessionId.value())
+                .update();
+    }
+
     private static UserSession toSession(ResultSet row, int rowNumber) throws SQLException {
         return UserSession.reconstitute(
                 new SessionId(row.getObject("id", UUID.class)),

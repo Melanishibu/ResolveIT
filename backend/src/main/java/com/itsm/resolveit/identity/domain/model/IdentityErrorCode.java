@@ -27,7 +27,11 @@ public enum IdentityErrorCode implements ErrorCode {
     /** No user with this id (RIT-US-08). */
     USER_NOT_FOUND(Set.of("id")),
     /** An Admin tried to deactivate their own account (RIT-US-08). */
-    USER_CANNOT_DEACTIVATE_SELF(Set.of());
+    USER_CANNOT_DEACTIVATE_SELF(Set.of()),
+    /** The current password entered does not match the user's password (RIT-US-27). */
+    AUTH_CURRENT_PASSWORD_WRONG(Set.of()),
+    /** The new password equals the current password (RIT-US-27). */
+    PASSWORD_SAME_AS_CURRENT(Set.of());
 
     private final Set<String> requiredParams;
 

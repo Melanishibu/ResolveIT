@@ -176,6 +176,16 @@ final class FakePasswords implements PasswordRepository {
     calls.add((token, newPassword));
     return const Success<void>(null);
   }
+
+  @override
+  Future<Result<void>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final refused = failure;
+    if (refused != null) return Failure(refused);
+    return const Success<void>(null);
+  }
 }
 
 Future<void> _openLink(

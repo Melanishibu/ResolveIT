@@ -36,8 +36,9 @@ class AppDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
+    final hasValue = options.any((option) => option.value == value);
     return InputDecorator(
-      isEmpty: value == null,
+      isEmpty: !hasValue && hint == null,
       decoration: InputDecoration(
         label: fieldLabel(context, label, isRequired: isRequired),
         hintText: hint,

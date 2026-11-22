@@ -2,6 +2,8 @@ package com.itsm.resolveit.identity.adapters.in.web;
 
 import com.itsm.resolveit.identity.CsrfExempt;
 import com.itsm.resolveit.identity.PublicEndpoint;
+import com.itsm.resolveit.identity.application.port.in.ChangePasswordCommand;
+import com.itsm.resolveit.identity.application.port.in.ChangePasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.CurrentUserView;
 import com.itsm.resolveit.identity.application.port.in.LogInCommand;
 import com.itsm.resolveit.identity.application.port.in.LogInUseCase;
@@ -9,7 +11,10 @@ import com.itsm.resolveit.identity.application.port.in.LogOutUseCase;
 import com.itsm.resolveit.identity.application.port.in.LoginResult;
 import com.itsm.resolveit.identity.application.port.in.SetPasswordCommand;
 import com.itsm.resolveit.identity.application.port.in.SetPasswordUseCase;
+import com.itsm.resolveit.identity.application.port.out.SessionTokenVerifier;
+import com.itsm.resolveit.identity.application.port.out.SessionTokenVerifier.SessionClaims;
 import com.itsm.resolveit.identity.domain.model.InvitationToken;
+import com.itsm.resolveit.identity.domain.model.NotAuthenticatedException;
 import com.itsm.resolveit.identity.domain.model.SessionToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -38,10 +43,15 @@ class AuthController {
     private final LogInUseCase logIn;
     private final LogOutUseCase logOut;
     private final SetPasswordUseCase setPassword;
+    private final ChangePasswordUseCase changePassword;
+    private final SessionTokenVerifier sessionVerifier;
     private final SessionCookies cookies;
 
-    AuthController(LogInUseCase logIn, LogOutUseCase logOut, SetPasswordUseCase setPassword, SessionCookies cookies) {
+    AuthController(LogInUseCase logIn, LogOutUseCase logOut, SetPasswordUseCase setPassword,
+                   ChangePasswordUseCase changePassword, SessionTokenVerifier sessionVerifier, SessionCookies cookies) {
         this.setPassword = setPassword;
+        this.changePassword = changePassword;
+        this.sessionVerifier = sessionVerifier;
         this.logIn = logIn;
         this.logOut = logOut;
         this.cookies = cookies;
@@ -107,6 +117,33 @@ class AuthController {
             content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<Void> setPassword(@Valid @RequestBody SetPasswordRequest request) {
         setPassword.setPassword(new SetPasswordCommand(InvitationToken.of(request.token()), request.newPassword()));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/password/change")
+    @Operation(summary = "Change password",
+            description = "Checks the current password, enforces the password policy, ensures new password differs"
+                    + " from current one, updates the password hash, and ends all other sessions of the user."
+                    + " CSRF-protected: requires X-XSRF-TOKEN header and RIT_SESSION cookie.")
+    @ApiResponse(responseCode = "204", description = "Password changed")
+    @ApiResponse(responseCode = "400", description = "AUTH_CURRENT_PASSWORD_WRONG, PASSWORD_POLICY_VIOLATION,"
+            + " PASSWORD_SAME_AS_CURRENT, or VALIDATION_FAILED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "401", description = "AUTH_UNAUTHENTICATED",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "403", description = "AUTH_CSRF_INVALID (X-XSRF-TOKEN header missing or not matching)",
+            content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    ResponseEntity<Void> changePassword(
+            CurrentUserView user,
+            @CookieValue(name = SessionCookies.SESSION_COOKIE) String sessionCookie,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        SessionClaims claims = sessionVerifier.verify(new SessionToken(sessionCookie))
+                .orElseThrow(NotAuthenticatedException::new);
+        changePassword.changePassword(new ChangePasswordCommand(
+                user.id(),
+                claims.sessionId(),
+                request.currentPassword(),
+                request.newPassword()));
         return ResponseEntity.noContent().build();
     }
 

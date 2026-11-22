@@ -122,4 +122,52 @@ void main() {
     expect(find.byKey(const Key('table-next-page')), findsNothing);
     expect(find.text('N'), findsOneWidget, reason: 'the header row stays');
   });
+
+  testWidgets('table stretches to fill the container width', (tester) async {
+    useDesktopViewport(tester, height: 800);
+    await tester.pumpWidget(
+      componentTestApp(
+        SizedBox(
+          width: 1200,
+          child: AppDataTable<int>(
+            columns: [
+              AppTableColumn(id: 'col1', label: 'Col 1', cell: (n) => Text('$n')),
+              AppTableColumn(id: 'col2', label: 'Col 2', cell: (n) => Text('$n')),
+            ],
+            rows: const [1, 2, 3],
+            page: 0,
+            pageSize: 20,
+            totalItems: 3,
+            onPageChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+    final dataTableWidth = tester.getSize(find.byType(DataTable)).width;
+    expect(dataTableWidth, 1200);
+  });
+
+  testWidgets('table allows horizontal scrolling when container is smaller than content', (tester) async {
+    useDesktopViewport(tester, height: 800);
+    await tester.pumpWidget(
+      componentTestApp(
+        SizedBox(
+          width: 200,
+          child: AppDataTable<int>(
+            columns: [
+              AppTableColumn(id: 'col1', label: 'Long Column 1 Header', cell: (n) => Text('Row content $n')),
+              AppTableColumn(id: 'col2', label: 'Long Column 2 Header', cell: (n) => Text('Row content $n')),
+            ],
+            rows: const [1, 2, 3],
+            page: 0,
+            pageSize: 20,
+            totalItems: 3,
+            onPageChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+    final dataTableWidth = tester.getSize(find.byType(DataTable)).width;
+    expect(dataTableWidth, greaterThan(200));
+  });
 }

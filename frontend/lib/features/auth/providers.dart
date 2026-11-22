@@ -5,6 +5,7 @@ import 'package:resolveit/features/auth/data/repository/api_auth_repository.dart
 import 'package:resolveit/features/auth/domain/repository/current_user_repository.dart';
 import 'package:resolveit/features/auth/domain/repository/password_repository.dart';
 import 'package:resolveit/features/auth/domain/repository/session_repository.dart';
+import 'package:resolveit/features/auth/domain/usecase/change_password.dart';
 import 'package:resolveit/features/auth/domain/usecase/load_current_user.dart';
 import 'package:resolveit/features/auth/domain/usecase/log_in.dart';
 import 'package:resolveit/features/auth/domain/usecase/log_out.dart';
@@ -55,4 +56,9 @@ final passwordRepositoryProvider = Provider<PasswordRepository>(
 final passwordInteractorProvider = Provider<PasswordInteractor>(
   (ref) =>
       PasswordInteractor(SetPassword(ref.watch(passwordRepositoryProvider))),
+);
+
+/// Change password use case (RIT-US-27).
+final changePasswordUseCaseProvider = Provider<ChangePasswordUseCase>(
+  (ref) => ChangePasswordUseCase(ref.watch(passwordRepositoryProvider)),
 );

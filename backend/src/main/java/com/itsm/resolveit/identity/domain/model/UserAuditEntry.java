@@ -32,6 +32,7 @@ public record UserAuditEntry(UserId userId, UUID actorId, UserAuditAction action
         PASSWORD_SET,
         USER_DEACTIVATED,
         USER_ACTIVATED,
-        PASSWORD_RESET_REQUESTED
+        PASSWORD_RESET_REQUESTED,
+        PASSWORD_CHANGED
     }
 }

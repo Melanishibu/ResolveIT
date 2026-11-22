@@ -8,6 +8,7 @@ export 'package:resolveit/features/auth/domain/entity/login_credentials.dart';
 export 'package:resolveit/features/auth/domain/repository/current_user_repository.dart';
 export 'package:resolveit/features/auth/domain/repository/password_repository.dart';
 export 'package:resolveit/features/auth/domain/repository/session_repository.dart';
+export 'package:resolveit/features/auth/domain/usecase/change_password.dart';
 export 'package:resolveit/features/auth/presentation/presenter/session_presenter.dart';
 export 'package:resolveit/features/auth/presentation/router/auth_routes.dart';
 export 'package:resolveit/features/auth/presentation/view/login_view.dart';
@@ -17,4 +18,5 @@ export 'package:resolveit/features/auth/providers.dart'
         authHttpClientProvider,
         currentUserRepositoryProvider,
         sessionRepositoryProvider,
-        passwordRepositoryProvider;
+        passwordRepositoryProvider,
+        changePasswordUseCaseProvider;

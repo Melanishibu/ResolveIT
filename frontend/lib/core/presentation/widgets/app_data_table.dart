@@ -13,12 +13,14 @@ final class AppTableColumn<T> {
     required this.label,
     required this.cell,
     this.sortable = false,
+    this.columnWidth,
   });
 
   final String id;
   final String label;
   final Widget Function(T row) cell;
   final bool sortable;
+  final TableColumnWidth? columnWidth;
 }
 
 /// The action offered at the end of each row (for example "View").
@@ -76,44 +78,55 @@ class AppDataTable<T> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            sortColumnIndex: sortIndex < 0 ? null : sortIndex,
-            sortAscending: sortAscending,
-            headingTextStyle: textTheme.labelLarge?.copyWith(
-              color: colors.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-            dataTextStyle: textTheme.bodyMedium?.copyWith(
-              color: colors.textPrimary,
-            ),
-            columns: [
-              for (final column in columns)
-                DataColumn(
-                  label: Text(column.label),
-                  onSort: column.sortable && onSort != null
-                      ? (_, _) => onSort!(column.id)
-                      : null,
+        LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: constraints.maxWidth.isFinite
+                    ? constraints.maxWidth
+                    : 0.0,
+              ),
+              child: DataTable(
+                sortColumnIndex: sortIndex < 0 ? null : sortIndex,
+                sortAscending: sortAscending,
+                headingTextStyle: textTheme.labelLarge?.copyWith(
+                  color: colors.textSecondary,
+                  fontWeight: FontWeight.w600,
                 ),
-              if (action != null) DataColumn(label: Text(l10n.tableActions)),
-            ],
-            rows: [
-              for (final row in rows)
-                DataRow(
-                  cells: [
-                    for (final column in columns) DataCell(column.cell(row)),
-                    if (action != null)
-                      DataCell(
-                        AppButton(
-                          label: action.label,
-                          variant: AppButtonVariant.text,
-                          onPressed: () => action.onPressed(row),
-                        ),
-                      ),
-                  ],
+                dataTextStyle: textTheme.bodyMedium?.copyWith(
+                  color: colors.textPrimary,
                 ),
-            ],
+                columns: [
+                  for (final column in columns)
+                    DataColumn(
+                      label: Text(column.label),
+                      columnWidth: column.columnWidth,
+                      onSort: column.sortable && onSort != null
+                          ? (_, _) => onSort!(column.id)
+                          : null,
+                    ),
+                  if (action != null)
+                    DataColumn(label: Text(l10n.tableActions)),
+                ],
+                rows: [
+                  for (final row in rows)
+                    DataRow(
+                      cells: [
+                        for (final column in columns) DataCell(column.cell(row)),
+                        if (action != null)
+                          DataCell(
+                            AppButton(
+                              label: action.label,
+                              variant: AppButtonVariant.text,
+                              onPressed: () => action.onPressed(row),
+                            ),
+                          ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
         // No rows: no footer and no paging; screens show an EmptyState instead.

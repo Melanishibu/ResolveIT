@@ -6,4 +6,10 @@ abstract interface class PasswordRepository {
     required String token,
     required String newPassword,
   });
+
+  /// Contract: change the logged-in user's password (`POST /auth/password/change`, RIT-US-27).
+  Future<Result<void>> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
 }

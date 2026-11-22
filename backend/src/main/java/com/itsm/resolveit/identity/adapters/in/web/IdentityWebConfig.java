@@ -1,7 +1,11 @@
 package com.itsm.resolveit.identity.adapters.in.web;
 
+import com.itsm.resolveit.identity.application.port.in.ChangePasswordUseCase;
 import com.itsm.resolveit.identity.application.port.in.CreateUserUseCase;
 import com.itsm.resolveit.identity.application.port.in.GetCurrentUserUseCase;
+import com.itsm.resolveit.identity.application.port.in.GetMyProfileUseCase;
+import com.itsm.resolveit.identity.application.service.ChangePasswordService;
+import com.itsm.resolveit.identity.application.service.GetMyProfileService;
 import com.itsm.resolveit.identity.application.port.out.DomainEventPublisher;
 import com.itsm.resolveit.identity.application.port.out.FailedLoginCounterRepository;
 import com.itsm.resolveit.identity.application.port.out.InvitationRepository;
@@ -80,6 +84,18 @@ class IdentityWebConfig {
     SetPasswordUseCase setPasswordUseCase(InvitationRepository invitations, UserRepository users,
                                           PasswordHasher hasher, UserAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new SetPasswordService(invitations, users, hasher, auditLog, clock(clock));
+    }
+
+    @Bean
+    GetMyProfileUseCase getMyProfileUseCase(UserRepository users) {
+        return new GetMyProfileService(users);
+    }
+
+    @Bean
+    ChangePasswordUseCase changePasswordUseCase(UserRepository users, UserSessionRepository sessions,
+                                                PasswordVerifier verifier, PasswordHasher hasher,
+                                                UserAuditLog auditLog, ObjectProvider<Clock> clock) {
+        return new ChangePasswordService(users, sessions, verifier, hasher, auditLog, clock(clock));
     }
 
     /** Request protection (RIT-US-05): CSRF and session check on every ResolveIT endpoint, plus the Actor parameter. */
