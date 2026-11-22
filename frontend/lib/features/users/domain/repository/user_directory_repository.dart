@@ -7,4 +7,6 @@ abstract interface class UserDirectoryRepository {
   Future<Result<UserPage>> listUsers(UserListFilter filter);
 
   Future<Result<UserSummary>> setActive(String userId, {required bool active});
+
+  Future<Result<UserSummary>> resendInvitation(String userId);
 }

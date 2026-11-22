@@ -2025,6 +2025,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose an active Technician from the list.'**
   String get errorAssigneeNotActiveAgentNextStep;
+
+  /// No description provided for @userListResendInvitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend invitation'**
+  String get userListResendInvitation;
+
+  /// No description provided for @userListInvitationResent.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation resent to {name}.'**
+  String userListInvitationResent(String name);
+
+  /// No description provided for @errorUserAlreadyActivatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'User has already set a password'**
+  String get errorUserAlreadyActivatedTitle;
+
+  /// No description provided for @errorUserAlreadyActivatedWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'The user with id {id} has already set their password and cannot be re-invited.'**
+  String errorUserAlreadyActivatedWhy(String id);
+
+  /// No description provided for @errorUserAlreadyActivatedNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'If the user forgot their password, they can reset it using the forgot password option.'**
+  String get errorUserAlreadyActivatedNextStep;
 }
 
 class _AppLocalizationsDelegate

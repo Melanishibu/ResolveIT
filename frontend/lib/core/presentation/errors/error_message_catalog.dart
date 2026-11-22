@@ -168,6 +168,11 @@ final class ErrorMessageCatalog {
       why: (l, _) => l.errorUserCannotDeactivateSelfWhy,
       nextStep: (l, _) => l.errorUserCannotDeactivateSelfNextStep,
     ),
+    'USER_ALREADY_ACTIVATED': ErrorCatalogEntry(
+      title: (l, _) => l.errorUserAlreadyActivatedTitle,
+      why: (l, p) => l.errorUserAlreadyActivatedWhy(p('id')),
+      nextStep: (l, _) => l.errorUserAlreadyActivatedNextStep,
+    ),
     'PASSWORD_POLICY_VIOLATION': ErrorCatalogEntry(
       title: (l, _) => l.errorPasswordPolicyViolationTitle,
       why: (l, _) => l.errorPasswordPolicyViolationWhy,

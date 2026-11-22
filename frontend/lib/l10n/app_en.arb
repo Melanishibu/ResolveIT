@@ -439,5 +439,16 @@
   "errorIncidentInvalidTransitionNextStep": "Reload the incident to see its current status and the actions it allows.",
   "errorAssigneeNotActiveAgentTitle": "This person can't take incidents",
   "errorAssigneeNotActiveAgentWhy": "Incidents can only be assigned to active Technicians.",
-  "errorAssigneeNotActiveAgentNextStep": "Choose an active Technician from the list."
+  "errorAssigneeNotActiveAgentNextStep": "Choose an active Technician from the list.",
+  "userListResendInvitation": "Resend invitation",
+  "userListInvitationResent": "Invitation resent to {name}.",
+  "@userListInvitationResent": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "errorUserAlreadyActivatedTitle": "User has already set a password",
+  "errorUserAlreadyActivatedWhy": "The user with id {id} has already set their password and cannot be re-invited.",
+  "@errorUserAlreadyActivatedWhy": {
+    "placeholders": { "id": { "type": "String" } }
+  },
+  "errorUserAlreadyActivatedNextStep": "If the user forgot their password, they can reset it using the forgot password option."
 }

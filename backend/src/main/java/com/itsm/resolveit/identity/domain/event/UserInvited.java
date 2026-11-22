@@ -16,7 +16,12 @@ import java.util.UUID;
  * logged ({@link InvitationToken#toString()} hides it).
  */
 public record UserInvited(UserId userId, InvitationId invitationId, EmailAddress email, DisplayName name, Role role,
-                          InvitationToken token, UUID actorId) {
+                          InvitationToken token, UUID actorId, boolean resend) {
+
+    public UserInvited(UserId userId, InvitationId invitationId, EmailAddress email, DisplayName name, Role role,
+                       InvitationToken token, UUID actorId) {
+        this(userId, invitationId, email, name, role, token, actorId, false);
+    }
 
     public UserInvited {
         Objects.requireNonNull(userId, "userId");

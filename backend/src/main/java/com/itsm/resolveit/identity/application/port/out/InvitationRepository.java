@@ -18,4 +18,9 @@ public interface InvitationRepository {
      * same hash waits until the first one commits (single use, RIT-US-07).
      */
     Optional<Invitation> findByTokenHash(String tokenHash);
+
+    /**
+     * Invalidates all earlier unexpired invitations of this user (RIT-US-22: resend invitation).
+     */
+    void invalidatePending(com.itsm.resolveit.identity.domain.model.UserId userId, java.time.Instant now);
 }

@@ -35,6 +35,12 @@ class UserListView extends ConsumerWidget {
         );
       }
     });
+    ref.listen(userListPresenterProvider, (previous, next) {
+      final resent = next.invitationResent;
+      if (resent != null && !identical(resent, previous?.invitationResent)) {
+        AppToast.success(context, l10n.userListInvitationResent(resent.name));
+      }
+    });
     final state = ref.watch(userListPresenterProvider);
     final presenter = ref.read(userListPresenterProvider.notifier);
     final ownId = ref.watch(sessionProvider).value?.id;
@@ -55,7 +61,10 @@ class UserListView extends ConsumerWidget {
     Widget actions(UserSummary user) {
       if (user.id == ownId) return const SizedBox.shrink();
       final busy = state.busyUserId == user.id;
-      return user.isActive
+      final canResend =
+          user.invitationStatus != null &&
+          user.invitationStatus != InvitationStatus.accepted;
+      final statusButton = user.isActive
           ? AppButton(
               key: Key('user-deactivate-${user.email}'),
               label: l10n.userListDeactivate,
@@ -72,6 +81,21 @@ class UserListView extends ConsumerWidget {
                   ? null
                   : () => presenter.setActive(user, active: true),
             );
+      if (!canResend) return statusButton;
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          statusButton,
+          SizedBox(width: spacing.s),
+          AppButton(
+            key: Key('user-resend-${user.email}'),
+            label: l10n.userListResendInvitation,
+            variant: AppButtonVariant.secondary,
+            isLoading: busy,
+            onPressed: busy ? null : () => presenter.resendInvitation(user),
+          ),
+        ],
+      );
     }
 
     return Column(

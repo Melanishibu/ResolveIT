@@ -62,6 +62,18 @@ public class JdbcInvitationRepository implements InvitationRepository {
                 .optional();
     }
 
+    @Override
+    public void invalidatePending(UserId userId, java.time.Instant now) {
+        jdbc.sql("""
+                UPDATE identity.invitation
+                SET expires_at = :now
+                WHERE user_id = :userId AND status <> 'USED' AND expires_at > :now
+                """)
+                .param("userId", userId.value())
+                .param("now", now.atOffset(ZoneOffset.UTC))
+                .update();
+    }
+
     static Invitation toInvitation(ResultSet row, int rowNumber) throws SQLException {
         return Invitation.reconstitute(
                 new InvitationId(row.getObject("id", UUID.class)),

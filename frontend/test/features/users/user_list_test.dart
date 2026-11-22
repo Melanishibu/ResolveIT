@@ -81,6 +81,48 @@ void main() {
     expect(find.text(l10nEn.userListActivated('User 02')), findsOneWidget);
   });
 
+  testWidgets('Admin resends invitation to pending user', (tester) async {
+    final directory = FakeDirectory(_users(3));
+    await _openList(tester, directory);
+
+    expect(
+      find.byKey(const Key('user-resend-user02@resolveit.local')),
+      findsOneWidget,
+    );
+    await tester.tap(
+      find.byKey(const Key('user-resend-user02@resolveit.local')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(directory.resendCalls.single, 'id-02');
+    expect(
+      find.text(l10nEn.userListInvitationResent('User 02')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('Resend invitation button is hidden for accepted invitation', (
+    tester,
+  ) async {
+    final directory = FakeDirectory([
+      const UserSummary(
+        id: 'id-accepted',
+        name: 'Accepted User',
+        email: 'accepted@resolveit.local',
+        role: Role.employee,
+        department: 'HR',
+        isActive: true,
+        invitationStatus: InvitationStatus.accepted,
+      ),
+    ]);
+    await _openList(tester, directory);
+
+    expect(
+      find.byKey(const Key('user-resend-accepted@resolveit.local')),
+      findsNothing,
+    );
+  });
+
   testWidgets('Admin cannot deactivate themselves', (tester) async {
     final directory = FakeDirectory(
       [
@@ -155,6 +197,7 @@ final class FakeDirectory implements UserDirectoryRepository {
   final ApiFailure? failure;
   final requests = <UserListFilter>[];
   final statusCalls = <(String, bool)>[];
+  final resendCalls = <String>[];
 
   @override
   Future<Result<UserPage>> listUsers(UserListFilter filter) async {
@@ -166,6 +209,15 @@ final class FakeDirectory implements UserDirectoryRepository {
         totalItems: users.length,
       ),
     );
+  }
+
+  @override
+  Future<Result<UserSummary>> resendInvitation(String userId) async {
+    final refused = failure;
+    if (refused != null) return Failure(refused);
+    resendCalls.add(userId);
+    final user = users.firstWhere((u) => u.id == userId);
+    return Success(user);
   }
 
   @override

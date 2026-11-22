@@ -1108,4 +1108,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorAssigneeNotActiveAgentNextStep =>
       'Choose an active Technician from the list.';
+
+  @override
+  String get userListResendInvitation => 'Resend invitation';
+
+  @override
+  String userListInvitationResent(String name) {
+    return 'Invitation resent to $name.';
+  }
+
+  @override
+  String get errorUserAlreadyActivatedTitle =>
+      'User has already set a password';
+
+  @override
+  String errorUserAlreadyActivatedWhy(String id) {
+    return 'The user with id $id has already set their password and cannot be re-invited.';
+  }
+
+  @override
+  String get errorUserAlreadyActivatedNextStep =>
+      'If the user forgot their password, they can reset it using the forgot password option.';
 }

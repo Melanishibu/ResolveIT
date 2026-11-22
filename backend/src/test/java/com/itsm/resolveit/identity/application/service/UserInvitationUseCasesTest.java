@@ -21,6 +21,7 @@ import com.itsm.resolveit.identity.domain.model.Invitation;
 import com.itsm.resolveit.identity.domain.model.InvitationId;
 import com.itsm.resolveit.identity.domain.model.InvitationStatus;
 import com.itsm.resolveit.identity.domain.model.Role;
+import com.itsm.resolveit.identity.domain.model.UserId;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry;
 import com.itsm.resolveit.identity.domain.model.UserAuditEntry.UserAuditAction;
 import com.itsm.resolveit.identity.domain.model.UserEmailTakenException;
@@ -140,6 +141,11 @@ class UserInvitationUseCasesTest {
         @Override
         public Optional<Invitation> findByTokenHash(String tokenHash) {
             return byId.values().stream().filter(i -> i.tokenHash().equals(tokenHash)).findFirst();
+        }
+
+        @Override
+        public void invalidatePending(UserId userId, java.time.Instant now) {
+            byId.values().removeIf(i -> i.userId().equals(userId) && i.status() != InvitationStatus.USED);
         }
     }
 }

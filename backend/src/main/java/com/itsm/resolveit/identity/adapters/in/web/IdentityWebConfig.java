@@ -75,6 +75,15 @@ class IdentityWebConfig {
     }
 
     @Bean
+    com.itsm.resolveit.identity.application.port.in.ResendInvitationUseCase resendInvitationUseCase(
+            UserRepository users, InvitationRepository invitations,
+            com.itsm.resolveit.identity.application.port.out.UserListReadModel readModel,
+            UserAuditLog auditLog, DomainEventPublisher events, ObjectProvider<Clock> clock) {
+        return new com.itsm.resolveit.identity.application.service.ResendInvitationService(
+                users, invitations, readModel, auditLog, events, clock(clock));
+    }
+
+    @Bean
     UserAdministrationService userAdministration(UserRepository users, UserListReadModel readModel,
                                                  UserAuditLog auditLog, ObjectProvider<Clock> clock) {
         return new UserAdministrationService(users, readModel, auditLog, clock(clock));
