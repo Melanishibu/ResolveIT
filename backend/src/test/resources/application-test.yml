@@ -1,0 +1,19 @@
+# Automated tests (activated by surefire/failsafe). The datasource is provided by Testcontainers
+# through @ServiceConnection, so no connection settings are needed here.
+spring:
+  main:
+    banner-mode: off
+  mail:
+    # No mail server by default: sending fails fast and the invitation becomes SEND_FAILED. Tests that check the
+    # email start a Mailpit container and point these at it.
+    host: localhost
+    port: 1
+
+resolveit:
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:5000}
+  frontend-base-url: http://localhost:5000
+  mail:
+    from: ResolveIT <no-reply@resolveit.local>
+  session:
+    # Tests never need a real key: a random one per run.
+    allow-ephemeral-signing-key: true

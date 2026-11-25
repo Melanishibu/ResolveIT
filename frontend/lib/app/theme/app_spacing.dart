@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+
+/// Spacing and size tokens. Widgets never use literal paddings or gaps.
+@immutable
+final class AppSpacing extends ThemeExtension<AppSpacing> {
+  const AppSpacing._();
+
+  static const AppSpacing standard = AppSpacing._();
+
+  double get xs => 4;
+  double get s => 8;
+  double get m => 12;
+  double get l => 16;
+  double get xl => 24;
+  double get xxl => 32;
+
+  double get sidebarWidth => 240;
+  double get topBarHeight => 64;
+  double get avatarRadius => 18;
+  double get dialogMaxWidth => 520;
+  double get chipHorizontal => 10;
+  double get chipVertical => 4;
+
+  // US-28 (AB#170) component sizes.
+  double get spinnerSize => 16;
+  double get spinnerStroke => 2;
+  double get controlMinHeight => 48;
+  double get tabHeight => 48;
+  double get statIconPadding => 12;
+  double get emptyStateIcon => 40;
+  double get fieldMaxWidth => 420;
+
+  // RIT-US-09 (AB#37) create-incident layout.
+  double get illustrationIcon => 64;
+  double get twoColumnMinWidth => 840;
+
+  // RIT-US-08 (AB#50) list filters.
+  double get filterWidth => 220;
+
+  @override
+  AppSpacing copyWith() => this;
+
+  @override
+  AppSpacing lerp(covariant ThemeExtension<AppSpacing>? other, double t) =>
+      this;
+}
+
+/// Corner radius tokens.
+@immutable
+final class AppRadii extends ThemeExtension<AppRadii> {
+  const AppRadii._();
+
+  static const AppRadii standard = AppRadii._();
+
+  double get card => 12;
+  double get control => 8;
+  double get chip => 999;
+
+  @override
+  AppRadii copyWith() => this;
+
+  @override
+  AppRadii lerp(covariant ThemeExtension<AppRadii>? other, double t) => this;
+}
